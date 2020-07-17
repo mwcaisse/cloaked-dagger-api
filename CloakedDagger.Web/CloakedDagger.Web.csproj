@@ -18,5 +18,13 @@
       <ProjectReference Include="..\CloakedDagger.Logic\CloakedDagger.Logic.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="application.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
 
 </Project>
