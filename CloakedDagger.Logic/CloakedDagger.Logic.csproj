@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CloakedDagger.Common\CloakedDagger.Common.csproj" />
+      <ProjectReference Include="..\CloakedDagger.Data\CloakedDagger.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Sodium.Core" Version="1.2.3" />
+    </ItemGroup>
+
+</Project>
