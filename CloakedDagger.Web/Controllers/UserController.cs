@@ -6,14 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
-    [Route("/user/")]
+    [Route("/user")]
     public class UserController : Controller
     {
 
         private readonly ILoginService _loginService;
 
+        public UserController(ILoginService loginService)
+        {
+            this._loginService = loginService;
+        }
+        
         [HttpPost]
-        [Route("/login")]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginViewModel user)
         {
             var principal = _loginService.Login(user.Username, user.Password);
