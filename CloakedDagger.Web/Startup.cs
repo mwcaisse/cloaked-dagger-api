@@ -11,6 +11,7 @@ using CloakedDagger.Data.Repositories;
 using CloakedDagger.Logic.PasswordHasher;
 using CloakedDagger.Logic.Services;
 using CloakedDagger.Web.Database;
+using CloakedDagger.Web.Middleware;
 using CloakedDagger.Web.Utils;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -48,7 +49,9 @@ namespace CloakedDagger.Web
             });
 
             services.AddTransient<IUserRepository, UserRepository>();
+            
             services.AddTransient<ILoginService, LoginService>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddTransient<IPasswordHasher, ArgonPasswordHasher>();
 
@@ -81,7 +84,8 @@ namespace CloakedDagger.Web
                 app.UseDeveloperExceptionPage();
             }
 
-
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            
             app.UseRouting();
             
             app.UseAuthentication();

@@ -19,5 +19,16 @@ namespace CloakedDagger.Data.Repositories
         {
             return _db.Users.Active().SingleOrDefault(u => u.Username == username);
         }
+
+        public bool UsernameExists(string username)
+        {
+            return _db.Users.Any(u => u.Username == username);
+        }
+
+        public void Create(User user)
+        {
+            _db.Users.Add(user);
+            _db.SaveChanges();
+        }
     }
 }

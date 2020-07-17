@@ -12,9 +12,12 @@ namespace CloakedDagger.Web.Controllers
 
         private readonly ILoginService _loginService;
 
-        public UserController(ILoginService loginService)
+        private readonly IUserService _userService;
+
+        public UserController(ILoginService loginService, IUserService userService)
         {
             this._loginService = loginService;
+            this._userService = userService;
         }
         
         [HttpPost]
@@ -29,6 +32,16 @@ namespace CloakedDagger.Web.Controllers
 
             await HttpContext.SignInAsync(principal);
             return Ok();
-        }   
+        }
+
+        [HttpPost]
+        [Route("register")]
+        public IActionResult Register([FromBody] UserRegistrationViewModel registration)
+        {
+            _userService.Register(registration);
+            // if registration failed it will throw an EntityValidationException, in which case our middleware will
+            //     handle that if we make it here registration was successful so we return 200.
+            return Ok(); 
+        }
     }
 }
