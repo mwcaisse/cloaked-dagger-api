@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Repositories;
@@ -18,6 +19,11 @@ namespace CloakedDagger.Data.Repositories
         public User Get(string username)
         {
             return _db.Users.Active().SingleOrDefault(u => u.Username == username);
+        }
+
+        public User Get(Guid id)
+        {
+            return _db.Users.Active().SingleOrDefault(u => u.UserId == id);
         }
 
         public bool UsernameExists(string username)

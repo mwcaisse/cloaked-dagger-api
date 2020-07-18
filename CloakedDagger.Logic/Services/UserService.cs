@@ -1,3 +1,4 @@
+using System;
 using CloakedDagger.Common;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Exceptions;
@@ -19,6 +20,17 @@ namespace CloakedDagger.Logic.Services
         {
             this._userRepository = userRepository;
             this._passwordHasher = passwordHasher;
+        }
+
+        public UserViewModel Get(Guid id)
+        {
+            var user = _userRepository.Get(id);
+            return null == user ? null : new UserViewModel()
+            {
+                UserId = user.UserId,
+                Username = user.Username,
+                Name = user.Name, 
+            };
         }
         
         public void Register(UserRegistrationViewModel registration)

@@ -1,13 +1,15 @@
+using System;
 using System.Threading.Tasks;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
     [Route("/user")]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
 
         private readonly ILoginService _loginService;
@@ -18,6 +20,14 @@ namespace CloakedDagger.Web.Controllers
         {
             this._loginService = loginService;
             this._userService = userService;
+        }
+
+        [HttpGet]
+        [Route(("me"))]
+        [Authorize]
+        public IActionResult GetMe()
+        {
+            return Ok(_userService.Get(GetCurrentUserId()));
         }
         
         [HttpPost]

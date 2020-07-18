@@ -14,6 +14,13 @@ namespace CloakedDagger.Common.Repositories
         public User Get(string username);
 
         /// <summary>
+        /// Retrieves the user with the given id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>The user with the id, or null if no user exists</returns>
+        public User Get(Guid id);
+
+        /// <summary>
         /// Determines if a user with the given username exists or not.
         /// </summary>
         /// <param name="username"></param>

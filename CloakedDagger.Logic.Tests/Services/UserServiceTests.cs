@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CloakedDagger.Common;
@@ -122,6 +123,53 @@ namespace CloakedDagger.Logic.Tests.Services
                 
                 Assert.NotNull(ex);
                 Assert.NotEmpty(ex.ValidationResults);
+            }
+        }
+
+        public class GetByIdTests
+        {
+            [Fact]
+            public void TestCanGetExistingUser()
+            {
+                var userRepositoryMock = new Mock<IUserRepository>();
+                var passwordHasherMock = new Mock<IPasswordHasher>();
+
+                var userId = Guid.NewGuid();
+                var user = new User()
+                {
+                    UserId = userId,
+                    Password = "amazinglySecurePassword",
+                    Username = "mitchell",
+                    Email = "mitchell@mitchell.com"
+                };
+
+                userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(user);
+                
+                var subject = new UserService(userRepositoryMock.Object, passwordHasherMock.Object);
+
+                var fetchedUser = subject.Get(userId);
+                Assert.NotNull(fetchedUser);
+                Assert.IsNotType<User>(fetchedUser);
+                
+                Assert.Equal(user.UserId, fetchedUser.UserId);
+                Assert.Equal(user.Username, fetchedUser.Username);
+                Assert.Equal(user.Name, fetchedUser.Name);
+            }
+            
+            [Fact]
+            public void TestNonExistingUserReturnsNull()
+            {
+                var userRepositoryMock = new Mock<IUserRepository>();
+                var passwordHasherMock = new Mock<IPasswordHasher>();
+
+                var userId = Guid.NewGuid();
+
+                userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(default(User));
+                
+                var subject = new UserService(userRepositoryMock.Object, passwordHasherMock.Object);
+
+                var fetchedUser = subject.Get(userId);
+                Assert.Null(fetchedUser);
             }
         }
         
