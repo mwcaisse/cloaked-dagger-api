@@ -44,6 +44,16 @@ namespace CloakedDagger.Web.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [HttpPost]
+        [Authorize]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return Ok();
+        }
+
         [HttpPost]
         [Route("register")]
         public IActionResult Register([FromBody] UserRegistrationViewModel registration)
