@@ -65,6 +65,7 @@ namespace CloakedDagger.Web
                         context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                         return Task.CompletedTask;
                     };
+                    options.Cookie.Name = "CLOAKED_DAGGER_SESSION";
                 });
 
             services.AddControllers()
