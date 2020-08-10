@@ -1,0 +1,23 @@
+using System;
+using System.Collections.Generic;
+using OwlTin.Common.Entities;
+
+namespace CloakedDagger.Common.Entities
+{
+    public class Resource : IActiveEntity, ITrackedEntity
+    {
+        public Guid ResourceId { get; set; }
+        
+        public string Name { get; set; }
+        
+        public string Description { get; set; }
+
+        public bool Active { get; set; }
+        
+        public DateTime CreateDate { get; set; }
+        
+        public DateTime ModifiedDate { get; set; }
+
+        public virtual ICollection<ResourceScope> ResourceScopes { get; set; }
+    }
+}

@@ -13,6 +13,8 @@ using CloakedDagger.Logic.Services;
 using CloakedDagger.Web.Database;
 using CloakedDagger.Web.Middleware;
 using CloakedDagger.Web.Utils;
+using IdentityServer4;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -75,6 +77,72 @@ namespace CloakedDagger.Web
                 });
 
             services.AddSingleton(Log.Logger);
+
+            // Identity Server / OAuth2
+            services.AddIdentityServer(options =>
+                {
+                    options.UserInteraction.LoginUrl = "http://localhost:3000/login";
+                }).AddInMemoryApiScopes(new List<ApiScope>
+                {
+                    new ApiScope()
+                    {
+                        Name = "das-cookbook.read",
+                        DisplayName = "Reads data in DasCookbook"
+                    },
+                    new ApiScope()
+                    {
+                        Name = "das-cookbook.write",
+                        DisplayName = "Writes data in DasCookbook"
+                    }
+                }).AddInMemoryIdentityResources(new List<IdentityResource>()
+                {
+                    new IdentityResources.OpenId(),
+                    new IdentityResources.Profile()
+                }).AddInMemoryApiResources(new List<ApiResource>()
+                {
+                    new ApiResource()
+                    {
+                        Name = "das-cookbook",
+                        DisplayName = "DasCookbook API",
+                        Scopes =
+                        {
+                            "das-cookbook.read",
+                            "das-cookbook.write"
+                        }
+                    }
+                }).AddInMemoryClients(new List<Client>
+                {
+                    new Client
+                    {
+                        ClientId = "das-cookbook",
+
+                        AllowedGrantTypes = GrantTypes.Code,
+                        AllowOfflineAccess = true,
+                        ClientSecrets =
+                        {
+                            new Secret("das-cookbook-amazing-secret".Sha256())
+                        },
+
+                        RedirectUris =
+                        {
+                            "http://localhost:5000/signin-oidc"
+                        },
+                        PostLogoutRedirectUris =
+                        {
+                            "http://localhost:5000/signout-callback-oidc",
+                        },
+
+                        AllowedScopes =
+                        {
+                            IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile,
+
+                            "das-cookbook.read",
+                            "das-cookbook.write",
+                        }
+                    }
+                })
+                .AddDeveloperSigningCredential();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,6 +159,7 @@ namespace CloakedDagger.Web
             
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseIdentityServer();
             
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
