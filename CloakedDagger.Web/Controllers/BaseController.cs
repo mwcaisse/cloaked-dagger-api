@@ -23,5 +23,22 @@ namespace CloakedDagger.Web.Controllers
             throw new Exception("No currently logged in user!");
         }
         
+        protected IActionResult OkOrNotFound(object entity)
+        {
+            if (null == entity)
+            {
+                return NotFound();
+            }
+            return Ok(entity);
+        }
+        
+        public virtual IActionResult NotSupportedYet()
+        {
+            return StatusCode(418, new
+            {
+                error = "This is not supported yet. Sorry. Hopefully this teapot will make up for it."
+            });
+        }
+        
     }
 }
