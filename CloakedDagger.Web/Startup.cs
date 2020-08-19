@@ -7,6 +7,7 @@ using CloakedDagger.Common;
 using CloakedDagger.Common.Repositories;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Data;
+using CloakedDagger.Data.Extensions;
 using CloakedDagger.Data.Repositories;
 using CloakedDagger.Logic.PasswordHasher;
 using CloakedDagger.Logic.Services;
@@ -51,9 +52,15 @@ namespace CloakedDagger.Web
             });
 
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IResourceRepository, ResourceRepository>();
+            services.AddTransient<IResourceScopeRepository, ResourceScopeRepository>();
+            services.AddTransient<IScopeRepository, ScopeRepository>();
             
             services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IUserService, UserService>();
+
+            services.AddTransient<IResourceService, ResourceService>();
+            services.AddTransient<IResourceScopeService, ResourceScopeService>();
 
             services.AddTransient<IPasswordHasher, ArgonPasswordHasher>();
 

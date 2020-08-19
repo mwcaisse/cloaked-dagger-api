@@ -18,6 +18,6 @@ namespace CloakedDagger.Common.Entities
         
         public DateTime ModifiedDate { get; set; }
 
-        public virtual ICollection<ResourceScope> ResourceScopes { get; set; }
+        public virtual ICollection<ResourceScope> AvailableScopes { get; set; }
     }
 }

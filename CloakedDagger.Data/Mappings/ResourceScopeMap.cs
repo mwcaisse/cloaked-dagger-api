@@ -26,7 +26,7 @@ namespace CloakedDagger.Data.Mappings
                 .IsRequired();
 
             builder.HasOne(rs => rs.Resource)
-                .WithMany(r => r.ResourceScopes)
+                .WithMany(r => r.AvailableScopes)
                 .HasForeignKey(rs => rs.ResourceId)
                 .IsRequired();
 
