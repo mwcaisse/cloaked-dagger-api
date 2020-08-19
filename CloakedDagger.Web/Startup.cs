@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using CloakedDagger.Common;
+using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Repositories;
 using CloakedDagger.Common.Services;
+using CloakedDagger.Common.ViewModels;
 using CloakedDagger.Data;
 using CloakedDagger.Data.Extensions;
 using CloakedDagger.Data.Repositories;
 using CloakedDagger.Logic.PasswordHasher;
 using CloakedDagger.Logic.Services;
+using CloakedDagger.Web.Converters;
 using CloakedDagger.Web.Database;
 using CloakedDagger.Web.Middleware;
 using CloakedDagger.Web.Utils;
@@ -29,6 +33,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OwlTin.Common.Converters;
 using Serilog;
+using Client = IdentityServer4.Models.Client;
+using Resource = IdentityServer4.Models.Resource;
 
 namespace CloakedDagger.Web
 {
@@ -77,10 +83,28 @@ namespace CloakedDagger.Web
                     options.Cookie.Name = "CLOAKED_DAGGER_SESSION";
                 });
 
+            var entityMapperConfig = new MapperConfiguration(config =>
+            {
+                config.CreateMap<ResourceScope, ResourceScopeViewModel>()
+                    .ForMember(vm => vm.Name, cfg =>
+                        cfg.MapFrom(rs => rs.Scope.Name)
+                    )
+                    .ForMember(vm => vm.Description, cfg =>
+                        cfg.MapFrom(rs => rs.Scope.Description)
+                    );
+                config.CreateMap<CloakedDagger.Common.Entities.Resource, ResourceViewModel>();
+            });
+            
+            var entityMapper = new Mapper(entityMapperConfig);
+            services.AddSingleton<IMapper>(entityMapper);
+            
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new JsonDateEpochConverter());
+                    options.SerializerSettings.Converters.Add(
+                        new MapperJsonConverter<CloakedDagger.Common.Entities.Resource, ResourceViewModel>(entityMapper));
+                    options.SerializerSettings.Converters.Add(new MapperJsonConverter<ResourceScope, ResourceScopeViewModel>(entityMapper));
                 });
 
             services.AddSingleton(Log.Logger);

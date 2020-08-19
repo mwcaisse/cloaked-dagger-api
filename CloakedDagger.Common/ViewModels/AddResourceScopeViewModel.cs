@@ -7,9 +7,9 @@ namespace CloakedDagger.Common.ViewModels
     {
         public Guid ResourceId { get; set; }
         
-        [Required(AllowEmptyStrings = false, ErrorMessage = "ScopeName is required")]
-        [MaxLength(250, ErrorMessage = "ScopeName must not exceed 250 characters")]
-        public string ScopeName { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Name is required")]
+        [MaxLength(250, ErrorMessage = "Name must not exceed 250 characters")]
+        public string Name { get; set; }
         
         public string Description { get; set; }
     }

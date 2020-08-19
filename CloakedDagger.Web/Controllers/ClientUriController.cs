@@ -32,7 +32,7 @@ namespace CloakedDagger.Web.Controllers
         }
 
         [HttpDelete]
-        [Route("{id")]
+        [Route("{id}")]
         public IActionResult Delete(Guid clientId, Guid id)
         {
             return NotSupportedYet();

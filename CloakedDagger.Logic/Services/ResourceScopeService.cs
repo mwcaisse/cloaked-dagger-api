@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using CloakedDagger.Common.Entities;
+using CloakedDagger.Common.Exceptions;
 using CloakedDagger.Common.Repositories;
+using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
-using CloakedDagger.Logic;
-using OwlTin.Common.Exceptions;
 
-namespace CloakedDagger.Common.Services
+
+namespace CloakedDagger.Logic.Services
 {
     public class ResourceScopeService : IResourceScopeService
     {
@@ -43,15 +44,22 @@ namespace CloakedDagger.Common.Services
                 throw new EntityValidationException("No resources with the given ID exists!");
             }
 
-            var scope = _scopeRepository.Get(vm.ScopeName);
+            var scope = _scopeRepository.Get(vm.Name);
             if (null == scope)
             {
                 scope = new Scope()
                 {
-                    Name = vm.ScopeName,
+                    Name = vm.Name,
                     Description = vm.Description
                 };
                 scope = _scopeRepository.Create(scope);
+            }
+            else
+            {
+                if (_resourceScopeRepository.ExistsOnResource(vm.ResourceId, scope.ScopeId))
+                {
+                    throw new EntityValidationException("This scope already exists on this resource!");
+                }
             }
 
             var resourceScope = new ResourceScope()

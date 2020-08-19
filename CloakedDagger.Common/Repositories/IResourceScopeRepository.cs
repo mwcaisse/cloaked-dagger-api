@@ -21,6 +21,14 @@ namespace CloakedDagger.Common.Repositories
         public IEnumerable<ResourceScope> GetForResource(Guid resourceId);
 
         /// <summary>
+        /// Determines if the scope with the given id exists on the given resource
+        /// </summary>
+        /// <param name="resourceId">The id of the resource</param>
+        /// <param name="scopeId">The id of the scope</param>
+        /// <returns>True if the scope exists on the resource, false otherwise</returns>
+        public bool ExistsOnResource(Guid resourceId, Guid scopeId);
+
+        /// <summary>
         /// Creates the given resource scope
         /// </summary>
         /// <param name="scope">The resource scope to create</param>

@@ -30,7 +30,7 @@ namespace CloakedDagger.Web.Controllers
         }
 
         [HttpPut]
-        [Route("{id")]
+        [Route("{id}")]
         public IActionResult Update(Guid id, [FromBody] ClientViewModel client)
         {
             client.ClientId = id;

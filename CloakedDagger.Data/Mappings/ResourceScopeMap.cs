@@ -10,7 +10,7 @@ namespace CloakedDagger.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<ResourceScope> builder)
         {
-            builder.ToTable("RESOURCE")
+            builder.ToTable("RESOURCE_SCOPE")
                 .HasKey(rs => rs.ResourceScopeId);
 
             builder.Property(rs => rs.ResourceScopeId)

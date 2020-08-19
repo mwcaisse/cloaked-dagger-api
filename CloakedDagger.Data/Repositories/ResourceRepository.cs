@@ -63,7 +63,7 @@ namespace CloakedDagger.Data.Repositories
             var query = _db.Resources.Where(r => r.Name == name);
             if (exclude.HasValue)
             {
-                query = query.Where(r => r.ResourceId == exclude);
+                query = query.Where(r => r.ResourceId != exclude);
             }
 
             return query.Any();

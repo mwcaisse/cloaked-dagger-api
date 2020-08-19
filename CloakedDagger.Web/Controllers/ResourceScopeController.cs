@@ -39,7 +39,7 @@ namespace CloakedDagger.Web.Controllers
             return Ok(_resourceScopeService.Create(scope));
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("{id}")]
         public IActionResult Remove(Guid id)
         {
