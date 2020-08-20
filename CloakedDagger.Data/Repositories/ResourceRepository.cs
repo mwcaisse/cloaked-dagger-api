@@ -19,17 +19,17 @@ namespace CloakedDagger.Data.Repositories
         
         public Resource Get(Guid id)
         {
-            return _db.Resources.Active().Build().FirstOrDefault(r => r.ResourceId == id);
+            return _db.Resources.Build().FirstOrDefault(r => r.ResourceId == id);
         }
 
         public bool Exists(Guid id)
         {
-            return _db.Resources.Active().Any(r => r.ResourceId == id);
+            return _db.Resources.Any(r => r.ResourceId == id);
         }
 
         public IEnumerable<Resource> GetAll()
         {
-            return _db.Resources.Active().Build();
+            return _db.Resources.Build();
         }
 
         public Resource Create(Resource resource)

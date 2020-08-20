@@ -1,4 +1,5 @@
 using System;
+using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,40 +9,48 @@ namespace CloakedDagger.Web.Controllers
     public class ClientController : BaseController
     {
 
+        private readonly IClientService _clientService;
+
+        public ClientController(IClientService clientService)
+        {
+            this._clientService = clientService;
+        }
+        
         [HttpGet]
         [Route("{id}")]
         public IActionResult Get(Guid id)
         {
-            return NotSupportedYet();
+            return OkOrNotFound(_clientService.Get(id));
         }
 
         [HttpGet]
         [Route("")]
         public IActionResult GetAll()
         {
-            return NotSupportedYet();
+            return Ok(_clientService.GetAll());
         }
 
         [HttpPost]
         [Route("")]
-        public IActionResult Create([FromBody] ClientViewModel client)
+        public IActionResult Create([FromBody] CreateClientViewModel client)
         {
-            return NotSupportedYet();
+            return Ok(_clientService.Create(client));
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update(Guid id, [FromBody] ClientViewModel client)
+        public IActionResult Update(Guid id, [FromBody] UpdateClientViewModel client)
         {
             client.ClientId = id;
-            return NotSupportedYet();
+            return Ok(_clientService.Update(client));
         }
         
-        [HttpGet]
+        [HttpDelete]
         [Route("{id}")]
         public IActionResult Delete(Guid id)
         {
-            return NotSupportedYet();
+            _clientService.Delete(id);
+            return Ok();
         }
         
     }

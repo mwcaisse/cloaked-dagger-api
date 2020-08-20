@@ -55,7 +55,9 @@ namespace CloakedDagger.Logic.Services
             existing.Name = resource.Name;
             existing.Description = resource.Description;
 
-            return _resourceRepository.Update(existing);
+            _resourceRepository.Update(existing);
+            return _resourceRepository.Get(existing.ResourceId);
+
         }
 
         public void Delete(Guid id)

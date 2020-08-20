@@ -13,6 +13,10 @@ namespace CloakedDagger.Data.Mappings
             builder.ToTable("CLIENT_ALLOWED_SCOPE")
                 .HasKey(cas => cas.ClientAllowedScopeId);
 
+            builder.Property(cas => cas.ClientAllowedScopeId)
+                .HasColumnName("ID")
+                .ValueGeneratedOnAdd();
+            
             builder.Property(cas => cas.ClientId)
                 .HasColumnName("CLIENT_ID")
                 .IsRequired();
