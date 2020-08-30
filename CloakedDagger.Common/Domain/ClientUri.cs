@@ -1,14 +1,29 @@
 using System;
 using CloakedDagger.Common.Enums;
+using CloakedDagger.Common.ViewModels;
+using OwlTin.Common.Exceptions;
 
 namespace CloakedDagger.Common.Domain
 {
-    public class ClientUri
+    public class ClientUri : IDomainModel
     {
-        public ClientUriType Type { get; private set; }
-        
-        public string Uri { get; private set; }
+        public Guid Id { get; internal set; }
 
+        public string Key => Id.ToString();
+        
+        public ClientUriType Type { get;  internal set; }
+        
+        public string Uri { get; internal set; }
+
+   
+
+        public static void ValidateUri(string uri)
+        {
+            if (string.IsNullOrWhiteSpace(uri))
+            {
+                throw new EntityValidationException("Uri must not be blank!");
+            }
+        }
         public override bool Equals(object? obj)
         {
             var otherClientUri = obj as ClientUri;
@@ -18,13 +33,12 @@ namespace CloakedDagger.Common.Domain
                 return false;
             }
 
-            return otherClientUri.Type == this.Type &&
-                   otherClientUri.Uri == this.Uri;
+            return Id.Equals(otherClientUri.Id);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine((int) Type, Uri);
+            return Id.GetHashCode();
         }
     }
 }
