@@ -23,7 +23,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 var userRepositoryMock = new Mock<IUserRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
 
-                var users = new List<User>();
+                var users = new List<UserEntity>();
                 
                 var username = "mitchell";
                 var password = "securePassword1";
@@ -40,7 +40,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 passwordHasherMock.Setup(ph => ph.HashPassword(password)).Returns(passwordHash);
                 userRepositoryMock.Setup(ur => ur.UsernameExists(username)).Returns(false);
 
-                userRepositoryMock.Setup(ur => ur.Create(It.IsAny<User>())).Callback((User u) =>
+                userRepositoryMock.Setup(ur => ur.Create(It.IsAny<UserEntity>())).Callback((UserEntity u) =>
                 {
                     users.Add(u);
                 });
@@ -49,7 +49,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 
                 subject.Register(userRegistration);
                 
-                userRepositoryMock.Verify(ur => ur.Create(It.IsAny<User>()), Times.Once);
+                userRepositoryMock.Verify(ur => ur.Create(It.IsAny<UserEntity>()), Times.Once);
 
                 Assert.NotEmpty(users);
                 var createdUser = users.First();
@@ -68,7 +68,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 var userRepositoryMock = new Mock<IUserRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
 
-                var users = new List<User>();
+                var users = new List<UserEntity>();
                 
                 var username = "mitchell";
                 var password = "securePassword1";
@@ -89,7 +89,7 @@ namespace CloakedDagger.Logic.Tests.Services
 
                 var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
 
-                userRepositoryMock.Verify(ur => ur.Create(It.IsAny<User>()), Times.Never);
+                userRepositoryMock.Verify(ur => ur.Create(It.IsAny<UserEntity>()), Times.Never);
                 
                 Assert.NotNull(ex);
                 Assert.Contains("Username is not available", ex.Message);
@@ -101,7 +101,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 var userRepositoryMock = new Mock<IUserRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
 
-                var users = new List<User>();
+                var users = new List<UserEntity>();
                 
                 var username = "mitchell";
 
@@ -119,7 +119,7 @@ namespace CloakedDagger.Logic.Tests.Services
 
                 var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
 
-                userRepositoryMock.Verify(ur => ur.Create(It.IsAny<User>()), Times.Never);
+                userRepositoryMock.Verify(ur => ur.Create(It.IsAny<UserEntity>()), Times.Never);
                 
                 Assert.NotNull(ex);
                 Assert.NotEmpty(ex.ValidationResults);
@@ -135,7 +135,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 var passwordHasherMock = new Mock<IPasswordHasher>();
 
                 var userId = Guid.NewGuid();
-                var user = new User()
+                var user = new UserEntity()
                 {
                     UserId = userId,
                     Password = "amazinglySecurePassword",
@@ -149,7 +149,7 @@ namespace CloakedDagger.Logic.Tests.Services
 
                 var fetchedUser = subject.Get(userId);
                 Assert.NotNull(fetchedUser);
-                Assert.IsNotType<User>(fetchedUser);
+                Assert.IsNotType<UserEntity>(fetchedUser);
                 
                 Assert.Equal(user.UserId, fetchedUser.UserId);
                 Assert.Equal(user.Username, fetchedUser.Username);
@@ -164,7 +164,7 @@ namespace CloakedDagger.Logic.Tests.Services
 
                 var userId = Guid.NewGuid();
 
-                userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(default(User));
+                userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(default(UserEntity));
                 
                 var subject = new UserService(userRepositoryMock.Object, passwordHasherMock.Object);
 

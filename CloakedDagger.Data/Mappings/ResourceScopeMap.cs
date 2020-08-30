@@ -1,14 +1,14 @@
 using System.Runtime.Versioning;
+using CloakedDagger.Common.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OwlTin.Common.Data;
-using ResourceScope = CloakedDagger.Common.Entities.ResourceScope;
 
 namespace CloakedDagger.Data.Mappings
 {
-    public class ResourceScopeMap : IEntityTypeConfiguration<ResourceScope>
+    public class ResourceScopeMap : IEntityTypeConfiguration<ResourceScopeEntity>
     {
-        public void Configure(EntityTypeBuilder<ResourceScope> builder)
+        public void Configure(EntityTypeBuilder<ResourceScopeEntity> builder)
         {
             builder.ToTable("RESOURCE_SCOPE")
                 .HasKey(rs => rs.ResourceScopeId);
@@ -25,12 +25,12 @@ namespace CloakedDagger.Data.Mappings
                 .HasColumnName("SCOPE_ID")
                 .IsRequired();
 
-            builder.HasOne(rs => rs.Resource)
+            builder.HasOne(rs => rs.ResourceEntity)
                 .WithMany(r => r.AvailableScopes)
                 .HasForeignKey(rs => rs.ResourceId)
                 .IsRequired();
 
-            builder.HasOne(rs => rs.Scope)
+            builder.HasOne(rs => rs.ScopeEntity)
                 .WithMany(s => s.ResourceScopes)
                 .HasForeignKey(rs => rs.ScopeId)
                 .IsRequired();

@@ -16,12 +16,12 @@ namespace CloakedDagger.Data.Repositories
         {
             this._db = db;
         }
-        public ResourceScope Get(Guid id)
+        public ResourceScopeEntity Get(Guid id)
         {
             return _db.ResourceScopes.Build().FirstOrDefault(rs => rs.ResourceScopeId == id);
         }
 
-        public IEnumerable<ResourceScope> GetForResource(Guid resourceId)
+        public IEnumerable<ResourceScopeEntity> GetForResource(Guid resourceId)
         {
             return _db.ResourceScopes.Build().Where(rs => rs.ResourceId == resourceId);
         }
@@ -31,11 +31,11 @@ namespace CloakedDagger.Data.Repositories
             return _db.ResourceScopes.Any(rs => rs.ResourceId == resourceId && rs.ScopeId == scopeId);
         }
 
-        public ResourceScope Create(ResourceScope scope)
+        public ResourceScopeEntity Create(ResourceScopeEntity scopeEntity)
         {
-            _db.ResourceScopes.Add(scope);
+            _db.ResourceScopes.Add(scopeEntity);
             _db.SaveChanges();
-            return scope;
+            return scopeEntity;
         }
 
         public void Delete(Guid id)

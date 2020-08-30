@@ -4,7 +4,7 @@ using OwlTin.Common.Entities;
 
 namespace CloakedDagger.Common.Entities
 {
-    public class ClientAllowedGrantType : ITrackedEntity
+    public class ClientAllowedGrantTypeEntity : ITrackedEntity
     {
         public Guid ClientAllowedGrantTypeId { get; set; }
         
@@ -16,6 +16,6 @@ namespace CloakedDagger.Common.Entities
         
         public DateTime ModifiedDate { get; set; }
         
-        public virtual Client Client { get; set; }
+        public virtual ClientEntity ClientEntity { get; set; }
     }
 }

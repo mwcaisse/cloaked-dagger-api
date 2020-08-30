@@ -5,9 +5,9 @@ using OwlTin.Common.Data;
 
 namespace CloakedDagger.Data.Mappings
 {
-    public class UserMap : IEntityTypeConfiguration<User>
+    public class UserMap : IEntityTypeConfiguration<UserEntity>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
             builder.ToTable("USER")
                 .HasKey(u => u.UserId);

@@ -36,7 +36,7 @@ namespace CloakedDagger.Logic.Services
         public void Register(UserRegistrationViewModel registration)
         {
             ValidateUserRegistration(registration);
-            var toCreate = new User()
+            var toCreate = new UserEntity()
             {
                 Username = registration.Username,
                 Email = registration.Email,

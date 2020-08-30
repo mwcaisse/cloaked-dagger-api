@@ -8,13 +8,13 @@ namespace CloakedDagger.Common.Services
 {
     public interface IClientService
     {
-        public Client Get(Guid id);
+        public ClientEntity Get(Guid id);
 
-        public IEnumerable<Client> GetAll();
+        public IEnumerable<ClientEntity> GetAll();
 
         public ClientCreatedViewModel Create(CreateClientViewModel client);
 
-        public Client Update(UpdateClientViewModel client);
+        public ClientEntity Update(UpdateClientViewModel client);
 
         public void Delete(Guid id);
 

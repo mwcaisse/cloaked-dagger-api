@@ -4,7 +4,7 @@ using OwlTin.Common.Entities;
 
 namespace CloakedDagger.Common.Entities
 {
-    public class Resource : IActiveEntity, ITrackedEntity
+    public class ResourceEntity : IActiveEntity, ITrackedEntity
     {
         public Guid ResourceId { get; set; }
         
@@ -18,6 +18,6 @@ namespace CloakedDagger.Common.Entities
         
         public DateTime ModifiedDate { get; set; }
 
-        public virtual ICollection<ResourceScope> AvailableScopes { get; set; }
+        public virtual ICollection<ResourceScopeEntity> AvailableScopes { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace CloakedDagger.Logic.Services
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns>The user object if login was successful, null if the login failed</returns>
-        private User ValidateLogin(string username, string password)
+        private UserEntity ValidateLogin(string username, string password)
         {
             var user = _userRepository.Get(username);
             if (null == user)
@@ -61,15 +61,15 @@ namespace CloakedDagger.Logic.Services
         /// <summary>
         ///  Creates a ClaimsPrincipal for authentication that represents the given user
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="userEntity"></param>
         /// <returns></returns>
-        private ClaimsPrincipal CreateClaimsPrincipalForUser(User user)
+        private ClaimsPrincipal CreateClaimsPrincipalForUser(UserEntity userEntity)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Sid, user.UserId.ToString()),
-                new Claim("sub", user.Username)
+                new Claim(ClaimTypes.Name, userEntity.Username),
+                new Claim(ClaimTypes.Sid, userEntity.UserId.ToString()),
+                new Claim("sub", userEntity.Username)
                 
             };
             var identity = new ClaimsIdentity(claims, "login");

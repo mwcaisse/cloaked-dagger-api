@@ -5,9 +5,9 @@ using OwlTin.Common.Data;
 
 namespace CloakedDagger.Data.Mappings
 {
-    public class ClientAllowedScopeMap : IEntityTypeConfiguration<ClientAllowedScope>
+    public class ClientAllowedScopeMap : IEntityTypeConfiguration<ClientAllowedScopeEntity>
     {
-        public void Configure(EntityTypeBuilder<ClientAllowedScope> builder)
+        public void Configure(EntityTypeBuilder<ClientAllowedScopeEntity> builder)
         {
 
             builder.ToTable("CLIENT_ALLOWED_SCOPE")
@@ -25,12 +25,12 @@ namespace CloakedDagger.Data.Mappings
                 .HasColumnName("SCOPE_ID")
                 .IsRequired();
 
-            builder.HasOne(cas => cas.Client)
+            builder.HasOne(cas => cas.ClientEntity)
                 .WithMany(c => c.ClientAllowedScopes)
                 .HasForeignKey(cas => cas.ClientId)
                 .IsRequired();
 
-            builder.HasOne(cas => cas.Scope)
+            builder.HasOne(cas => cas.ScopeEntity)
                 .WithMany(s => s.ClientAllowedScopes)
                 .HasForeignKey(cas => cas.ScopeId)
                 .IsRequired();

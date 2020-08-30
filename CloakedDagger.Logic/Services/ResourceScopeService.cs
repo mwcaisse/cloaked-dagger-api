@@ -25,17 +25,17 @@ namespace CloakedDagger.Logic.Services
             this._scopeRepository = scopeRepository;
         }
         
-        public ResourceScope Get(Guid id)
+        public ResourceScopeEntity Get(Guid id)
         {
             return _resourceScopeRepository.Get(id);
         }
 
-        public IEnumerable<ResourceScope> GetForResource(Guid resourceId)
+        public IEnumerable<ResourceScopeEntity> GetForResource(Guid resourceId)
         {
             return _resourceScopeRepository.GetForResource(resourceId);
         }
 
-        public ResourceScope Create(AddResourceScopeViewModel vm)
+        public ResourceScopeEntity Create(AddResourceScopeViewModel vm)
         {
             ValidationUtils.ValidateViewModel(vm);
 
@@ -47,7 +47,7 @@ namespace CloakedDagger.Logic.Services
             var scope = _scopeRepository.Get(vm.Name);
             if (null == scope)
             {
-                scope = new Scope()
+                scope = new ScopeEntity()
                 {
                     Name = vm.Name,
                     Description = vm.Description
@@ -62,10 +62,10 @@ namespace CloakedDagger.Logic.Services
                 }
             }
 
-            var resourceScope = new ResourceScope()
+            var resourceScope = new ResourceScopeEntity()
             {
                 ResourceId = vm.ResourceId,
-                Scope = scope
+                ScopeEntity = scope
             };
 
             return _resourceScopeRepository.Create(resourceScope);

@@ -6,9 +6,9 @@ namespace CloakedDagger.Data.Extensions
 {
     public static class ResourceScopeExtensions
     {
-        public static IQueryable<ResourceScope> Build(this IQueryable<ResourceScope> query)
+        public static IQueryable<ResourceScopeEntity> Build(this IQueryable<ResourceScopeEntity> query)
         {
-            return query.Include(rs => rs.Scope);
+            return query.Include(rs => rs.ScopeEntity);
         }
     }
 }

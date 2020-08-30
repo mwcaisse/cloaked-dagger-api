@@ -17,7 +17,7 @@ namespace CloakedDagger.Logic.Services
             this._resourceRepository = resourceRepository;
         }
         
-        public Resource Get(Guid id)
+        public ResourceEntity Get(Guid id)
         {
             return _resourceRepository.Get(id);
         }
@@ -27,12 +27,12 @@ namespace CloakedDagger.Logic.Services
             return _resourceRepository.GetAll();
         }
 
-        public Resource Create(ResourceViewModel resource)
+        public ResourceEntity Create(ResourceViewModel resource)
         {
             resource.ResourceId = null; // clear this out, just in case
             ValidateResource(resource);
             
-            var toCreate = new Resource()
+            var toCreate = new ResourceEntity()
             {
                 Name = resource.Name,
                 Description = resource.Description,
@@ -42,7 +42,7 @@ namespace CloakedDagger.Logic.Services
             return _resourceRepository.Create(toCreate);
         }
 
-        public Resource Update(ResourceViewModel resource)
+        public ResourceEntity Update(ResourceViewModel resource)
         {
             if (!resource.ResourceId.HasValue)
             {

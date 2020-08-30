@@ -17,13 +17,13 @@ namespace CloakedDagger.Common.Repositories
         /// </summary>
         /// <param name="name">The name of the scope</param>
         /// <returns>The scope if a scope with the given name exists, null otherwise</returns>
-        public Scope Get(string name);
+        public ScopeEntity Get(string name);
 
         /// <summary>
         /// Creates the given scope
         /// </summary>
-        /// <param name="scope">the scope to create</param>
+        /// <param name="scopeEntity">the scope to create</param>
         /// <returns>The newly created scope</returns>
-        public Scope Create(Scope scope);
+        public ScopeEntity Create(ScopeEntity scopeEntity);
     }
 }

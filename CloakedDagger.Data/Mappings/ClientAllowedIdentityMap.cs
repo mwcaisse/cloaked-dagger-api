@@ -5,9 +5,9 @@ using OwlTin.Common.Data;
 
 namespace CloakedDagger.Data.Mappings
 {
-    public class ClientAllowedIdentityMap : IEntityTypeConfiguration<ClientAllowedIdentity>
+    public class ClientAllowedIdentityMap : IEntityTypeConfiguration<ClientAllowedIdentityEntity>
     {
-        public void Configure(EntityTypeBuilder<ClientAllowedIdentity> builder)
+        public void Configure(EntityTypeBuilder<ClientAllowedIdentityEntity> builder)
         {
 
             builder.ToTable("CLIENT_ALLOWED_IDENTITY")
@@ -24,7 +24,7 @@ namespace CloakedDagger.Data.Mappings
             builder.Property(cai => cai.Identity)
                 .IsRequired();
 
-            builder.HasOne(cai => cai.Client)
+            builder.HasOne(cai => cai.ClientEntity)
                 .WithMany(c => c.ClientAllowedIdentities)
                 .HasForeignKey(cai => cai.ClientId)
                 .IsRequired();

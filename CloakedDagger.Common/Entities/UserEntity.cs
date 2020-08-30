@@ -3,7 +3,7 @@ using OwlTin.Common.Entities;
 
 namespace CloakedDagger.Common.Entities
 {
-    public class User : ITrackedEntity, IActiveEntity
+    public class UserEntity : ITrackedEntity, IActiveEntity
     {
         
         public Guid UserId { get; set; }

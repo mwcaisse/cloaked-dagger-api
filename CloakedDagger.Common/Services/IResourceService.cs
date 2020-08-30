@@ -8,13 +8,13 @@ namespace CloakedDagger.Common.Services
     public interface IResourceService
     {
 
-        public Resource Get(Guid id);
+        public ResourceEntity Get(Guid id);
 
         public IEnumerable GetAll();
 
-        public Resource Create(ResourceViewModel resource);
+        public ResourceEntity Create(ResourceViewModel resource);
 
-        public Resource Update(ResourceViewModel resource);
+        public ResourceEntity Update(ResourceViewModel resource);
         
         public void Delete(Guid id);
 

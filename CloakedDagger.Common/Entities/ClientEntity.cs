@@ -4,7 +4,7 @@ using OwlTin.Common.Entities;
 
 namespace CloakedDagger.Common.Entities
 {
-    public class Client : ITrackedEntity, IActiveEntity
+    public class ClientEntity : ITrackedEntity, IActiveEntity
     {
         public Guid ClientId { get; set; }
         
@@ -20,12 +20,12 @@ namespace CloakedDagger.Common.Entities
         
         public bool Active { get; set; }
 
-        public virtual ICollection<ClientUri> ClientUris { get; set; }
+        public virtual ICollection<ClientUriEntity> ClientUris { get; set; }
         
-        public virtual ICollection<ClientAllowedScope> ClientAllowedScopes { get; set; }
+        public virtual ICollection<ClientAllowedScopeEntity> ClientAllowedScopes { get; set; }
         
-        public virtual ICollection<ClientAllowedIdentity> ClientAllowedIdentities { get; set; }
+        public virtual ICollection<ClientAllowedIdentityEntity> ClientAllowedIdentities { get; set; }
         
-        public virtual ICollection<ClientAllowedGrantType> ClientAllowedGrantTypes { get; set; }
+        public virtual ICollection<ClientAllowedGrantTypeEntity> ClientAllowedGrantTypes { get; set; }
     }
 }

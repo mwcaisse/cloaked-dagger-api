@@ -17,7 +17,7 @@ namespace CloakedDagger.Data.Repositories
             this._db = db;
         }
         
-        public Resource Get(Guid id)
+        public ResourceEntity Get(Guid id)
         {
             return _db.Resources.Build().FirstOrDefault(r => r.ResourceId == id);
         }
@@ -27,25 +27,25 @@ namespace CloakedDagger.Data.Repositories
             return _db.Resources.Any(r => r.ResourceId == id);
         }
 
-        public IEnumerable<Resource> GetAll()
+        public IEnumerable<ResourceEntity> GetAll()
         {
             return _db.Resources.Build();
         }
 
-        public Resource Create(Resource resource)
+        public ResourceEntity Create(ResourceEntity resourceEntity)
         {
-            _db.Resources.Add(resource);
+            _db.Resources.Add(resourceEntity);
             _db.SaveChanges();
 
-            return resource;
+            return resourceEntity;
         }
 
-        public Resource Update(Resource resource)
+        public ResourceEntity Update(ResourceEntity resourceEntity)
         {
-            _db.Resources.Attach(resource);
+            _db.Resources.Attach(resourceEntity);
             _db.SaveChanges();
 
-            return resource;
+            return resourceEntity;
         }
 
         public void Delete(Guid id)

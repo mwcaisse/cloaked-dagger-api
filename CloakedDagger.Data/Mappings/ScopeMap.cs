@@ -5,9 +5,9 @@ using OwlTin.Common.Data;
 
 namespace CloakedDagger.Data.Mappings
 {
-    public class ScopeMap : IEntityTypeConfiguration<Scope>
+    public class ScopeMap : IEntityTypeConfiguration<ScopeEntity>
     {
-        public void Configure(EntityTypeBuilder<Scope> builder)
+        public void Configure(EntityTypeBuilder<ScopeEntity> builder)
         {
 
             builder.ToTable("SCOPE")

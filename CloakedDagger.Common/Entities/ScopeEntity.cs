@@ -4,7 +4,7 @@ using OwlTin.Common.Entities;
 
 namespace CloakedDagger.Common.Entities
 {
-    public class Scope : ITrackedEntity, IActiveEntity
+    public class ScopeEntity : ITrackedEntity, IActiveEntity
     {
         public Guid ScopeId { get; set; }
         
@@ -18,8 +18,8 @@ namespace CloakedDagger.Common.Entities
         
         public bool Active { get; set; }
         
-        public virtual ICollection<ResourceScope> ResourceScopes { get; set; }
+        public virtual ICollection<ResourceScopeEntity> ResourceScopes { get; set; }
         
-        public virtual ICollection<ClientAllowedScope> ClientAllowedScopes { get; set; }
+        public virtual ICollection<ClientAllowedScopeEntity> ClientAllowedScopes { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using OwlTin.Common.Entities;
 
 namespace CloakedDagger.Common.Entities
 {
-    public class ClientAllowedScope : ITrackedEntity
+    public class ClientAllowedScopeEntity : ITrackedEntity
     {
         public Guid ClientAllowedScopeId { get; set; }
         
@@ -15,8 +15,8 @@ namespace CloakedDagger.Common.Entities
         
         public DateTime ModifiedDate { get; set; }
         
-        public virtual Client Client { get; set; }
+        public virtual ClientEntity ClientEntity { get; set; }
         
-        public virtual Scope Scope { get; set; }
+        public virtual ScopeEntity ScopeEntity { get; set; }
     }
 }

@@ -16,12 +16,12 @@ namespace CloakedDagger.Data.Repositories
             this._db = db;
         }
         
-        public User Get(string username)
+        public UserEntity Get(string username)
         {
             return _db.Users.Active().SingleOrDefault(u => u.Username == username);
         }
 
-        public User Get(Guid id)
+        public UserEntity Get(Guid id)
         {
             return _db.Users.Active().SingleOrDefault(u => u.UserId == id);
         }
@@ -31,9 +31,9 @@ namespace CloakedDagger.Data.Repositories
             return _db.Users.Any(u => u.Username == username);
         }
 
-        public void Create(User user)
+        public void Create(UserEntity userEntity)
         {
-            _db.Users.Add(user);
+            _db.Users.Add(userEntity);
             _db.SaveChanges();
         }
     }

@@ -7,7 +7,7 @@ namespace CloakedDagger.Common.Repositories
 {
     public interface IResourceRepository
     {
-        public Resource Get(Guid id);
+        public ResourceEntity Get(Guid id);
 
         /// <summary>
         /// Determines if a resource with the given id exists
@@ -16,11 +16,11 @@ namespace CloakedDagger.Common.Repositories
         /// <returns>True if the resource exists, false otherwise</returns>
         public bool Exists(Guid id);
 
-        public IEnumerable<Resource> GetAll();
+        public IEnumerable<ResourceEntity> GetAll();
 
-        public Resource Create(Resource resource);
+        public ResourceEntity Create(ResourceEntity resourceEntity);
 
-        public Resource Update(Resource resource);
+        public ResourceEntity Update(ResourceEntity resourceEntity);
 
         public void Delete(Guid id);
 

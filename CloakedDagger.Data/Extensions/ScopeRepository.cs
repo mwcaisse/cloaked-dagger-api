@@ -18,16 +18,16 @@ namespace CloakedDagger.Data.Extensions
             return _db.Scopes.Any(s => s.Name == name);
         }
 
-        public Scope Get(string name)
+        public ScopeEntity Get(string name)
         {
             return _db.Scopes.FirstOrDefault(s => s.Name == name);
         }
 
-        public Scope Create(Scope scope)
+        public ScopeEntity Create(ScopeEntity scopeEntity)
         {
-            _db.Scopes.Add(scope);
+            _db.Scopes.Add(scopeEntity);
             _db.SaveChanges();
-            return scope;
+            return scopeEntity;
         }
     }
 }

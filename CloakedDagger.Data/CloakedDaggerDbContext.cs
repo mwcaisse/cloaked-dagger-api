@@ -7,23 +7,23 @@ namespace CloakedDagger.Data
 {
     public class CloakedDaggerDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
         
-        public DbSet<Client> Clients { get; set; }
+        public DbSet<ClientEntity> Clients { get; set; }
         
-        public DbSet<ClientAllowedScope> ClientAllowedScopes { get; set; }
+        public DbSet<ClientAllowedScopeEntity> ClientAllowedScopes { get; set; }
         
-        public DbSet<ClientAllowedGrantType> ClientAllowedGrantTypes { get; set; }
+        public DbSet<ClientAllowedGrantTypeEntity> ClientAllowedGrantTypes { get; set; }
         
-        public DbSet<ClientAllowedIdentity> ClientAllowedIdentities { get; set; }
+        public DbSet<ClientAllowedIdentityEntity> ClientAllowedIdentities { get; set; }
         
-        public DbSet<ClientUri> ClientUris { get; set; }
+        public DbSet<ClientUriEntity> ClientUris { get; set; }
         
-        public DbSet<Resource> Resources { get; set; }
+        public DbSet<ResourceEntity> Resources { get; set; }
         
-        public DbSet<ResourceScope> ResourceScopes { get; set; }
+        public DbSet<ResourceScopeEntity> ResourceScopes { get; set; }
         
-        public DbSet<Scope> Scopes { get; set; }
+        public DbSet<ScopeEntity> Scopes { get; set; }
 
         public CloakedDaggerDbContext(DbContextOptions<CloakedDaggerDbContext> options) : base(options)
         {

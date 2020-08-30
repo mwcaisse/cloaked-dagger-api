@@ -17,7 +17,7 @@ namespace CloakedDagger.Data.Repositories
             this._db = db;
         }
         
-        public Client Get(Guid id)
+        public ClientEntity Get(Guid id)
         {
             return _db.Clients.Build().FirstOrDefault(c => c.ClientId == id);
         }
@@ -34,23 +34,23 @@ namespace CloakedDagger.Data.Repositories
             return query.Any();
         }
 
-        public IEnumerable<Client> GetAll()
+        public IEnumerable<ClientEntity> GetAll()
         {
             return _db.Clients.Build();
         }
 
-        public Client Create(Client client)
+        public ClientEntity Create(ClientEntity clientEntity)
         {
-            _db.Add(client);
+            _db.Add(clientEntity);
             _db.SaveChanges();
-            return client;
+            return clientEntity;
         }
 
-        public Client Update(Client client)
+        public ClientEntity Update(ClientEntity clientEntity)
         {
-            _db.Attach(client);
+            _db.Attach(clientEntity);
             _db.SaveChanges();
-            return client;
+            return clientEntity;
         }
 
         public void Delete(Guid id)

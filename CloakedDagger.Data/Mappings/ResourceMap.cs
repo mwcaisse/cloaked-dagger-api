@@ -5,9 +5,9 @@ using OwlTin.Common.Data;
 
 namespace CloakedDagger.Data.Mappings
 {
-    public class ResourceMap : IEntityTypeConfiguration<Resource>
+    public class ResourceMap : IEntityTypeConfiguration<ResourceEntity>
     {
-        public void Configure(EntityTypeBuilder<Resource> builder)
+        public void Configure(EntityTypeBuilder<ResourceEntity> builder)
         {
 
             builder.ToTable("RESOURCE")

@@ -6,15 +6,15 @@ namespace CloakedDagger.Common.Repositories
 {
     public interface IClientRepository
     {
-        public Client Get(Guid id);
+        public ClientEntity Get(Guid id);
 
         public bool ClientWithNameExists(string name, Guid? excludeClientId = null);
 
-        public IEnumerable<Client> GetAll();
+        public IEnumerable<ClientEntity> GetAll();
 
-        public Client Create(Client client);
+        public ClientEntity Create(ClientEntity clientEntity);
 
-        public Client Update(Client client);
+        public ClientEntity Update(ClientEntity clientEntity);
 
         public void Delete(Guid id);
     }

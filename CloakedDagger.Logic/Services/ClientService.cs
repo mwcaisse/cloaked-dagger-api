@@ -20,12 +20,12 @@ namespace CloakedDagger.Logic.Services
             this._clientRepository = clientRepository;
         }
         
-        public Client Get(Guid id)
+        public ClientEntity Get(Guid id)
         {
             return _clientRepository.Get(id);
         }
 
-        public IEnumerable<Client> GetAll()
+        public IEnumerable<ClientEntity> GetAll()
         {
             return _clientRepository.GetAll();
         }
@@ -36,7 +36,7 @@ namespace CloakedDagger.Logic.Services
 
             var secret = Guid.NewGuid().ToString();
             
-            var toCreate = new Client()
+            var toCreate = new ClientEntity()
             {
                 Name = client.Name,
                 Description =  client.Description,
@@ -54,7 +54,7 @@ namespace CloakedDagger.Logic.Services
             };
         }
 
-        public Client Update(UpdateClientViewModel client)
+        public ClientEntity Update(UpdateClientViewModel client)
         {
             ValidateClient(client);
 

@@ -5,9 +5,9 @@ using OwlTin.Common.Data;
 
 namespace CloakedDagger.Data.Mappings
 {
-    public class ClientUriMap : IEntityTypeConfiguration<ClientUri>
+    public class ClientUriMap : IEntityTypeConfiguration<ClientUriEntity>
     {
-        public void Configure(EntityTypeBuilder<ClientUri> builder)
+        public void Configure(EntityTypeBuilder<ClientUriEntity> builder)
         {
 
             builder.ToTable("CLIENT_URI")
@@ -30,7 +30,7 @@ namespace CloakedDagger.Data.Mappings
                 .IsRequired()
                 .HasMaxLength(5000);
 
-            builder.HasOne(cu => cu.Client)
+            builder.HasOne(cu => cu.ClientEntity)
                 .WithMany(c => c.ClientUris)
                 .HasForeignKey(cu => cu.ClientId)
                 .IsRequired();

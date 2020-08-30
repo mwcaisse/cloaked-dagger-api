@@ -8,11 +8,11 @@ namespace CloakedDagger.Common.Services
     public interface IResourceScopeService
     {
 
-        public ResourceScope Get(Guid id);
+        public ResourceScopeEntity Get(Guid id);
         
-        public IEnumerable<ResourceScope> GetForResource(Guid resourceId);
+        public IEnumerable<ResourceScopeEntity> GetForResource(Guid resourceId);
 
-        public ResourceScope Create(AddResourceScopeViewModel scope);
+        public ResourceScopeEntity Create(AddResourceScopeViewModel scope);
 
         public void Delete(Guid id);
 

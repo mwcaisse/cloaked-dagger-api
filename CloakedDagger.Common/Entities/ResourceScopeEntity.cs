@@ -3,7 +3,7 @@ using OwlTin.Common.Entities;
 
 namespace CloakedDagger.Common.Entities
 {
-    public class ResourceScope : ITrackedEntity
+    public class ResourceScopeEntity : ITrackedEntity
     {
         public Guid ResourceScopeId { get; set; }
         
@@ -15,8 +15,8 @@ namespace CloakedDagger.Common.Entities
         
         public DateTime ModifiedDate { get; set; }
         
-        public virtual Resource Resource { get; set; }
+        public virtual ResourceEntity ResourceEntity { get; set; }
         
-        public virtual Scope Scope { get; set; }
+        public virtual ScopeEntity ScopeEntity { get; set; }
     }
 }

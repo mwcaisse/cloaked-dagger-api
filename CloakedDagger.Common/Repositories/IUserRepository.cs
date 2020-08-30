@@ -11,14 +11,14 @@ namespace CloakedDagger.Common.Repositories
         /// </summary>
         /// <param name="username"></param>
         /// <returns>The user with that username, or null if no user exists</returns>
-        public User Get(string username);
+        public UserEntity Get(string username);
 
         /// <summary>
         /// Retrieves the user with the given id
         /// </summary>
         /// <param name="id"></param>
         /// <returns>The user with the id, or null if no user exists</returns>
-        public User Get(Guid id);
+        public UserEntity Get(Guid id);
 
         /// <summary>
         /// Determines if a user with the given username exists or not.
@@ -30,9 +30,9 @@ namespace CloakedDagger.Common.Repositories
         /// <summary>
         /// Creates the given user
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="userEntity"></param>
         /// <returns></returns>
-        public void Create(User user);
+        public void Create(UserEntity userEntity);
 
     }
 }

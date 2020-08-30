@@ -28,7 +28,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 passwordHasher.Setup(ph => 
                     ph.VerifyPassword("correctHASH", password)).Returns(true);
 
-                userRepository.Setup(ur => ur.Get(username)).Returns(new User()
+                userRepository.Setup(ur => ur.Get(username)).Returns(new UserEntity()
                 {
                     UserId = userId,
                     Username = username,
@@ -57,7 +57,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 var userRepository = new Mock<IUserRepository>();
                 var passwordHasher = new Mock<IPasswordHasher>();
 
-                userRepository.Setup(ur => ur.Get(username)).Returns(default(User));
+                userRepository.Setup(ur => ur.Get(username)).Returns(default(UserEntity));
                 
                 var subject = new LoginService(userRepository.Object, passwordHasher.Object);
                 
@@ -78,7 +78,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 passwordHasher.Setup(ph => 
                     ph.VerifyPassword(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 
-                userRepository.Setup(ur => ur.Get(username)).Returns(new User()
+                userRepository.Setup(ur => ur.Get(username)).Returns(new UserEntity()
                 {
                     Username = username,
                     Password = "amazingHash"

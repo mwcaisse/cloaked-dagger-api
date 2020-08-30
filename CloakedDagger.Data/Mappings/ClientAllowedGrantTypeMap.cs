@@ -5,9 +5,9 @@ using OwlTin.Common.Data;
 
 namespace CloakedDagger.Data.Mappings
 {
-    public class ClientAllowedGrantTypeMap : IEntityTypeConfiguration<ClientAllowedGrantType>
+    public class ClientAllowedGrantTypeMap : IEntityTypeConfiguration<ClientAllowedGrantTypeEntity>
     {
-        public void Configure(EntityTypeBuilder<ClientAllowedGrantType> builder)
+        public void Configure(EntityTypeBuilder<ClientAllowedGrantTypeEntity> builder)
         {
             builder.ToTable("CLIENT_ALLOWED_GRANT_TYPE")
                 .HasKey(cagt => cagt.ClientAllowedGrantTypeId);
@@ -24,7 +24,7 @@ namespace CloakedDagger.Data.Mappings
                 .HasColumnName("GRANT_TYPE")
                 .IsRequired();
 
-            builder.HasOne(cagt => cagt.Client)
+            builder.HasOne(cagt => cagt.ClientEntity)
                 .WithMany(c => c.ClientAllowedGrantTypes)
                 .HasForeignKey(cagt => cagt.ClientId)
                 .IsRequired();
