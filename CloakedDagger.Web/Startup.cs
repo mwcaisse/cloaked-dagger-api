@@ -62,6 +62,7 @@ namespace CloakedDagger.Web
             services.AddTransient<IResourceScopeRepository, ResourceScopeRepository>();
             services.AddTransient<IScopeRepository, ScopeRepository>();
             services.AddTransient<IClientRepository, ClientRepository>();
+            services.AddTransient<IClientEventRepository, ClientEventRepository>();
             
             services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IUserService, UserService>();

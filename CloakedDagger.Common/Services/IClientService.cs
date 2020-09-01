@@ -12,9 +12,9 @@ namespace CloakedDagger.Common.Services
 
         public IEnumerable<ClientEntity> GetAll();
 
-        public ClientCreatedViewModel Create(CreateClientViewModel client);
+        public ClientCreatedViewModel Create(CreateClientViewModel vm);
 
-        public ClientEntity Update(UpdateClientViewModel client);
+        public ClientEntity Update(UpdateClientViewModel vm);
 
         public void Delete(Guid id);
 

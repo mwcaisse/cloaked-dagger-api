@@ -9,6 +9,7 @@ namespace CloakedDagger.Data
     {
         public DbSet<UserEntity> Users { get; set; }
         
+        public DbSet<ClientEventEntity> ClientEvents { get; set; }
         public DbSet<ClientEntity> Clients { get; set; }
         
         public DbSet<ClientAllowedScopeEntity> ClientAllowedScopes { get; set; }
@@ -41,6 +42,7 @@ namespace CloakedDagger.Data
             modelBuilder.ApplyConfiguration(new ClientAllowedIdentityMap());
             modelBuilder.ApplyConfiguration(new ClientAllowedScopeMap());
             modelBuilder.ApplyConfiguration(new ClientUriMap());
+            modelBuilder.ApplyConfiguration(new ClientEventEntityMap());
             
             modelBuilder.ApplyConfiguration(new ResourceMap());
             modelBuilder.ApplyConfiguration(new ResourceScopeMap());

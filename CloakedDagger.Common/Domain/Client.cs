@@ -200,10 +200,10 @@ namespace CloakedDagger.Common.Domain
             var e = new ClientCreatedEvent()
             {
                 ClientId = Id,
-                Name = Name,
+                Name = name,
                 Secret = ShaUtils.Sha256HashString(secret),
-                Description = Description,
-                OccuredOn = DateTime.UtcNow
+                Description = description,
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
             EventHandler.Created(this, e);
@@ -214,11 +214,10 @@ namespace CloakedDagger.Common.Domain
             var e = new ClientRenamedEvent()
             {
                 ClientId = Id,
-                Name = Name,
-                OccuredOn = DateTime.UtcNow
+                Name = name,
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
-
             EventHandler.Renamed(this, e);
         }
 
@@ -227,8 +226,8 @@ namespace CloakedDagger.Common.Domain
             var e = new ClientRedescribedEvent()
             {
                 ClientId = Id,
-                Description = Description,
-                OccuredOn = DateTime.UtcNow
+                Description = description,
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
             EventHandler.Redescribed(this, e);
@@ -259,7 +258,7 @@ namespace CloakedDagger.Common.Domain
             var e = new ClientActivatedEvent()
             {
                 ClientId = Id,
-                OccuredOn = DateTime.UtcNow
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
             EventHandler.Activated(this, e);
@@ -270,7 +269,7 @@ namespace CloakedDagger.Common.Domain
             var e = new ClientDeactivatedEvent()
             {
                 ClientId = Id,
-                OccuredOn = DateTime.UtcNow
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
             EventHandler.Deactivated(this, e);
@@ -288,7 +287,7 @@ namespace CloakedDagger.Common.Domain
             {
                 Identity = identity,
                 ClientId = Id,
-                OccuredOn = DateTime.UtcNow
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
             EventHandler.AllowedIdentityAdded(this, e);
@@ -305,7 +304,7 @@ namespace CloakedDagger.Common.Domain
             {
                 Identity = identity,
                 ClientId = Id,
-                OccuredOn = DateTime.UtcNow
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
             EventHandler.AllowedIdentityRemoved(this, e);
@@ -322,7 +321,7 @@ namespace CloakedDagger.Common.Domain
             {
                 GrantType = grantType,
                 ClientId = Id,
-                OccuredOn = DateTime.UtcNow
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
             EventHandler.AllowedGrantTypeAdded(this, e);
@@ -339,7 +338,7 @@ namespace CloakedDagger.Common.Domain
             {
                 GrantType = grantType,
                 ClientId = Id,
-                OccuredOn = DateTime.UtcNow
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
             EventHandler.AllowedGrantTypeRemoved(this, e);
@@ -356,7 +355,7 @@ namespace CloakedDagger.Common.Domain
                 UriType = type,
                 Uri = uri,
                 ClientId = Id,
-                OccuredOn = DateTime.UtcNow
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
             EventHandler.UriAdded(this, e);
@@ -384,7 +383,7 @@ namespace CloakedDagger.Common.Domain
                 Uri = uri,
                 UriType = type,
                 ClientId = Id,
-                OccuredOn = DateTime.UtcNow,
+                OccurredOn = DateTime.UtcNow,
                 ClientUriId = clientUriId
             };
             _changes.Add(e);
@@ -409,7 +408,7 @@ namespace CloakedDagger.Common.Domain
             {
                 ClientUriId = clientUriId,
                 ClientId = Id,
-                OccuredOn = DateTime.UtcNow
+                OccurredOn = DateTime.UtcNow
             };
             _changes.Add(e);
             EventHandler.UriRemoved(this, e);

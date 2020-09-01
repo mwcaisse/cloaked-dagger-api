@@ -4,7 +4,7 @@ namespace CloakedDagger.Common.Domain.Events
 {
     public abstract class DomainEvent
     {
-        public DateTime OccuredOn { get; set; }
+        public DateTime OccurredOn { get; set; }
         
         public abstract string Type { get; }
     }
