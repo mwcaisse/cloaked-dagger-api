@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CloakedDagger.Common.Domain.Events.Client;
@@ -13,6 +14,12 @@ namespace CloakedDagger.Common.Repositories
         /// <param name="clientId"></param>
         /// <returns></returns>
         IEnumerable<ClientDomainEvent> GetClientEvents(Guid clientId);
+
+        /// <summary>
+        ///  Returns all events for all clients
+        /// </summary>
+        /// <returns></returns>
+        IDictionary<Guid, IEnumerable<ClientDomainEvent>> GetAllClientEvents();
 
         /// <summary>
         /// Saves the list of client events

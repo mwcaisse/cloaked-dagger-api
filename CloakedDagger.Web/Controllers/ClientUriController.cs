@@ -26,8 +26,6 @@ namespace CloakedDagger.Web.Controllers
         [Route("{id}")]
         public IActionResult Update(Guid clientId, Guid id, [FromBody] ClientUriViewModel uri)
         {
-            uri.ClientUriId = id;
-            uri.ClientId = clientId;
             return NotSupportedYet();
         }
 

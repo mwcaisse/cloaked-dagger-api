@@ -27,12 +27,5 @@ namespace CloakedDagger.Web.Controllers
         {
             return NotSupportedYet();
         }
-
-        [HttpDelete]
-        [Route("")]
-        public IActionResult Delete(Guid clientId, [FromBody] ClientAllowedScopeViewModel scope)
-        {
-            return NotSupportedYet();
-        }
     }
 }

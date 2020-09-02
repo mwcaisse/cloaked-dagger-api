@@ -24,6 +24,16 @@ namespace CloakedDagger.Data.Repositories
                 .Select(ce => ce.Event);
         }
 
+        public IDictionary<Guid, IEnumerable<ClientDomainEvent>> GetAllClientEvents()
+        {
+            return _db.ClientEvents.OrderBy(ce => ce.OccurredOn)
+                .GroupBy(ce => ce.ClientId)
+                .ToDictionary(g => g.Key, 
+                    g => g.Select(ce => ce.Event));
+                        
+
+        }
+
         public void SaveClientEvents(Guid clientId, IEnumerable<ClientDomainEvent> events)
         {
             var entities = events.Select(e => new ClientEventEntity()

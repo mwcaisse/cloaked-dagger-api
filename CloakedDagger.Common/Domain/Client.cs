@@ -33,9 +33,9 @@ namespace CloakedDagger.Common.Domain
 
         public IEnumerable<ClientGrantType> AllowedGrantTypes => _allowedGrantTypes.ToImmutableHashSet();
 
-        private readonly List<Scope> _allowedScopes;
+        private readonly List<string> _allowedScopes;
 
-        public IEnumerable<Scope> AllowedScopes => _allowedScopes.AsReadOnly();
+        public IEnumerable<string> AllowedScopes => _allowedScopes.AsReadOnly();
 
         private readonly List<ClientUri> _uris;
 
@@ -172,6 +172,18 @@ namespace CloakedDagger.Common.Domain
                 client._allowedIdentities.Remove(e.Identity);
                 return client;
             }
+
+            public static Client AllowedScopeAdded(Client client, AddedAllowedScope e)
+            {
+                client._allowedScopes.Add(e.ScopeName);
+                return client;
+            }
+
+            public static Client AllowedScopeRemoved(Client client, RemovedAllowedScope e)
+            {
+                client._allowedScopes.Remove(e.ScopeName);
+                return client;
+            }
         }
 
         private Client(Guid id)
@@ -180,7 +192,7 @@ namespace CloakedDagger.Common.Domain
             
             _allowedIdentities = new HashSet<Identity>();
             _allowedGrantTypes = new HashSet<ClientGrantType>();
-            _allowedScopes = new List<Scope>();
+            _allowedScopes = new List<string>();
             _uris = new List<ClientUri>();
             _changes = new List<ClientDomainEvent>();
         }
@@ -414,14 +426,36 @@ namespace CloakedDagger.Common.Domain
             EventHandler.UriRemoved(this, e);
         }
 
-        public void AddAllowedScope(Scope scope)
+        public void AddAllowedScope(string scopeName)
         {
-            _allowedScopes.Add(scope);
+            if (_allowedScopes.Contains(scopeName))
+            {
+                throw new EntityValidationException($"This scope ({scopeName}) is already allowed.");
+            }
+
+            var e = new AddedAllowedScope()
+            {
+                ClientId = Id,
+                OccurredOn = DateTime.Now,
+                ScopeName = scopeName
+            };
+            EventHandler.AllowedScopeAdded(this, e);
         }
 
-        public void RemoveAllowedScope(Scope scope)
+        public void RemoveAllowedScope(string scopeName)
         {
-            _allowedScopes.Remove(scope);
+            if (!_allowedScopes.Contains(scopeName))
+            {
+                throw new EntityValidationException($"This scope ({scopeName}) is not currently allowed.");
+            }
+            
+            var e = new RemovedAllowedScope()
+            {
+                ClientId =  Id,
+                OccurredOn = DateTime.UtcNow,
+                ScopeName = scopeName
+            };
+            EventHandler.AllowedScopeRemoved(this, e);
         }
 
         public void FlushChanges()

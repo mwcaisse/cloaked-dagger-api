@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="10.0.0" />
       <PackageReference Include="OwlTin.Common" Version="1.0.15" />
     </ItemGroup>
 

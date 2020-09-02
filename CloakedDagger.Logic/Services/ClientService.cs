@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using CloakedDagger.Common.Domain;
+using CloakedDagger.Common.Domain.Events.Client;
 using CloakedDagger.Common.Entities;
+using CloakedDagger.Common.Enums;
 using CloakedDagger.Common.Exceptions;
+using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Repositories;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
@@ -24,14 +28,16 @@ namespace CloakedDagger.Logic.Services
             this._clientEventRepository = clientEventRepository;
         }
         
-        public ClientEntity Get(Guid id)
+        public ClientViewModel Get(Guid id)
         {
-            return _clientRepository.Get(id);
+            return HydrateClient(id).ToViewModel();
         }
 
-        public IEnumerable<ClientEntity> GetAll()
+        public IEnumerable<ClientViewModel> GetAll()
         {
-            return _clientRepository.GetAll();
+            return _clientEventRepository.GetAllClientEvents()
+                .Select(p =>Client.EventHandler.Hydrate(p.Key, p.Value))
+                .ToViewModel();
         }
 
         public ClientCreatedViewModel Create(CreateClientViewModel vm)
@@ -42,18 +48,10 @@ namespace CloakedDagger.Logic.Services
             
             // Create the client domain object and save it's events
             var client = new Client(vm.Name, secret, vm.Description);
-            _clientEventRepository.SaveClientEvents(client.Id, client.Changes);
-
-            // Create the view model of the client
-            var toCreate = new ClientEntity()
-            {
-                ClientId = client.Id,
-                Name = client.Name,
-                Description =  client.Description,
-                Secret = client.Secret
-            };
-            _clientRepository.Create(toCreate);
-
+            
+            //Save the client
+            SaveClient(client);
+            
             return new ClientCreatedViewModel()
             {
                 ClientId = client.Id,
@@ -63,12 +61,11 @@ namespace CloakedDagger.Logic.Services
             };
         }
 
-        public ClientEntity Update(UpdateClientViewModel vm)
+        public ClientViewModel Update(UpdateClientViewModel vm)
         {
             ValidateClient(vm);
 
-            var clientEvents = _clientEventRepository.GetClientEvents(vm.ClientId);
-            var client = Client.EventHandler.Hydrate(vm.ClientId, clientEvents);
+            var client = HydrateClient(vm.ClientId);
 
             if (!string.Equals(client.Name, vm.Name))
             {
@@ -80,19 +77,117 @@ namespace CloakedDagger.Logic.Services
                 client.Redescribe(vm.Description);
             }
 
-            _clientEventRepository.SaveClientEvents(client.Id, client.Changes);
-            
-            // Update the view model
-            var existing = _clientRepository.Get(vm.ClientId);
-            existing.Name = client.Name;
-            existing.Description = client.Description;
-
-            _clientRepository.Update(existing);
-            return _clientRepository.Get(existing.ClientId);
+            SaveClient(client);
+            return client.ToViewModel();
         }
 
+        public void Activate(Guid id)
+        {
+            PerformActionOnClient(id, c => c.Activate());
+        }
+
+        public void Deactivate(Guid id)
+        {
+            PerformActionOnClient(id, c => c.Deactivate());
+        }
+
+        public void AddAllowedIdentity(Guid id, Identity identity)
+        {
+            PerformActionOnClient(id, c => c.AddAllowedIdentity(identity));
+        }
+
+        public void RemoveAllowedIdentity(Guid id, Identity identity)
+        {
+            PerformActionOnClient(id, c => c.RemoveAllowedIdentity(identity));
+        }
+
+        public void AddAllowedGrantType(Guid id, ClientGrantType grantType)
+        {
+            PerformActionOnClient(id, c => c.AddAllowedGrantType(grantType));
+        }
+
+        public void RemoveAllowedGrantType(Guid id, ClientGrantType grantType)
+        {
+            PerformActionOnClient(id, c => c.RemoveAllowedGrantType(grantType));
+        }
+
+        public void AddUri(Guid id, UpdateClientUriViewModel vm)
+        {
+            PerformActionOnClient(id, c => c.AddUri(vm.Type, vm.Uri));
+        }
+
+        public void UpdateUri(Guid id, Guid clientUriId, UpdateClientUriViewModel vm)
+        {
+            PerformActionOnClient(id, c => c.ModifyUri(clientUriId, vm.Type, vm.Uri));
+        }
+
+        public void RemoveUri(Guid id, Guid uriId)
+        {
+            PerformActionOnClient(id, c => c.RemoveUri(uriId));
+        }
+
+        public void AddAllowedScope(Guid id, string scopeName)
+        {
+            //TODO: Probably want to validate that this scope actually exists on a resource somewhere (meh..)
+            PerformActionOnClient(id, c => c.AddAllowedScope(scopeName));
+        }
+
+        public void RemoveAllowedScope(Guid id, string scopeName)
+        {
+            PerformActionOnClient(id, c => c.RemoveAllowedScope(scopeName));
+        }
+
+        private void PerformActionOnClient(Guid id, Action<Client> action)
+        {
+            var client = HydrateClient(id);
+
+            action(client);
+            
+            SaveClient(client);
+        }
+
+        private Client HydrateClient(Guid id)
+        {
+            var clientEvents = _clientEventRepository.GetClientEvents(id);
+            return Client.EventHandler.Hydrate(id, clientEvents);
+        }
+        
+        private void SaveClient(Client client)
+        {
+            if (client.Changes.Any())
+            {
+                _clientEventRepository.SaveClientEvents(client.Id, client.Changes);
+
+                if (client.Changes.Any(e => e is ClientCreatedEvent))
+                {
+                    var toCreate = new ClientEntity()
+                    {
+                        ClientId = client.Id,
+                        Name = client.Name,
+                        Description =  client.Description,
+                        Secret = client.Secret
+                    };
+                    _clientRepository.Create(toCreate);
+                }
+                else if (client.Changes.Any(e => e is ClientRenamedEvent || e is ClientRedescribedEvent))
+                {
+                    // We are creating it above with the current Name/Description of the client, so even if they
+                    // were changed during processing, it will be created with the current Name/Description
+                    // Also because of how this service works, it won't have both
+                    
+                    var clientEntity = _clientRepository.Get(client.Id);
+                    clientEntity.Name = client.Name;
+                    clientEntity.Description = client.Description;
+                    _clientRepository.Update(clientEntity);
+                }
+                
+                client.FlushChanges();
+            }
+        }
+        
         public void Delete(Guid id)
         {
+            //TODO: Revisit this.
             _clientRepository.Delete(id);
         }
 
@@ -110,21 +205,6 @@ namespace CloakedDagger.Logic.Services
             {
                 throw new EntityValidationException("A client with this name already exists.");
             }
-        }
-
-        protected string Sha256HashString(string val)
-        {
-            if (string.IsNullOrWhiteSpace(val))
-            {
-                return string.Empty;
-            }
-
-            using var sha = SHA256.Create();
-            
-            var bytes = Encoding.UTF8.GetBytes(val);
-            var hash = sha.ComputeHash(bytes);
-
-            return Convert.ToBase64String(hash);
         }
     }
 }

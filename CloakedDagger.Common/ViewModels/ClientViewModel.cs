@@ -2,23 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CloakedDagger.Common.Entities;
+using CloakedDagger.Common.Enums;
 
 namespace CloakedDagger.Common.ViewModels
 {
     public class ClientViewModel
     {
-        public Guid ClientId { get; set; }
+        public Guid Id { get; set; }
         
         public string Name { get; set; }
         
         public string Description { get; set; }
         
-        public IEnumerable<ClientUriViewModel> ClientUris { get; set; }
+        public IEnumerable<ClientUriViewModel> Uris { get; set; }
         
-        public IEnumerable<ClientAllowedScopeViewModel> ClientAllowedScopes { get; set; }
+        public IEnumerable<string> AllowedScopes { get; set; }
         
-        public IEnumerable<ClientAllowedIdentityViewModel> ClientAllowedIdentities { get; set; }
+        public IEnumerable<Identity> AllowedIdentities { get; set; }
         
-        public IEnumerable<ClientAllowedGrantTypeViewModel> ClientAllowedGrantTypes { get; set; }
+        public IEnumerable<ClientGrantType> AllowedGrantTypes { get; set; }
     }
 }

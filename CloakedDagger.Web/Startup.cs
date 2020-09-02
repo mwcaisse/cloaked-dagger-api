@@ -97,11 +97,6 @@ namespace CloakedDagger.Web
                         cfg.MapFrom(rs => rs.ScopeEntity.Description)
                     );
                 config.CreateMap<CloakedDagger.Common.Entities.ResourceEntity, ResourceViewModel>();
-                config.CreateMap<CloakedDagger.Common.Entities.ClientEntity, ClientViewModel>();
-                config.CreateMap<ClientAllowedScopeEntity, ClientAllowedScopeViewModel>();
-                config.CreateMap<ClientAllowedGrantTypeEntity, ClientAllowedGrantTypeViewModel>();
-                config.CreateMap<ClientAllowedIdentityEntity, ClientAllowedIdentityViewModel>();
-                config.CreateMap<ClientUriEntity, ClientUriViewModel>();
             });
             
             var entityMapper = new Mapper(entityMapperConfig);
@@ -114,16 +109,6 @@ namespace CloakedDagger.Web
                     options.SerializerSettings.Converters.Add(
                         new MapperJsonConverter<CloakedDagger.Common.Entities.ResourceEntity, ResourceViewModel>(entityMapper));
                     options.SerializerSettings.Converters.Add(new MapperJsonConverter<ResourceScopeEntity, ResourceScopeViewModel>(entityMapper));
-                    options.SerializerSettings.Converters.Add(
-                        new MapperJsonConverter<CloakedDagger.Common.Entities.ClientEntity, ClientViewModel>(entityMapper));
-                    options.SerializerSettings.Converters.Add(
-                        new MapperJsonConverter<ClientAllowedScopeEntity, ClientAllowedScopeViewModel>(entityMapper));
-                    options.SerializerSettings.Converters.Add(
-                        new MapperJsonConverter<ClientAllowedGrantTypeEntity, ClientAllowedGrantTypeViewModel>(entityMapper));
-                    options.SerializerSettings.Converters.Add(
-                        new MapperJsonConverter<ClientAllowedIdentityEntity, ClientAllowedIdentityViewModel>(entityMapper));
-                    options.SerializerSettings.Converters.Add(
-                        new MapperJsonConverter<ClientUriEntity, ClientUriViewModel>(entityMapper));
                 });
 
             services.AddSingleton(Log.Logger);
