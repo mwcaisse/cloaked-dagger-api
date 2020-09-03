@@ -78,6 +78,10 @@ namespace CloakedDagger.Common.Domain
                             return AllowedGrantTypeAdded(c, e);
                         case RemovedAllowedGrantType e:
                             return AllowedGrantTypeRemoved(c, e);
+                        case AddedAllowedScope e:
+                            return AllowedScopeAdded(c, e);
+                        case RemovedAllowedScope e:
+                            return AllowedScopeRemoved(c, e);
                         default:
                             throw new Exception($"Could not re-hydrate client. Unknown event {cde.Type}");
                     }

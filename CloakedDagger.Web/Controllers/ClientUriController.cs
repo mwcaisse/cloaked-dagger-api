@@ -1,4 +1,6 @@
 using System;
+using CloakedDagger.Common.Domain;
+using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,32 +10,47 @@ namespace CloakedDagger.Web.Controllers
     public class ClientUriController : BaseController
     {
 
+        private readonly IClientService _clientService;
+
+        public ClientUriController(IClientService clientService)
+        {
+            this._clientService = clientService;
+        }
+        
         [HttpGet]
         [Route("")]
-        public IActionResult GetAll()
+        public IActionResult GetAll(Guid clientId)
         {
-            return NotSupportedYet();
+            var client = _clientService.Get(clientId);
+            if (null == client)
+            {
+                return NotFound();    
+            }
+            return Ok(client.Uris);
         }
 
         [HttpPost]
         [Route("")]
-        public IActionResult Create(Guid clientId, [FromBody] ClientUriViewModel uri)
+        public IActionResult Create(Guid clientId, [FromBody] UpdateClientUriViewModel uri)
         {
-            return NotSupportedYet();
+            _clientService.AddUri(clientId, uri);
+            return NoContent();
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update(Guid clientId, Guid id, [FromBody] ClientUriViewModel uri)
+        public IActionResult Update(Guid clientId, Guid id, [FromBody] UpdateClientUriViewModel uri)
         {
-            return NotSupportedYet();
+            _clientService.UpdateUri(clientId, id, uri);
+            return NoContent();
         }
 
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Delete(Guid clientId, Guid id)
         {
-            return NotSupportedYet();
+            _clientService.RemoveUri(clientId, id);
+            return NoContent();
         }
     }
 }

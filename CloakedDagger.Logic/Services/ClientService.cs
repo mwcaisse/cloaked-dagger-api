@@ -13,6 +13,7 @@ using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Repositories;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
+using DasCookbook.Common.Exceptions;
 
 namespace CloakedDagger.Logic.Services
 {
@@ -30,7 +31,7 @@ namespace CloakedDagger.Logic.Services
         
         public ClientViewModel Get(Guid id)
         {
-            return HydrateClient(id).ToViewModel();
+            return HydrateClient(id)?.ToViewModel();
         }
 
         public IEnumerable<ClientViewModel> GetAll()
@@ -65,19 +66,18 @@ namespace CloakedDagger.Logic.Services
         {
             ValidateClient(vm);
 
-            var client = HydrateClient(vm.ClientId);
-
-            if (!string.Equals(client.Name, vm.Name))
+            var client = PerformActionOnClient(vm.ClientId, c =>
             {
-                client.Rename(vm.Name);
-            }
+                if (!string.Equals(c.Name, vm.Name))
+                {
+                    c.Rename(vm.Name);
+                }
 
-            if (!string.Equals(client.Description, vm.Description))
-            {
-                client.Redescribe(vm.Description);
-            }
-
-            SaveClient(client);
+                if (!string.Equals(c.Description, vm.Description))
+                {
+                    c.Redescribe(vm.Description);
+                }
+            });
             return client.ToViewModel();
         }
 
@@ -137,18 +137,27 @@ namespace CloakedDagger.Logic.Services
             PerformActionOnClient(id, c => c.RemoveAllowedScope(scopeName));
         }
 
-        private void PerformActionOnClient(Guid id, Action<Client> action)
+        private Client PerformActionOnClient(Guid id, Action<Client> action)
         {
             var client = HydrateClient(id);
+            if (null == client)
+            {
+                throw new EntityNotFoundException($"No client with id {id} exists!");
+            }
 
             action(client);
             
             SaveClient(client);
+            return client;
         }
 
         private Client HydrateClient(Guid id)
         {
-            var clientEvents = _clientEventRepository.GetClientEvents(id);
+            var clientEvents = _clientEventRepository.GetClientEvents(id).ToList();
+            if (!clientEvents.Any())
+            {
+                return null;
+            }
             return Client.EventHandler.Hydrate(id, clientEvents);
         }
         

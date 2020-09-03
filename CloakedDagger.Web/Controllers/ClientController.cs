@@ -44,6 +44,23 @@ namespace CloakedDagger.Web.Controllers
             client.ClientId = id;
             return Ok(_clientService.Update(client));
         }
+
+        [HttpPost]
+        [Route("{id}/activate")]
+        public IActionResult Activate(Guid id)
+        {
+            _clientService.Activate(id);
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("{id}/deactivate")]
+        public IActionResult Deactivate(Guid id)
+        {
+            _clientService.Deactivate(id);
+            return NoContent();
+        }
+        
         
         [HttpDelete]
         [Route("{id}")]
