@@ -27,9 +27,11 @@ namespace CloakedDagger.Data.Repositories
         public IDictionary<Guid, IEnumerable<ClientDomainEvent>> GetAllClientEvents()
         {
             return _db.ClientEvents.OrderBy(ce => ce.OccurredOn)
+                .ToList()
                 .GroupBy(ce => ce.ClientId)
                 .ToDictionary(g => g.Key, 
-                    g => g.Select(ce => ce.Event));
+                    g => g.OrderBy(e => e.OccurredOn)
+                        .Select(ce => ce.Event));
                         
 
         }

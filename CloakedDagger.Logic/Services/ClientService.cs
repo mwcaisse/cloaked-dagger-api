@@ -41,7 +41,7 @@ namespace CloakedDagger.Logic.Services
                 .ToViewModel();
         }
 
-        public ClientCreatedViewModel Create(CreateClientViewModel vm)
+        public ClientCreatedViewModel Create(UpdateClientViewModel vm)
         {
             ValidateClient(vm);
 
@@ -55,18 +55,18 @@ namespace CloakedDagger.Logic.Services
             
             return new ClientCreatedViewModel()
             {
-                ClientId = client.Id,
+                Id = client.Id,
                 Name = client.Name,
                 Description = client.Description,
                 Secret = secret
             };
         }
 
-        public ClientViewModel Update(UpdateClientViewModel vm)
+        public ClientViewModel Update(Guid id, UpdateClientViewModel vm)
         {
-            ValidateClient(vm);
+            ValidateClient(vm, id);
 
-            var client = PerformActionOnClient(vm.ClientId, c =>
+            var client = PerformActionOnClient(id, c =>
             {
                 if (!string.Equals(c.Name, vm.Name))
                 {
@@ -200,15 +200,9 @@ namespace CloakedDagger.Logic.Services
             _clientRepository.Delete(id);
         }
 
-        private void ValidateClient(CreateClientViewModel client)
+        private void ValidateClient(UpdateClientViewModel client, Guid? clientId = null)
         {
             ValidationUtils.ValidateViewModel(client);
-
-            Guid? clientId = null;
-            if (client is UpdateClientViewModel)
-            {
-                clientId = (client as UpdateClientViewModel).ClientId;
-            }
 
             if (_clientRepository.ClientWithNameExists(client.Name, clientId))
             {

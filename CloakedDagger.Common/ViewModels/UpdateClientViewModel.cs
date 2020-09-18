@@ -2,8 +2,11 @@ using System;
 
 namespace CloakedDagger.Common.ViewModels
 {
-    public class UpdateClientViewModel : CreateClientViewModel
+    public class UpdateClientViewModel
     {
-        public Guid ClientId { get; set; }
+        public string Name { get; set; }
+        
+        public string Description { get; set; }
+        
     }
 }

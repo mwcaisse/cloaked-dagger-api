@@ -13,9 +13,9 @@ namespace CloakedDagger.Common.Services
 
         public IEnumerable<ClientViewModel> GetAll();
 
-        public ClientCreatedViewModel Create(CreateClientViewModel vm);
+        public ClientCreatedViewModel Create(UpdateClientViewModel vm);
 
-        public ClientViewModel Update(UpdateClientViewModel vm);
+        public ClientViewModel Update(Guid id, UpdateClientViewModel vm);
 
         public void Activate(Guid id);
 

@@ -32,7 +32,7 @@ namespace CloakedDagger.Web.Controllers
 
         [HttpPost]
         [Route("")]
-        public IActionResult Create([FromBody] CreateClientViewModel client)
+        public IActionResult Create([FromBody] UpdateClientViewModel client)
         {
             return Ok(_clientService.Create(client));
         }
@@ -41,8 +41,7 @@ namespace CloakedDagger.Web.Controllers
         [Route("{id}")]
         public IActionResult Update(Guid id, [FromBody] UpdateClientViewModel client)
         {
-            client.ClientId = id;
-            return Ok(_clientService.Update(client));
+            return Ok(_clientService.Update(id, client));
         }
 
         [HttpPost]

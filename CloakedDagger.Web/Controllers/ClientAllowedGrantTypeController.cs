@@ -1,12 +1,12 @@
 using System;
+using CloakedDagger.Common.Enums;
 using CloakedDagger.Common.Services;
-using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
     
-    [Microsoft.AspNetCore.Components.Route("/client/{clientId}/allowed-grant-type/")]
+    [Route("/client/{clientId}/allowed-grant-type")]
     public class ClientAllowedGrantTypeController : BaseController
     {
 
@@ -31,18 +31,18 @@ namespace CloakedDagger.Web.Controllers
         }
         
         [HttpPost]
-        [Route("")]
-        public IActionResult Create(Guid clientId, [FromBody] UpdateClientAllowedGrantTypeViewModel vm)
+        [Route("{grantType:int}")]
+        public IActionResult Create(Guid clientId, ClientGrantType grantType)
         {
-            _clientService.AddAllowedGrantType(clientId, vm.Type);
+            _clientService.AddAllowedGrantType(clientId, grantType);
             return NoContent();
         }
 
         [HttpDelete]
-        [Route("")]
-        public IActionResult Delete(Guid clientId, [FromBody] UpdateClientAllowedGrantTypeViewModel vm)
+        [Route("{grantType:int}")]
+        public IActionResult Delete(Guid clientId, ClientGrantType grantType)
         {
-            _clientService.RemoveAllowedGrantType(clientId, vm.Type);
+            _clientService.RemoveAllowedGrantType(clientId, grantType);
             return NoContent();
         }
         
