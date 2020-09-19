@@ -28,6 +28,8 @@ namespace CloakedDagger.Common.Repositories
         /// <returns>True if the scope exists on the resource, false otherwise</returns>
         public bool ExistsOnResource(Guid resourceId, Guid scopeId);
 
+        public IEnumerable<ScopeEntity> Search(string text);
+
         /// <summary>
         /// Creates the given resource scope
         /// </summary>

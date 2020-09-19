@@ -1,11 +1,12 @@
 using System;
+using CloakedDagger.Common.Enums;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
-    [Microsoft.AspNetCore.Components.Route("/client/{clientId}/allowed-identity/")]
+    [Route("/client/{clientId}/allowed-identity")]
     public class ClientAllowedIdentityController : BaseController
     {
         private readonly IClientService _clientService;
@@ -29,18 +30,18 @@ namespace CloakedDagger.Web.Controllers
         }
 
         [HttpPost]
-        [Route("")]
-        public IActionResult Create(Guid clientId, [FromBody] UpdateClientAllowedIdentityViewModel vm)
+        [Route("{identity}")]
+        public IActionResult Create(Guid clientId, Identity identity)
         {
-            _clientService.AddAllowedIdentity(clientId, vm.Identity);
+            _clientService.AddAllowedIdentity(clientId, identity);
             return NoContent();
         }
 
         [HttpDelete]
-        [Route("")]
-        public IActionResult Delete(Guid clientId, [FromBody] UpdateClientAllowedIdentityViewModel vm)
+        [Route("{identity}")]
+        public IActionResult Delete(Guid clientId, Identity identity)
         {
-            _clientService.RemoveAllowedIdentity(clientId, vm.Identity);
+            _clientService.RemoveAllowedIdentity(clientId, identity);
             return NoContent();
         }
     }

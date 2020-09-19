@@ -29,18 +29,18 @@ namespace CloakedDagger.Web.Controllers
         }
 
         [HttpPost]
-        [Route("")]
-        public IActionResult Create(Guid clientId, [FromBody] UpdateClientScopeViewModel vm)
+        [Route("{scopeName}")]
+        public IActionResult Create(Guid clientId, string scopeName)
         {
-            _clientService.AddAllowedScope(clientId, vm.ScopeName);
+            _clientService.AddAllowedScope(clientId, scopeName);
             return NoContent();
         }
 
         [HttpDelete]
-        [Route("")]
-        public IActionResult Delete(Guid clientId, UpdateClientScopeViewModel vm)
+        [Route("{scopeName}")]
+        public IActionResult Delete(Guid clientId, string scopeName)
         {
-            _clientService.RemoveAllowedScope(clientId, vm.ScopeName);
+            _clientService.RemoveAllowedScope(clientId, scopeName);
             return NoContent();
         }
     }

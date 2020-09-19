@@ -35,6 +35,11 @@ namespace CloakedDagger.Logic.Services
             return _resourceScopeRepository.GetForResource(resourceId);
         }
 
+        public IEnumerable<ScopeEntity> Search(string text)
+        {
+            return _resourceScopeRepository.Search(text);
+        }
+
         public ResourceScopeEntity Create(AddResourceScopeViewModel vm)
         {
             ValidationUtils.ValidateViewModel(vm);

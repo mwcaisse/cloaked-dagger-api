@@ -33,8 +33,7 @@ namespace CloakedDagger.Web.Controllers
         [Route("")]
         public IActionResult Create(Guid clientId, [FromBody] UpdateClientUriViewModel uri)
         {
-            _clientService.AddUri(clientId, uri);
-            return NoContent();
+            return Ok(_clientService.AddUri(clientId, uri));
         }
 
         [HttpPut]

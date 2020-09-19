@@ -111,9 +111,15 @@ namespace CloakedDagger.Logic.Services
             PerformActionOnClient(id, c => c.RemoveAllowedGrantType(grantType));
         }
 
-        public void AddUri(Guid id, UpdateClientUriViewModel vm)
+        public ClientUriViewModel AddUri(Guid id, UpdateClientUriViewModel vm)
         {
-            PerformActionOnClient(id, c => c.AddUri(vm.Type, vm.Uri));
+            var addedUri = PerformActionOnClientForResult(id, c => c.AddUri(vm.Type, vm.Uri));
+            return new ClientUriViewModel()
+            {
+                Id = addedUri.Id,
+                Type = addedUri.Type,
+                Uri = addedUri.Uri
+            };
         }
 
         public void UpdateUri(Guid id, Guid clientUriId, UpdateClientUriViewModel vm)
@@ -149,6 +155,20 @@ namespace CloakedDagger.Logic.Services
             
             SaveClient(client);
             return client;
+        }
+
+        private T PerformActionOnClientForResult<T>(Guid id, Func<Client, T> action)
+        {
+            var client = HydrateClient(id);
+            if (null == client)
+            {
+                throw new EntityNotFoundException($"No client with id {id} exists!");
+            }
+
+            var res = action(client);
+            
+            SaveClient(client);
+            return res;
         }
 
         private Client HydrateClient(Guid id)

@@ -45,8 +45,5 @@ namespace CloakedDagger.Web.Controllers
             _clientService.RemoveAllowedGrantType(clientId, grantType);
             return NoContent();
         }
-        
-        
-
     }
 }

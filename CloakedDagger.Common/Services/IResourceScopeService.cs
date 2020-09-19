@@ -12,6 +12,8 @@ namespace CloakedDagger.Common.Services
         
         public IEnumerable<ResourceScopeEntity> GetForResource(Guid resourceId);
 
+        public IEnumerable<ScopeEntity> Search(string text);
+
         public ResourceScopeEntity Create(AddResourceScopeViewModel scope);
 
         public void Delete(Guid id);

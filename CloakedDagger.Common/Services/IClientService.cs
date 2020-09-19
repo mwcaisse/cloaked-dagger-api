@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CloakedDagger.Common.Domain;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Enums;
 using CloakedDagger.Common.ViewModels;
@@ -28,7 +29,7 @@ namespace CloakedDagger.Common.Services
 
         public void RemoveAllowedGrantType(Guid id, ClientGrantType grantType);
 
-        public void AddUri(Guid id, UpdateClientUriViewModel vm);
+        public ClientUriViewModel AddUri(Guid id, UpdateClientUriViewModel vm);
 
         public void UpdateUri(Guid id, Guid clientUriId, UpdateClientUriViewModel vm);
 

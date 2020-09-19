@@ -361,9 +361,15 @@ namespace CloakedDagger.Common.Domain
 
         }
 
-        public void AddUri(ClientUriType type, string uri)
+        public ClientUri AddUri(ClientUriType type, string uri)
         {
             ClientUri.ValidateUri(uri);
+
+            if (_uris.Any(u => u.Type == type && 
+                               string.Equals(u.Uri, uri, StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new EntityValidationException("A URI with this URL and type already exists on the client!");
+            }
 
             var e = new AddedClientUriEvent()
             {
@@ -375,6 +381,8 @@ namespace CloakedDagger.Common.Domain
             };
             _changes.Add(e);
             EventHandler.UriAdded(this, e);
+
+            return _uris.FirstOrDefault(u => u.Id == e.ClientUriId);
         }
 
         public void ModifyUri(Guid clientUriId, ClientUriType type, string uri)

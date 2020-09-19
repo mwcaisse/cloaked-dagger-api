@@ -31,6 +31,12 @@ namespace CloakedDagger.Data.Repositories
             return _db.ResourceScopes.Any(rs => rs.ResourceId == resourceId && rs.ScopeId == scopeId);
         }
 
+        public IEnumerable<ScopeEntity> Search(string text)
+        {
+            return _db.ResourceScopes.Build().Where(rs => rs.ScopeEntity.Name.Contains(text))
+                .Select(rs => rs.ScopeEntity);
+        }
+
         public ResourceScopeEntity Create(ResourceScopeEntity scopeEntity)
         {
             _db.ResourceScopes.Add(scopeEntity);
