@@ -58,7 +58,8 @@ namespace CloakedDagger.Logic.Services
                 Id = client.Id,
                 Name = client.Name,
                 Description = client.Description,
-                Secret = secret
+                Secret = secret,
+                Active = client.Active
             };
         }
 

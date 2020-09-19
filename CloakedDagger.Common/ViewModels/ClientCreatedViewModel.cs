@@ -11,5 +11,7 @@ namespace CloakedDagger.Common.ViewModels
         public string Description { get; set; }
         
         public string Secret { get; set; }
+        
+        public bool Active { get; set; }
     }
 }

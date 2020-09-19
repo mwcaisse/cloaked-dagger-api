@@ -14,6 +14,8 @@ namespace CloakedDagger.Common.ViewModels
         
         public string Description { get; set; }
         
+        public bool Active { get; set; }
+        
         public IEnumerable<ClientUriViewModel> Uris { get; set; }
         
         public IEnumerable<string> AllowedScopes { get; set; }
