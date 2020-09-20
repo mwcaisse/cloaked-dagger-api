@@ -28,6 +28,13 @@ namespace CloakedDagger.Common.Repositories
         /// <returns>True if the scope exists on the resource, false otherwise</returns>
         public bool ExistsOnResource(Guid resourceId, Guid scopeId);
 
+        /// <summary>
+        /// Determines if the scope with the given name exists on any resource(s)
+        /// </summary>
+        /// <param name="scopeName">The name of the scope to check</param>
+        /// <returns>True if at least one resource defines the scope, false otherwise</returns>
+        public bool ExistsOnAnyResource(string scopeName);
+
         public IEnumerable<ScopeEntity> Search(string text);
 
         /// <summary>

@@ -1,8 +1,10 @@
+
 using CloakedDagger.Common.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
+
     [Route("/scope")]
     public class ScopeController : BaseController
     {
@@ -14,8 +16,9 @@ namespace CloakedDagger.Web.Controllers
             this._resourceScopeService = resourceScopeService;
         }
 
-        [Route("/search")]
-        public IActionResult Search([FromQuery]string text)
+        [HttpGet]
+        [Route("search")]
+        public IActionResult Search(string text)
         {
             return Ok(_resourceScopeService.Search(text));
         }

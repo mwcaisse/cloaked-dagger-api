@@ -82,6 +82,8 @@ namespace CloakedDagger.Common.Domain
                             return AllowedScopeAdded(c, e);
                         case RemovedAllowedScope e:
                             return AllowedScopeRemoved(c, e);
+                        case ClientIgnoredEvent e:
+                            return c;
                         default:
                             throw new Exception($"Could not re-hydrate client. Unknown event {cde.Type}");
                     }
@@ -448,9 +450,10 @@ namespace CloakedDagger.Common.Domain
             var e = new AddedAllowedScope()
             {
                 ClientId = Id,
-                OccurredOn = DateTime.Now,
+                OccurredOn = DateTime.UtcNow,
                 ScopeName = scopeName
             };
+            _changes.Add(e);
             EventHandler.AllowedScopeAdded(this, e);
         }
 
@@ -467,6 +470,7 @@ namespace CloakedDagger.Common.Domain
                 OccurredOn = DateTime.UtcNow,
                 ScopeName = scopeName
             };
+            _changes.Add(e);
             EventHandler.AllowedScopeRemoved(this, e);
         }
 

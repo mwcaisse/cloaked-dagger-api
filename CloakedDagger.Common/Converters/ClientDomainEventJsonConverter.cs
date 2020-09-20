@@ -27,6 +27,8 @@ namespace CloakedDagger.Common.Converters
             {nameof(RemovedAllowedGrantType), typeof(RemovedAllowedGrantType)},
             {nameof(RemovedAllowedIdentity), typeof(RemovedAllowedIdentity)},
             {nameof(RemovedClientUriEvent), typeof(RemovedClientUriEvent)},
+            {nameof(AddedAllowedScope), typeof(AddedAllowedScope)},
+            {nameof(RemovedAllowedScope), typeof(RemovedAllowedScope)},
         };
         
         public override ClientDomainEvent ReadJson(JsonReader reader, Type objectType, ClientDomainEvent existingValue, bool hasExistingValue,

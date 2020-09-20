@@ -23,10 +23,14 @@ namespace CloakedDagger.Logic.Services
 
         private readonly IClientEventRepository _clientEventRepository;
 
-        public ClientService(IClientRepository clientRepository, IClientEventRepository clientEventRepository)
+        private readonly IResourceScopeRepository _resourceScopeRepository;
+
+        public ClientService(IClientRepository clientRepository, IClientEventRepository clientEventRepository,
+            IResourceScopeRepository resourceScopeRepository)
         {
             this._clientRepository = clientRepository;
             this._clientEventRepository = clientEventRepository;
+            this._resourceScopeRepository = resourceScopeRepository;
         }
         
         public ClientViewModel Get(Guid id)
@@ -135,7 +139,10 @@ namespace CloakedDagger.Logic.Services
 
         public void AddAllowedScope(Guid id, string scopeName)
         {
-            //TODO: Probably want to validate that this scope actually exists on a resource somewhere (meh..)
+            if (!_resourceScopeRepository.ExistsOnAnyResource(scopeName))
+            {
+                throw new EntityValidationException("This scope doesn't exist on any resource!");
+            }
             PerformActionOnClient(id, c => c.AddAllowedScope(scopeName));
         }
 
