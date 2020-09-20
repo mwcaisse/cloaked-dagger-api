@@ -15,8 +15,8 @@ namespace CloakedDagger.Common.Converters
 
         private readonly Dictionary<string, Type> _typeMapping = new Dictionary<string, Type>()
         {
-            {nameof(AddedAllowedGrantType), typeof(AddedAllowedGrantType)},
-            {nameof(AddedAllowedIdentity), typeof(AddedAllowedIdentity)},
+            {nameof(AddedAllowedGrantTypeEvent), typeof(AddedAllowedGrantTypeEvent)},
+            {nameof(AddedAllowedIdentityEvent), typeof(AddedAllowedIdentityEvent)},
             {nameof(AddedClientUriEvent), typeof(AddedClientUriEvent)},
             {nameof(ClientActivatedEvent), typeof(ClientActivatedEvent)},
             {nameof(ClientCreatedEvent), typeof(ClientCreatedEvent)},
@@ -24,11 +24,11 @@ namespace CloakedDagger.Common.Converters
             {nameof(ClientRedescribedEvent), typeof(ClientRedescribedEvent)},
             {nameof(ClientRenamedEvent), typeof(ClientRenamedEvent)},
             {nameof(ModifiedClientUriEvent), typeof(ModifiedClientUriEvent)},
-            {nameof(RemovedAllowedGrantType), typeof(RemovedAllowedGrantType)},
-            {nameof(RemovedAllowedIdentity), typeof(RemovedAllowedIdentity)},
+            {nameof(RemovedAllowedGrantTypeEvent), typeof(RemovedAllowedGrantTypeEvent)},
+            {nameof(RemovedAllowedIdentityEvent), typeof(RemovedAllowedIdentityEvent)},
             {nameof(RemovedClientUriEvent), typeof(RemovedClientUriEvent)},
-            {nameof(AddedAllowedScope), typeof(AddedAllowedScope)},
-            {nameof(RemovedAllowedScope), typeof(RemovedAllowedScope)},
+            {nameof(AddedAllowedScopeEvent), typeof(AddedAllowedScopeEvent)},
+            {nameof(RemovedAllowedScopeEvent), typeof(RemovedAllowedScopeEvent)},
         };
         
         public override ClientDomainEvent ReadJson(JsonReader reader, Type objectType, ClientDomainEvent existingValue, bool hasExistingValue,

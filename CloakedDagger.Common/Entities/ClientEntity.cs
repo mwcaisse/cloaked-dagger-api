@@ -19,13 +19,5 @@ namespace CloakedDagger.Common.Entities
         public DateTime ModifiedDate { get; set; }
         
         public bool Active { get; set; }
-
-        public virtual ICollection<ClientUriEntity> ClientUris { get; set; }
-        
-        public virtual ICollection<ClientAllowedScopeEntity> ClientAllowedScopes { get; set; }
-        
-        public virtual ICollection<ClientAllowedIdentityEntity> ClientAllowedIdentities { get; set; }
-        
-        public virtual ICollection<ClientAllowedGrantTypeEntity> ClientAllowedGrantTypes { get; set; }
     }
 }

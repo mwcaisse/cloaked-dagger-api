@@ -19,7 +19,5 @@ namespace CloakedDagger.Common.Entities
         public bool Active { get; set; }
         
         public virtual ICollection<ResourceScopeEntity> ResourceScopes { get; set; }
-        
-        public virtual ICollection<ClientAllowedScopeEntity> ClientAllowedScopes { get; set; }
     }
 }

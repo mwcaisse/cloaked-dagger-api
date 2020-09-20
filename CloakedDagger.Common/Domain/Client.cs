@@ -70,17 +70,17 @@ namespace CloakedDagger.Common.Domain
                             return UriModified(c, e);
                         case RemovedClientUriEvent e:
                             return UriRemoved(c, e);
-                        case AddedAllowedIdentity e:
+                        case AddedAllowedIdentityEvent e:
                             return AllowedIdentityAdded(c, e);
-                        case RemovedAllowedIdentity e:
+                        case RemovedAllowedIdentityEvent e:
                             return AllowedIdentityRemoved(c, e);
-                        case AddedAllowedGrantType e:
+                        case AddedAllowedGrantTypeEvent e:
                             return AllowedGrantTypeAdded(c, e);
-                        case RemovedAllowedGrantType e:
+                        case RemovedAllowedGrantTypeEvent e:
                             return AllowedGrantTypeRemoved(c, e);
-                        case AddedAllowedScope e:
+                        case AddedAllowedScopeEvent e:
                             return AllowedScopeAdded(c, e);
-                        case RemovedAllowedScope e:
+                        case RemovedAllowedScopeEvent e:
                             return AllowedScopeRemoved(c, e);
                         case ClientIgnoredEvent e:
                             return c;
@@ -155,37 +155,37 @@ namespace CloakedDagger.Common.Domain
                 return client;
             }
 
-            public static Client AllowedGrantTypeAdded(Client client, AddedAllowedGrantType e)
+            public static Client AllowedGrantTypeAdded(Client client, AddedAllowedGrantTypeEvent e)
             {
                 client._allowedGrantTypes.Add(e.GrantType);
                 return client;
             }
 
-            public static Client AllowedGrantTypeRemoved(Client client, RemovedAllowedGrantType e)
+            public static Client AllowedGrantTypeRemoved(Client client, RemovedAllowedGrantTypeEvent e)
             {
                 client._allowedGrantTypes.Remove(e.GrantType);
                 return client;
             }
 
-            public static Client AllowedIdentityAdded(Client client, AddedAllowedIdentity e)
+            public static Client AllowedIdentityAdded(Client client, AddedAllowedIdentityEvent e)
             {
                 client._allowedIdentities.Add(e.Identity);
                 return client;
             }
 
-            public static Client AllowedIdentityRemoved(Client client, RemovedAllowedIdentity e)
+            public static Client AllowedIdentityRemoved(Client client, RemovedAllowedIdentityEvent e)
             {
                 client._allowedIdentities.Remove(e.Identity);
                 return client;
             }
 
-            public static Client AllowedScopeAdded(Client client, AddedAllowedScope e)
+            public static Client AllowedScopeAdded(Client client, AddedAllowedScopeEvent e)
             {
                 client._allowedScopes.Add(e.ScopeName);
                 return client;
             }
 
-            public static Client AllowedScopeRemoved(Client client, RemovedAllowedScope e)
+            public static Client AllowedScopeRemoved(Client client, RemovedAllowedScopeEvent e)
             {
                 client._allowedScopes.Remove(e.ScopeName);
                 return client;
@@ -301,7 +301,7 @@ namespace CloakedDagger.Common.Domain
                 throw new EntityValidationException("This Identity is already allowed.");
             }
 
-            var e = new AddedAllowedIdentity()
+            var e = new AddedAllowedIdentityEvent()
             {
                 Identity = identity,
                 ClientId = Id,
@@ -318,7 +318,7 @@ namespace CloakedDagger.Common.Domain
                 throw new EntityValidationException("This identity is not currently allowed.");
             }
             
-            var e = new RemovedAllowedIdentity()
+            var e = new RemovedAllowedIdentityEvent()
             {
                 Identity = identity,
                 ClientId = Id,
@@ -335,7 +335,7 @@ namespace CloakedDagger.Common.Domain
                 throw new EntityValidationException("This grant type is already allowed.");
             }
 
-            var e = new AddedAllowedGrantType()
+            var e = new AddedAllowedGrantTypeEvent()
             {
                 GrantType = grantType,
                 ClientId = Id,
@@ -352,7 +352,7 @@ namespace CloakedDagger.Common.Domain
                 throw new EntityValidationException("This grant type is not currently allowed.");
             }
 
-            var e = new RemovedAllowedGrantType()
+            var e = new RemovedAllowedGrantTypeEvent()
             {
                 GrantType = grantType,
                 ClientId = Id,
@@ -447,7 +447,7 @@ namespace CloakedDagger.Common.Domain
                 throw new EntityValidationException($"This scope ({scopeName}) is already allowed.");
             }
 
-            var e = new AddedAllowedScope()
+            var e = new AddedAllowedScopeEvent()
             {
                 ClientId = Id,
                 OccurredOn = DateTime.UtcNow,
@@ -464,7 +464,7 @@ namespace CloakedDagger.Common.Domain
                 throw new EntityValidationException($"This scope ({scopeName}) is not currently allowed.");
             }
             
-            var e = new RemovedAllowedScope()
+            var e = new RemovedAllowedScopeEvent()
             {
                 ClientId =  Id,
                 OccurredOn = DateTime.UtcNow,

@@ -19,7 +19,7 @@ namespace CloakedDagger.Data.Repositories
         
         public ClientEntity Get(Guid id)
         {
-            return _db.Clients.Build().FirstOrDefault(c => c.ClientId == id);
+            return _db.Clients.FirstOrDefault(c => c.ClientId == id);
         }
 
         public bool ClientWithNameExists(string name, Guid? excludeClientId = null)
@@ -36,7 +36,7 @@ namespace CloakedDagger.Data.Repositories
 
         public IEnumerable<ClientEntity> GetAll()
         {
-            return _db.Clients.Build();
+            return _db.Clients;
         }
 
         public ClientEntity Create(ClientEntity clientEntity)

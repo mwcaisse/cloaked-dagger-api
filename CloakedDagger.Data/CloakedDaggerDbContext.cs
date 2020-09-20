@@ -11,15 +11,7 @@ namespace CloakedDagger.Data
         
         public DbSet<ClientEventEntity> ClientEvents { get; set; }
         public DbSet<ClientEntity> Clients { get; set; }
-        
-        public DbSet<ClientAllowedScopeEntity> ClientAllowedScopes { get; set; }
-        
-        public DbSet<ClientAllowedGrantTypeEntity> ClientAllowedGrantTypes { get; set; }
-        
-        public DbSet<ClientAllowedIdentityEntity> ClientAllowedIdentities { get; set; }
-        
-        public DbSet<ClientUriEntity> ClientUris { get; set; }
-        
+
         public DbSet<ResourceEntity> Resources { get; set; }
         
         public DbSet<ResourceScopeEntity> ResourceScopes { get; set; }
@@ -38,10 +30,6 @@ namespace CloakedDagger.Data
             modelBuilder.ApplyConfiguration(new UserMap());
 
             modelBuilder.ApplyConfiguration(new ClientMap());
-            modelBuilder.ApplyConfiguration(new ClientAllowedGrantTypeMap());
-            modelBuilder.ApplyConfiguration(new ClientAllowedIdentityMap());
-            modelBuilder.ApplyConfiguration(new ClientAllowedScopeMap());
-            modelBuilder.ApplyConfiguration(new ClientUriMap());
             modelBuilder.ApplyConfiguration(new ClientEventEntityMap());
             
             modelBuilder.ApplyConfiguration(new ResourceMap());
