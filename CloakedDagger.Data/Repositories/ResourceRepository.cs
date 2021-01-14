@@ -32,6 +32,17 @@ namespace CloakedDagger.Data.Repositories
             return _db.Resources.Build();
         }
 
+        public IEnumerable<ResourceEntity> GetWithNames(IEnumerable<string> names)
+        {
+            return _db.Resources.Active().Where(r => names.Contains(r.Name)).Build();
+        }
+
+        public IEnumerable<ResourceEntity> GetByScopes(IEnumerable<string> scopeNames)
+        {
+            return _db.ResourceScopes.Where(rs => rs.ResourceEntity.Active && scopeNames.Contains(rs.ScopeEntity.Name))
+                .Select(rs => rs.ResourceEntity).Distinct().Build();
+        }
+
         public ResourceEntity Create(ResourceEntity resourceEntity)
         {
             _db.Resources.Add(resourceEntity);

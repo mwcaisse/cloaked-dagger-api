@@ -1,5 +1,6 @@
 using System;
 using CloakedDagger.Common.Domain;
+using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@ namespace CloakedDagger.Web.Controllers
             {
                 return NotFound();    
             }
-            return Ok(client.Uris);
+            return Ok(client.ToViewModel().Uris);
         }
 
         [HttpPost]

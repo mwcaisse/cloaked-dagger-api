@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CloakedDagger.Common.Entities;
 
 namespace CloakedDagger.Common.Repositories
@@ -19,6 +20,19 @@ namespace CloakedDagger.Common.Repositories
         /// <returns>The scope if a scope with the given name exists, null otherwise</returns>
         public ScopeEntity Get(string name);
 
+        /// <summary>
+        /// Fetches a list of all active scopes
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ScopeEntity> GetAll();
+
+        /// <summary>
+        /// Fetches a list of scopes that match the given names
+        /// </summary>
+        /// <param name="names"></param>
+        /// <returns></returns>
+        public IEnumerable<ScopeEntity> GetWithNames(IEnumerable<string> names);
+        
         /// <summary>
         /// Creates the given scope
         /// </summary>

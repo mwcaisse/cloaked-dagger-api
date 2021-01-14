@@ -10,7 +10,7 @@ namespace CloakedDagger.Common.Services
 {
     public interface IClientService
     {
-        public ClientViewModel Get(Guid id);
+        public Client Get(Guid id);
 
         public IEnumerable<ClientViewModel> GetAll();
 

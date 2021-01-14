@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.ViewModels;
 
@@ -10,7 +11,7 @@ namespace CloakedDagger.Common.Services
 
         public ResourceEntity Get(Guid id);
 
-        public IEnumerable GetAll();
+        public IEnumerable<ResourceEntity> GetAll();
 
         public ResourceEntity Create(ResourceViewModel resource);
 

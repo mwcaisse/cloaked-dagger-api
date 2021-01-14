@@ -1,4 +1,5 @@
 using System;
+using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace CloakedDagger.Web.Controllers
                 return NotFound();
             }
 
-            return Ok(client.AllowedScopes);
+            return Ok(client.ToViewModel().AllowedScopes);
         }
 
         [HttpPost]

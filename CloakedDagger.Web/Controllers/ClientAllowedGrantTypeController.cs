@@ -1,5 +1,6 @@
 using System;
 using CloakedDagger.Common.Enums;
+using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,7 @@ namespace CloakedDagger.Web.Controllers
                 return NotFound();
             }
 
-            return Ok(client.AllowedGrantTypes);
+            return Ok(client.ToViewModel().AllowedGrantTypes);
         }
         
         [HttpPost]

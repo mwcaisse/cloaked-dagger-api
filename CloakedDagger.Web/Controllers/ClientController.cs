@@ -1,4 +1,5 @@
 using System;
+using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace CloakedDagger.Web.Controllers
         [Route("{id}")]
         public IActionResult Get(Guid id)
         {
-            return OkOrNotFound(_clientService.Get(id));
+            return OkOrNotFound(_clientService.Get(id)?.ToViewModel());
         }
 
         [HttpGet]

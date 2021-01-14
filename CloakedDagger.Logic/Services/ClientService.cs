@@ -33,9 +33,9 @@ namespace CloakedDagger.Logic.Services
             this._resourceScopeRepository = resourceScopeRepository;
         }
         
-        public ClientViewModel Get(Guid id)
+        public Client Get(Guid id)
         {
-            return HydrateClient(id)?.ToViewModel();
+            return HydrateClient(id);
         }
 
         public IEnumerable<ClientViewModel> GetAll()

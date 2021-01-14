@@ -14,6 +14,7 @@ using CloakedDagger.Data.Extensions;
 using CloakedDagger.Data.Repositories;
 using CloakedDagger.Logic.PasswordHasher;
 using CloakedDagger.Logic.Services;
+using CloakedDagger.Web.Adapters;
 using CloakedDagger.Web.Converters;
 using CloakedDagger.Web.Database;
 using CloakedDagger.Web.Middleware;
@@ -117,66 +118,9 @@ namespace CloakedDagger.Web
             services.AddIdentityServer(options =>
                 {
                     options.UserInteraction.LoginUrl = "http://localhost:3000/login";
-                }).AddInMemoryApiScopes(new List<ApiScope>
-                {
-                    new ApiScope()
-                    {
-                        Name = "das-cookbook.read",
-                        DisplayName = "Reads data in DasCookbook"
-                    },
-                    new ApiScope()
-                    {
-                        Name = "das-cookbook.write",
-                        DisplayName = "Writes data in DasCookbook"
-                    }
-                }).AddInMemoryIdentityResources(new List<IdentityResource>()
-                {
-                    new IdentityResources.OpenId(),
-                    new IdentityResources.Profile()
-                }).AddInMemoryApiResources(new List<ApiResource>()
-                {
-                    new ApiResource()
-                    {
-                        Name = "das-cookbook",
-                        DisplayName = "DasCookbook API",
-                        Scopes =
-                        {
-                            "das-cookbook.read",
-                            "das-cookbook.write"
-                        }
-                    }
-                }).AddInMemoryClients(new List<Client>
-                {
-                    new Client
-                    {
-                        ClientId = "das-cookbook",
-
-                        AllowedGrantTypes = GrantTypes.Code,
-                        AllowOfflineAccess = true,
-                        ClientSecrets =
-                        {
-                            new Secret("das-cookbook-amazing-secret".Sha256())
-                        },
-
-                        RedirectUris =
-                        {
-                            "http://localhost:5000/signin-oidc"
-                        },
-                        PostLogoutRedirectUris =
-                        {
-                            "http://localhost:5000/signout-callback-oidc",
-                        },
-
-                        AllowedScopes =
-                        {
-                            IdentityServerConstants.StandardScopes.OpenId,
-                            IdentityServerConstants.StandardScopes.Profile,
-
-                            "das-cookbook.read",
-                            "das-cookbook.write",
-                        }
-                    }
                 })
+                .AddClientStore<ClientStoreAdapter>()
+                .AddResourceStore<ResourceStoreAdapter>()
                 .AddDeveloperSigningCredential();
         }
 

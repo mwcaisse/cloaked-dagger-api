@@ -18,6 +18,20 @@ namespace CloakedDagger.Common.Repositories
 
         public IEnumerable<ResourceEntity> GetAll();
 
+        /// <summary>
+        /// Fetches the Resources that name is contained in names
+        /// </summary>
+        /// <param name="names"></param>
+        /// <returns></returns>
+        public IEnumerable<ResourceEntity> GetWithNames(IEnumerable<string> names);
+
+        /// <summary>
+        /// Fetches the Resources that allow at least one of the given scope names
+        /// </summary>
+        /// <param name="scopeNames"></param>
+        /// <returns></returns>
+        public IEnumerable<ResourceEntity> GetByScopes(IEnumerable<string> scopeNames);
+
         public ResourceEntity Create(ResourceEntity resourceEntity);
 
         public ResourceEntity Update(ResourceEntity resourceEntity);

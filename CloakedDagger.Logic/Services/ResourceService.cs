@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Exceptions;
 using CloakedDagger.Common.Repositories;
@@ -22,7 +23,7 @@ namespace CloakedDagger.Logic.Services
             return _resourceRepository.Get(id);
         }
 
-        public IEnumerable GetAll()
+        public IEnumerable<ResourceEntity> GetAll()
         {
             return _resourceRepository.GetAll();
         }
