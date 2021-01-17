@@ -33,6 +33,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OwlTin.Common.Converters;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
 using Client = IdentityServer4.Models.Client;
 using Resource = IdentityServer4.Models.Resource;
@@ -55,7 +56,9 @@ namespace CloakedDagger.Web
 
             services.AddDbContext<CloakedDaggerDbContext>(options =>
             {
-                options.UseMySql(Configuration.GetDatabaseConnectionString());
+                options.UseMySql(Configuration.GetDatabaseConnectionString(),
+                    ServerVersion.AutoDetect(Configuration.GetDatabaseConnectionString()),
+                    mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend));
             });
 
             services.AddTransient<IUserRepository, UserRepository>();
