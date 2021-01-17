@@ -4,7 +4,7 @@ using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Repositories;
 using OwlTin.Common;
 
-namespace CloakedDagger.Data.Extensions
+namespace CloakedDagger.Data.Repositories
 {
     public class ScopeRepository : IScopeRepository
     {

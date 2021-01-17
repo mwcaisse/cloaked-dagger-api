@@ -117,7 +117,7 @@ namespace CloakedDagger.Web
             // Identity Server / OAuth2
             services.AddIdentityServer(options =>
                 {
-                    options.UserInteraction.LoginUrl = "http://localhost:3000/login";
+                    options.UserInteraction.LoginUrl = "http://localhost:3333/login";
                 })
                 .AddClientStore<ClientStoreAdapter>()
                 .AddResourceStore<ResourceStoreAdapter>()

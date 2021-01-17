@@ -76,3 +76,5 @@ UpgradeLog.htm
 mono_crash*.blob
 
 
+CloakedDagger.Web/tempkey.jwk
+
