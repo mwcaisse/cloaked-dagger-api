@@ -55,7 +55,8 @@ namespace CloakedDagger.Logic.Services
                 scope = new ScopeEntity()
                 {
                     Name = vm.Name,
-                    Description = vm.Description
+                    Description = vm.Description,
+                    Active = true
                 };
                 scope = _scopeRepository.Create(scope);
             }

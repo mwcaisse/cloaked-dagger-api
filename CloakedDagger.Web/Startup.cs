@@ -79,13 +79,13 @@ namespace CloakedDagger.Web
                 .AddCookie(options =>
                 {
                     options.LogoutPath = "/user/logout";
+                    options.Cookie.Name = "CLOAKED_DAGGER_SESSION";
                     options.Events.OnRedirectToLogin = (context) =>
                     {
                         // Don't want it to redirect to a different URL when not logged in, just return a 401
                         context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                         return Task.CompletedTask;
                     };
-                    options.Cookie.Name = "CLOAKED_DAGGER_SESSION";
                 });
 
             var entityMapperConfig = new MapperConfiguration(config =>

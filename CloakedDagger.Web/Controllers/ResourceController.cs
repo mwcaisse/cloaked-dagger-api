@@ -1,11 +1,13 @@
 using System;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
     [Route("/resource")]
+    [Authorize]
     public class ResourceController : BaseController
     {
 

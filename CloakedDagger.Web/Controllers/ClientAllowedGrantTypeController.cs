@@ -2,12 +2,14 @@ using System;
 using CloakedDagger.Common.Enums;
 using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
     
     [Route("/client/{clientId}/allowed-grant-type")]
+    [Authorize]
     public class ClientAllowedGrantTypeController : BaseController
     {
 

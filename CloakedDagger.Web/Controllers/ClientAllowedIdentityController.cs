@@ -3,11 +3,13 @@ using CloakedDagger.Common.Enums;
 using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
     [Route("/client/{clientId}/allowed-identity")]
+    [Authorize]
     public class ClientAllowedIdentityController : BaseController
     {
         private readonly IClientService _clientService;

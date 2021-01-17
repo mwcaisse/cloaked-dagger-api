@@ -1,11 +1,13 @@
 
 using CloakedDagger.Common.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
 
     [Route("/scope")]
+    [Authorize]
     public class ScopeController : BaseController
     {
 

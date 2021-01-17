@@ -2,11 +2,13 @@ using System;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
     [Route("/resource/{resourceId}/scope/")]
+    [Authorize]
     public class ResourceScopeController : BaseController
     {
 

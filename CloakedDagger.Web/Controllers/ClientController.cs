@@ -2,11 +2,13 @@ using System;
 using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
 {
     [Route("/client")]
+    [Authorize]
     public class ClientController : BaseController
     {
 
