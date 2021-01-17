@@ -78,19 +78,6 @@ namespace CloakedDagger.Web
 
             services.AddTransient<IPasswordHasher, ArgonPasswordHasher>();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LogoutPath = "/user/logout";
-                    options.Cookie.Name = "CLOAKED_DAGGER_SESSION";
-                    options.Events.OnRedirectToLogin = (context) =>
-                    {
-                        // Don't want it to redirect to a different URL when not logged in, just return a 401
-                        context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
-                        return Task.CompletedTask;
-                    };
-                });
-
             var entityMapperConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<ResourceScopeEntity, ResourceScopeViewModel>()
@@ -125,6 +112,22 @@ namespace CloakedDagger.Web
                 .AddClientStore<ClientStoreAdapter>()
                 .AddResourceStore<ResourceStoreAdapter>()
                 .AddDeveloperSigningCredential();
+            
+            // Add this after we configure Identity Server, otherwise it overrides the settings or at least the
+            //  OnRedirectToLogin handler
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LogoutPath = "/user/logout";
+                    options.Cookie.Name = "CLOAKED_DAGGER_SESSION";
+                    options.Events.OnRedirectToLogin = context =>
+                    {
+                        // Don't want it to redirect to a different URL when not logged in, just return a 401
+                        context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                        return Task.CompletedTask;
+                    };
+                });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
