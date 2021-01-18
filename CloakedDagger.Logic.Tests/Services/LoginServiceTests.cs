@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using CloakedDagger.Common;
 using CloakedDagger.Common.Entities;
@@ -32,7 +33,8 @@ namespace CloakedDagger.Logic.Tests.Services
                 {
                     UserId = userId,
                     Username = username,
-                    Password = "correctHASH"
+                    Password = "correctHASH",
+                    Roles = new List<UserRoleEntity>()
                 });
                 
                 var subject = new LoginService(userRepository.Object, passwordHasher.Object);
@@ -81,7 +83,8 @@ namespace CloakedDagger.Logic.Tests.Services
                 userRepository.Setup(ur => ur.Get(username)).Returns(new UserEntity()
                 {
                     Username = username,
-                    Password = "amazingHash"
+                    Password = "amazingHash",
+                    Roles = new List<UserRoleEntity>()
                 });
                 
                 var subject = new LoginService(userRepository.Object, passwordHasher.Object);

@@ -41,7 +41,9 @@ namespace CloakedDagger.Logic.Tests.Services
 
                 passwordHasherMock.Setup(ph => ph.HashPassword(password)).Returns(passwordHash);
                 userRepositoryMock.Setup(ur => ur.UsernameExists(username)).Returns(false);
-
+                userRepositoryMock.Setup(ur => ur.Get(It.IsAny<Guid>())).Returns(new UserEntity());
+                roleRepositoryMock.Setup(rr => rr.Get(It.IsAny<Guid>())).Returns(new RoleEntity());
+                
                 userRepositoryMock.Setup(ur => ur.Create(It.IsAny<UserEntity>())).Callback((UserEntity u) =>
                 {
                     users.Add(u);
@@ -151,7 +153,8 @@ namespace CloakedDagger.Logic.Tests.Services
                     UserId = userId,
                     Password = "amazinglySecurePassword",
                     Username = "mitchell",
-                    Email = "mitchell@mitchell.com"
+                    Email = "mitchell@mitchell.com",
+                    Roles = new List<UserRoleEntity>()
                 };
 
                 userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(user);

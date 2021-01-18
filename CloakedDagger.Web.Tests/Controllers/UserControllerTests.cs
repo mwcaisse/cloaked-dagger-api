@@ -67,7 +67,9 @@ namespace CloakedDagger.Web.Tests.Controllers
 
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, username),
+                    new(ClaimTypes.Sid, username),
+                    new("sub", username)
                 };
                 var identity = new ClaimsIdentity(claims, "login");
                 var principal = new ClaimsPrincipal(identity);
