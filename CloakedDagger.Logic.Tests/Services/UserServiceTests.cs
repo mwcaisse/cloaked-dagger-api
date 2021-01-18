@@ -163,7 +163,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 Assert.NotNull(fetchedUser);
                 Assert.IsNotType<UserEntity>(fetchedUser);
                 
-                Assert.Equal(user.UserId, fetchedUser.UserId);
+                Assert.Equal(user.UserId, fetchedUser.Id);
                 Assert.Equal(user.Username, fetchedUser.Username);
                 Assert.Equal(user.Name, fetchedUser.Name);
             }

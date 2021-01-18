@@ -113,7 +113,7 @@ namespace CloakedDagger.Web.Tests.Controllers
                     {
                         Username = TestAuthHandler.TestUsername,
                         Name = TestAuthHandler.TestUsername,
-                        UserId = userId
+                        Id = userId
                     });
 
                 var resp = await Client.GetAsync("/user/me");
@@ -125,7 +125,7 @@ namespace CloakedDagger.Web.Tests.Controllers
                 Assert.DoesNotContain("password", userResponseDict.Keys);
 
                 var userResp = JsonConvert.DeserializeObject<UserViewModel>(respContent);
-                Assert.Equal(userId, userResp.UserId);
+                Assert.Equal(userId, userResp.Id);
                 Assert.Equal(TestAuthHandler.TestUsername, userResp.Username);
                 Assert.Equal(TestAuthHandler.TestUsername, userResp.Name);
 
@@ -158,7 +158,7 @@ namespace CloakedDagger.Web.Tests.Controllers
                     {
                         Username = TestAuthHandler.TestUsername,
                         Name = TestAuthHandler.TestUsername,
-                        UserId = userId
+                        Id = userId
                     });
 
                 var resp = await Client.GetAsync("/user/me");
