@@ -1,4 +1,5 @@
 using System;
+using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using IdentityServer4.Models;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CloakedDagger.Web.Controllers
 {
     [Route("/resource/{resourceId}/scope/")]
-    [Authorize]
+    [Authorize (Roles=Roles.Admin.Name)]
     public class ResourceScopeController : BaseController
     {
 

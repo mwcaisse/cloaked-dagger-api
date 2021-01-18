@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using OwlTin.Common.Entities;
 
 namespace CloakedDagger.Common.Entities
@@ -23,6 +24,8 @@ namespace CloakedDagger.Common.Entities
         public DateTime CreateDate { get; set; }
         
         public DateTime ModifiedDate { get; set; }
+        
+        public virtual ICollection<UserRoleEntity> Roles { get; set; }
 
     }
 }

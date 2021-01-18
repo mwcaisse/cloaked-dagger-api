@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Repositories;
+using CloakedDagger.Data.Extensions;
+using Microsoft.EntityFrameworkCore;
 using OwlTin.Common;
 
 namespace CloakedDagger.Data.Repositories
@@ -18,12 +20,15 @@ namespace CloakedDagger.Data.Repositories
         
         public UserEntity Get(string username)
         {
-            return _db.Users.Active().SingleOrDefault(u => u.Username == username);
+            return _db.Users.Active().Build().SingleOrDefault(u => u.Username == username);
         }
 
         public UserEntity Get(Guid id)
         {
-            return _db.Users.Active().SingleOrDefault(u => u.UserId == id);
+            return _db.Users
+                .Active()
+                .Build()
+                .SingleOrDefault(u => u.UserId == id);
         }
 
         public bool UsernameExists(string username)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace CloakedDagger.Common.ViewModels
 {
@@ -9,5 +10,7 @@ namespace CloakedDagger.Common.ViewModels
         public string Username { get; set; }
         
         public string Name { get; set; }
+
+        public ICollection<string> Roles { get; set; }
     }
 }

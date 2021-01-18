@@ -21,6 +21,8 @@ namespace CloakedDagger.Logic.Tests.Services
             public void CanRegisterValidUser()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
+                var roleRepositoryMock = new Mock<IRoleRepository>();
+                var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
 
                 var users = new List<UserEntity>();
@@ -45,7 +47,8 @@ namespace CloakedDagger.Logic.Tests.Services
                     users.Add(u);
                 });
                 
-                var subject = new UserService(userRepositoryMock.Object, passwordHasherMock.Object);
+                var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object);
                 
                 subject.Register(userRegistration);
                 
@@ -66,6 +69,8 @@ namespace CloakedDagger.Logic.Tests.Services
             public void CannotRegisterUserIfUsernameIsTaken()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
+                var roleRepositoryMock = new Mock<IRoleRepository>();
+                var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
 
                 var users = new List<UserEntity>();
@@ -85,7 +90,8 @@ namespace CloakedDagger.Logic.Tests.Services
                 passwordHasherMock.Setup(ph => ph.HashPassword(password)).Returns(passwordHash);
                 userRepositoryMock.Setup(ur => ur.UsernameExists(username)).Returns(true);
                 
-                var subject = new UserService(userRepositoryMock.Object, passwordHasherMock.Object);
+                var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object);
 
                 var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
 
@@ -99,6 +105,8 @@ namespace CloakedDagger.Logic.Tests.Services
             public void CannotRegisterWithInvalidInfo()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
+                var roleRepositoryMock = new Mock<IRoleRepository>();
+                var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
 
                 var users = new List<UserEntity>();
@@ -115,7 +123,8 @@ namespace CloakedDagger.Logic.Tests.Services
 
                 userRepositoryMock.Setup(ur => ur.UsernameExists(username)).Returns(true);
                 
-                var subject = new UserService(userRepositoryMock.Object, passwordHasherMock.Object);
+                var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object);
 
                 var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
 
@@ -132,6 +141,8 @@ namespace CloakedDagger.Logic.Tests.Services
             public void TestCanGetExistingUser()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
+                var roleRepositoryMock = new Mock<IRoleRepository>();
+                var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
 
                 var userId = Guid.NewGuid();
@@ -145,7 +156,8 @@ namespace CloakedDagger.Logic.Tests.Services
 
                 userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(user);
                 
-                var subject = new UserService(userRepositoryMock.Object, passwordHasherMock.Object);
+                var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object);
 
                 var fetchedUser = subject.Get(userId);
                 Assert.NotNull(fetchedUser);
@@ -160,13 +172,16 @@ namespace CloakedDagger.Logic.Tests.Services
             public void TestNonExistingUserReturnsNull()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
+                var roleRepositoryMock = new Mock<IRoleRepository>();
+                var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
 
                 var userId = Guid.NewGuid();
 
                 userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(default(UserEntity));
                 
-                var subject = new UserService(userRepositoryMock.Object, passwordHasherMock.Object);
+                var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object);
 
                 var fetchedUser = subject.Get(userId);
                 Assert.Null(fetchedUser);

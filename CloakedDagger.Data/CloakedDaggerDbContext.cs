@@ -9,6 +9,10 @@ namespace CloakedDagger.Data
     {
         public DbSet<UserEntity> Users { get; set; }
         
+        public DbSet<RoleEntity> Roles { get; set; }
+        
+        public DbSet<UserRoleEntity> UserRoles { get; set; }
+
         public DbSet<ClientEventEntity> ClientEvents { get; set; }
         public DbSet<ClientEntity> Clients { get; set; }
 
@@ -28,6 +32,9 @@ namespace CloakedDagger.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new UserMap());
+            modelBuilder.ApplyConfiguration(new RoleMap());
+            modelBuilder.ApplyConfiguration(new UserRoleMap());
+            
 
             modelBuilder.ApplyConfiguration(new ClientMap());
             modelBuilder.ApplyConfiguration(new ClientEventEntityMap());

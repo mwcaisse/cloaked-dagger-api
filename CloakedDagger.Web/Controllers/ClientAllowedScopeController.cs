@@ -1,4 +1,5 @@
 using System;
+using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CloakedDagger.Web.Controllers
 {
     [Route("/client/{clientId}/allowed-scope/")]
-    [Authorize]
+    [Authorize (Roles=Roles.Admin.Name)]
     public class ClientAllowedScopeController : BaseController
     {
         private readonly IClientService _clientService;

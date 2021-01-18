@@ -1,4 +1,5 @@
 using System;
+using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Domain;
 using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CloakedDagger.Web.Controllers
 {
     [Route("/client/{clientId}/uri/")]
-    [Authorize]
+    [Authorize (Roles=Roles.Admin.Name)]
     public class ClientUriController : BaseController
     {
 

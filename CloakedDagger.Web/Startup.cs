@@ -62,6 +62,8 @@ namespace CloakedDagger.Web
             });
 
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IRoleRepository, RoleRepository>();
+            services.AddTransient<IUserRoleRepository, UserRoleRepository>();
             services.AddTransient<IResourceRepository, ResourceRepository>();
             services.AddTransient<IResourceScopeRepository, ResourceScopeRepository>();
             services.AddTransient<IScopeRepository, ScopeRepository>();
@@ -124,6 +126,11 @@ namespace CloakedDagger.Web
                     {
                         // Don't want it to redirect to a different URL when not logged in, just return a 401
                         context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                        return Task.CompletedTask;
+                    };
+                    options.Events.OnRedirectToAccessDenied = context =>
+                    {
+                        context.Response.StatusCode = (int) HttpStatusCode.Forbidden;
                         return Task.CompletedTask;
                     };
                 });

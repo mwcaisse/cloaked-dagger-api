@@ -67,11 +67,14 @@ namespace CloakedDagger.Logic.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, userEntity.Username),
-                new Claim(ClaimTypes.Sid, userEntity.UserId.ToString()),
-                new Claim("sub", userEntity.Username)
-                
+                new(ClaimTypes.Name, userEntity.Username),
+                new(ClaimTypes.Sid, userEntity.UserId.ToString()),
+                new("sub", userEntity.Username)
             };
+            foreach (var roleEntity in userEntity.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, roleEntity.Role.Name));
+            }
             var identity = new ClaimsIdentity(claims, "login");
             return new ClaimsPrincipal(identity);
         }

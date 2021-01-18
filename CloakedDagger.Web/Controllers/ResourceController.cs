@@ -1,4 +1,5 @@
 using System;
+using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CloakedDagger.Web.Controllers
 {
     [Route("/resource")]
-    [Authorize]
+    [Authorize (Roles=Roles.Admin.Name)]
     public class ResourceController : BaseController
     {
 

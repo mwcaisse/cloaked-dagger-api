@@ -1,4 +1,5 @@
 using System;
+using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Enums;
 using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
@@ -9,7 +10,7 @@ namespace CloakedDagger.Web.Controllers
 {
     
     [Route("/client/{clientId}/allowed-grant-type")]
-    [Authorize]
+    [Authorize (Roles=Roles.Admin.Name)]
     public class ClientAllowedGrantTypeController : BaseController
     {
 
