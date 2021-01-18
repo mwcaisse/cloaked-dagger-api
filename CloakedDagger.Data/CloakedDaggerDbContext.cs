@@ -21,6 +21,8 @@ namespace CloakedDagger.Data
         public DbSet<ResourceScopeEntity> ResourceScopes { get; set; }
         
         public DbSet<ScopeEntity> Scopes { get; set; }
+        
+        public DbSet<PersistedGrantEntity> PersistedGrants { get; set; }
 
         public CloakedDaggerDbContext(DbContextOptions<CloakedDaggerDbContext> options) : base(options)
         {
@@ -43,9 +45,8 @@ namespace CloakedDagger.Data
             modelBuilder.ApplyConfiguration(new ResourceScopeMap());
             
             modelBuilder.ApplyConfiguration(new ScopeMap());
-            
-            
-            
+
+            modelBuilder.ApplyConfiguration(new PersistedGrantMap());
         }
     }
 }

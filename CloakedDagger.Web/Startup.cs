@@ -84,6 +84,7 @@ namespace CloakedDagger.Web
             services.AddTransient<IScopeRepository, ScopeRepository>();
             services.AddTransient<IClientRepository, ClientRepository>();
             services.AddTransient<IClientEventRepository, ClientEventRepository>();
+            services.AddTransient<IPersistedGrantRepository, PersistedGrantRepository>();
             
             services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IUserService, UserService>();
@@ -127,7 +128,8 @@ namespace CloakedDagger.Web
                     options.UserInteraction.LoginUrl = authenticationConfiguration.LoginUrl;
                 })
                 .AddClientStore<ClientStoreAdapter>()
-                .AddResourceStore<ResourceStoreAdapter>();
+                .AddResourceStore<ResourceStoreAdapter>()
+                .AddPersistedGrantStore<PersistedGrantStoreAdapter>();
 
             if (string.IsNullOrWhiteSpace(authenticationConfiguration.Key))
             {
