@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
 using CloakedDagger.Common;
@@ -15,6 +18,7 @@ using CloakedDagger.Data.Repositories;
 using CloakedDagger.Logic.PasswordHasher;
 using CloakedDagger.Logic.Services;
 using CloakedDagger.Web.Adapters;
+using CloakedDagger.Web.Configuration;
 using CloakedDagger.Web.Converters;
 using CloakedDagger.Web.Database;
 using CloakedDagger.Web.Middleware;
@@ -32,6 +36,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using OwlTin.Common.Converters;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
@@ -52,6 +57,16 @@ namespace CloakedDagger.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var authenticationConfiguration = new AuthenticationConfiguration()
+            {
+                LoginUrl = Configuration.GetValue<string>("authentication:loginUrl"),
+                LogoutUrl = Configuration.GetValue<string>("authentication:logoutUrl"),
+                CookieName = Configuration.GetValue<string>("authentication:cookieName"),
+                Key = Configuration.GetValue<string>("authentication:key"),
+                KeyPassword = Configuration.GetValue<string>("authentication:keyPassword")
+            };
+            services.AddSingleton(authenticationConfiguration);
+            
             DatabaseMigrator.MigrateDatabase(Configuration.GetDatabaseConnectionString());
 
             services.AddDbContext<CloakedDaggerDbContext>(options =>
@@ -107,21 +122,29 @@ namespace CloakedDagger.Web
             services.AddSingleton(Log.Logger);
 
             // Identity Server / OAuth2
-            services.AddIdentityServer(options =>
+            var isBuilder = services.AddIdentityServer(options =>
                 {
-                    options.UserInteraction.LoginUrl = "http://localhost:3333/login";
+                    options.UserInteraction.LoginUrl = authenticationConfiguration.LoginUrl;
                 })
                 .AddClientStore<ClientStoreAdapter>()
-                .AddResourceStore<ResourceStoreAdapter>()
-                .AddDeveloperSigningCredential();
-            
+                .AddResourceStore<ResourceStoreAdapter>();
+
+            if (string.IsNullOrWhiteSpace(authenticationConfiguration.Key))
+            {
+                isBuilder.AddDeveloperSigningCredential();
+            }
+            else
+            {
+                isBuilder.AddSigningCredential(LoadAuthenticationSigningKey(authenticationConfiguration));
+            }
+
             // Add this after we configure Identity Server, otherwise it overrides the settings or at least the
             //  OnRedirectToLogin handler
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LogoutPath = "/user/logout";
-                    options.Cookie.Name = "CLOAKED_DAGGER_SESSION";
+                    options.LogoutPath = authenticationConfiguration.LogoutUrl;
+                    options.Cookie.Name = authenticationConfiguration.CookieName;
                     options.Events.OnRedirectToLogin = context =>
                     {
                         // Don't want it to redirect to a different URL when not logged in, just return a 401
@@ -135,6 +158,11 @@ namespace CloakedDagger.Web
                     };
                 });
 
+        }
+
+        private X509Certificate2 LoadAuthenticationSigningKey(AuthenticationConfiguration config)
+        {
+            return new (Convert.FromBase64String(config.Key), config.KeyPassword);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
