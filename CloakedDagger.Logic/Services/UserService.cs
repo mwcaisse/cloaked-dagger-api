@@ -36,7 +36,7 @@ namespace CloakedDagger.Logic.Services
             var user = _userRepository.Get(id);
             return null == user ? null : new UserViewModel()
             {
-                UserId = user.UserId,
+                Id = user.UserId,
                 Username = user.Username,
                 Name = user.Name, 
                 Roles = user.Roles.Select(ur => ur.Role.Name).ToList()
