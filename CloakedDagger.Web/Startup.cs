@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,7 +9,6 @@ using CloakedDagger.Common.Repositories;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using CloakedDagger.Data;
-using CloakedDagger.Data.Extensions;
 using CloakedDagger.Data.Repositories;
 using CloakedDagger.Logic.PasswordHasher;
 using CloakedDagger.Logic.Services;
@@ -23,25 +18,16 @@ using CloakedDagger.Web.Converters;
 using CloakedDagger.Web.Database;
 using CloakedDagger.Web.Middleware;
 using CloakedDagger.Web.Utils;
-using IdentityServer4;
-using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using OwlTin.Common.Converters;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
-using Client = IdentityServer4.Models.Client;
-using Resource = IdentityServer4.Models.Resource;
 
 namespace CloakedDagger.Web
 {

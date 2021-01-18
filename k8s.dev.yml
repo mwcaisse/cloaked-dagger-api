@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloaked-dagger-api
+  namespace: dev
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: cloaked-dagger-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloaked-dagger-api
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloaked-dagger-api
+  template:
+    metadata:
+      labels:
+        app: cloaked-dagger-api
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: cloaked-dagger-api
+          image: registry.gitlab.com/mwcaisse/application-images/cloaked-dagger-api:$IMAGE_TAG
+          ports:
+            - containerPort: 8080
+          env:
+            - name: CLOAKED_DAGGER_API_DATABASE__HOST
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: database-host
+            - name: CLOAKED_DAGGER_API_DATABASE__USER
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: database-user
+            - name: CLOAKED_DAGGER_API_DATABASE__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: database-password
+            - name: CLOAKED_DAGGER_API_DATABASE__PORT
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: database-port
+            - name: CLOAKED_DAGGER_API_DATABASE__SCHEMA
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: database-schema
+            - name: CLOAKED_DAGGER_API_DATABASE__SSLMODE
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: database-ssl-mode
+            - name: CLOAKED_DAGGER_API_AUTHENTICATION__LOGINURL
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: authentication-login-url
+            - name: CLOAKED_DAGGER_API_AUTHENTICATION__KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: authentication-key
+            - name: CLOAKED_DAGGER_API_AUTHENTICATION__KEYPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: authentication-key-password
+            - name: CLOAKED_DAGGER_API_AUTHENTICATION__LOGOUTURL
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: authentication-logout-url
+            - name: CLOAKED_DAGGER_API_AUTHENTICATION__COOKIENAME
+              value: "CLOAKED_DAGGER_SESSION"
+
+      imagePullSecrets:
+        - name: docker-creds
