@@ -50,7 +50,7 @@ namespace CloakedDagger.Web.Tests.Controllers
                     password
                 }), Encoding.UTF8, "application/json");
 
-                var resp = await Client.PostAsync("/user/login", content);
+                var resp = await Client.PostAsync("/api/user/login", content);
                 
                 Assert.Equal(HttpStatusCode.Unauthorized, resp.StatusCode);
 
@@ -82,7 +82,7 @@ namespace CloakedDagger.Web.Tests.Controllers
                     password
                 }), Encoding.UTF8, "application/json");
 
-                var resp = await Client.PostAsync("/user/login", content);
+                var resp = await Client.PostAsync("/api/user/login", content);
                 
                 Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
             }
@@ -118,7 +118,7 @@ namespace CloakedDagger.Web.Tests.Controllers
                         Id = userId
                     });
 
-                var resp = await Client.GetAsync("/user/me");
+                var resp = await Client.GetAsync("/api/user/me");
                 Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
 
                 var respContent = await resp.Content.ReadAsStringAsync();
@@ -163,7 +163,7 @@ namespace CloakedDagger.Web.Tests.Controllers
                         Id = userId
                     });
 
-                var resp = await Client.GetAsync("/user/me");
+                var resp = await Client.GetAsync("/api/user/me");
                 Assert.Equal(HttpStatusCode.Unauthorized, resp.StatusCode);
             }
         }
