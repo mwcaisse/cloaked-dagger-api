@@ -161,15 +161,20 @@ namespace CloakedDagger.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMiddleware<ErrorHandlingMiddleware>();
-            
-            app.UseRouting();
-            
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseIdentityServer();
-            
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.Map("/api", apiApp =>
+            {
+                apiApp.UseMiddleware<ErrorHandlingMiddleware>();
+
+                apiApp.UseRouting();
+
+                apiApp.UseAuthentication();
+                apiApp.UseAuthorization();
+                apiApp.UseIdentityServer();
+
+                apiApp.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            });
+
+
         }
     }
 }
