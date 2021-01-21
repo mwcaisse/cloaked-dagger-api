@@ -21,6 +21,7 @@ using CloakedDagger.Web.Utils;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -164,6 +165,16 @@ namespace CloakedDagger.Web
             app.Map("/api", apiApp =>
             {
                 apiApp.UseMiddleware<ErrorHandlingMiddleware>();
+
+                // Configure forwarded headers to ensure discovery document of ID Server is in https
+                var forwardOptions = new ForwardedHeadersOptions()
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+                    RequireHeaderSymmetry = false
+                };
+                forwardOptions.KnownNetworks.Clear();
+                forwardOptions.KnownProxies.Clear();
+                app.UseForwardedHeaders(forwardOptions);
 
                 apiApp.UseRouting();
 
