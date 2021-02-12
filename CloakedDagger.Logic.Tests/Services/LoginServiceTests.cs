@@ -33,6 +33,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 {
                     UserId = userId,
                     Username = username,
+                    Name = "test",
                     Password = "correctHASH",
                     Roles = new List<UserRoleEntity>()
                 });
