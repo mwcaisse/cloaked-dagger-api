@@ -7,6 +7,8 @@ namespace CloakedDagger.Common.Services
     public interface IUserService
     {
         public UserViewModel Get(Guid id);
+
+        public bool IsActive(Guid id);
         public void Register(UserRegistrationViewModel registration);
     }
 }

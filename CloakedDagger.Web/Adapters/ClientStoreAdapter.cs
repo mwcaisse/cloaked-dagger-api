@@ -46,6 +46,12 @@ namespace CloakedDagger.Web.Adapters
                 
                 AllowedScopes = client.AllowedScopes
                     .Union(client.AllowedIdentities.Select(ai => _allowedIdentityMapping[ai]))
+                    .Union(new List<string>()
+                    {
+                        "id",
+                        "username",
+                        "name"
+                    })
                     .ToList(),
                 
                 Enabled = true
@@ -63,7 +69,8 @@ namespace CloakedDagger.Web.Adapters
         {
             {Identity.OpenId, IdentityServerConstants.StandardScopes.OpenId},
             {Identity.Profile, IdentityServerConstants.StandardScopes.Profile},
-            {Identity.Email, IdentityServerConstants.StandardScopes.Email}
+            {Identity.Email, IdentityServerConstants.StandardScopes.Email},
+            {Identity.User, UserIdentityResource.Scope}
         };
     }
 }

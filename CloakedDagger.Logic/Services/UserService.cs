@@ -42,7 +42,13 @@ namespace CloakedDagger.Logic.Services
                 Roles = user.Roles.Select(ur => ur.Role.Name).ToList()
             };
         }
-        
+
+        public bool IsActive(Guid id)
+        {
+            var user = _userRepository.Get(id);
+            return null != user && user.Locked == false;
+        }
+
         public void Register(UserRegistrationViewModel registration)
         {
             ValidateUserRegistration(registration);
@@ -53,7 +59,7 @@ namespace CloakedDagger.Logic.Services
                 Password = _passwordHasher.HashPassword(registration.Password),
                 Name = registration.Name,
                 Active = true,
-                Locked = true
+                Locked = false
             };
             _userRepository.Create(toCreate);
             AddRole(toCreate.UserId, Roles.User.Id);

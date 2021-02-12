@@ -116,7 +116,9 @@ namespace CloakedDagger.Web
                 })
                 .AddClientStore<ClientStoreAdapter>()
                 .AddResourceStore<ResourceStoreAdapter>()
-                .AddPersistedGrantStore<PersistedGrantStoreAdapter>();
+                .AddPersistedGrantStore<PersistedGrantStoreAdapter>()
+                .AddProfileService<ProfileServiceAdapter>();
+        
 
             if (string.IsNullOrWhiteSpace(authenticationConfiguration.Key))
             {

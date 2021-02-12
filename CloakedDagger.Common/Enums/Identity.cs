@@ -5,5 +5,6 @@ namespace CloakedDagger.Common.Enums
         OpenId = 1,
         Profile = 2,
         Email = 3,
+        User = 4,
     }
 }

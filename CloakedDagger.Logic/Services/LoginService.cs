@@ -65,18 +65,28 @@ namespace CloakedDagger.Logic.Services
         /// <returns></returns>
         private ClaimsPrincipal CreateClaimsPrincipalForUser(UserEntity userEntity)
         {
+            var identity = new ClaimsIdentity(GetClaimsForUser(userEntity), "login");
+            return new ClaimsPrincipal(identity);
+        }
+        
+        public static List<Claim> GetClaimsForUser(UserEntity userEntity)
+        {
             var claims = new List<Claim>
             {
                 new(ClaimTypes.Name, userEntity.Username),
                 new(ClaimTypes.Sid, userEntity.UserId.ToString()),
-                new("sub", userEntity.Username)
+                new("sub", userEntity.UserId.ToString()),
+                new("id", userEntity.UserId.ToString()),
+                new("username", userEntity.Username),
+                new("name", userEntity.Name),
             };
             foreach (var roleEntity in userEntity.Roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, roleEntity.Role.Name));
+                claims.Add(new Claim("role", roleEntity.Role.Name));
             }
-            var identity = new ClaimsIdentity(claims, "login");
-            return new ClaimsPrincipal(identity);
+
+            return claims;
         }
     }
 }

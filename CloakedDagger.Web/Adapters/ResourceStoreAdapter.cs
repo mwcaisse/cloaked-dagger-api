@@ -21,7 +21,8 @@ namespace CloakedDagger.Web.Adapters
         {
             new IdentityResources.OpenId(),
             new IdentityResources.Email(),
-            new IdentityResources.Profile()
+            new IdentityResources.Profile(),
+            new UserIdentityResource()
         };
 
         public ResourceStoreAdapter(IResourceRepository resourceRepository, IScopeRepository scopeRepository)
