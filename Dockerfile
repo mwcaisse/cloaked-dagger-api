@@ -1,5 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
+# CA Certificats are outdated in base image, update before proceeding so we can restore nuget packages
+RUN apt update -y && apt upgrade -y
+
 ARG OWLTIN_SOURCE
 ARG OWLTIN_USERNAME
 ARG OWLTIN_PASSWORD
