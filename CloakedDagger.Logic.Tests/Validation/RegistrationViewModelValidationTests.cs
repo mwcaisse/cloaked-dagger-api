@@ -16,7 +16,8 @@ namespace CloakedDagger.Logic.Tests.Validation
                 Username = "",
                 Password = "helloworld_long_password",
                 Email = "hello@hello.com",
-                Name = "hello"
+                Name = "hello",
+                RegistrationKey = "HelloWorld"
             };
 
             var ex = Assert.Throws<EntityValidationException>(() => 
@@ -37,7 +38,8 @@ namespace CloakedDagger.Logic.Tests.Validation
                 Username = "hello",
                 Password = "",
                 Email = "hello@hello.com",
-                Name = "hello"
+                Name = "hello",
+                RegistrationKey = "HelloWorld"
             };
 
             var ex = Assert.Throws<EntityValidationException>(() => 
@@ -58,7 +60,8 @@ namespace CloakedDagger.Logic.Tests.Validation
                 Username = "hello",
                 Password = "securepassword2",
                 Email = "",
-                Name = "hello"
+                Name = "hello",
+                RegistrationKey = "HelloWorld"
             };
 
             var ex = Assert.Throws<EntityValidationException>(() => 
@@ -70,6 +73,28 @@ namespace CloakedDagger.Logic.Tests.Validation
                 res => res.MemberNames.Contains("Email") 
                        && res.ErrorMessage.Contains("Email is required"));
         }
+        
+        [Fact]
+        public void TestBlankRegistrationKeyThrowsError()
+        {
+            var registration = new UserRegistrationViewModel()
+            {
+                Username = "hello",
+                Password = "securepassword2",
+                Email = "mitchell@gmail.com",
+                Name = "hello",
+                RegistrationKey = ""
+            };
+
+            var ex = Assert.Throws<EntityValidationException>(() => 
+                ValidationUtils.ValidateViewModel(registration));
+
+            Assert.NotEmpty(ex.ValidationResults);
+
+            Assert.Contains(ex.ValidationResults, 
+                res => res.MemberNames.Contains("RegistrationKey") 
+                       && res.ErrorMessage.Contains("Registration Key is required"));
+        }
 
         [Fact]
         public void TestPasswordsMustBeAtleast8Characters()
@@ -79,7 +104,8 @@ namespace CloakedDagger.Logic.Tests.Validation
                 Username = "hello",
                 Password = "12345",
                 Email = "email@email.com",
-                Name = "hello"
+                Name = "hello",
+                RegistrationKey = "HelloWorld"
             };
 
             var ex = Assert.Throws<EntityValidationException>(() => 
@@ -100,7 +126,8 @@ namespace CloakedDagger.Logic.Tests.Validation
                 Name = "Ron Swansom",
                 Email = "ron@why_you_need_this.com",
                 Password = "securePASSWORD123#",
-                Username = "ron"
+                Username = "ron",
+                RegistrationKey = "HelloWorld"
             };
             
             ValidationUtils.ValidateViewModel(registration);

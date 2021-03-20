@@ -66,6 +66,9 @@ namespace CloakedDagger.Web
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IRoleRepository, RoleRepository>();
             services.AddTransient<IUserRoleRepository, UserRoleRepository>();
+            services.AddTransient<IUserRegistrationKeyRepository, UserRegistrationKeyRepository>();
+            services.AddTransient<IUserRegistrationKeyUseRepository, UserRegistrationKeyUseRepository>();
+            
             services.AddTransient<IResourceRepository, ResourceRepository>();
             services.AddTransient<IResourceScopeRepository, ResourceScopeRepository>();
             services.AddTransient<IScopeRepository, ScopeRepository>();
@@ -75,6 +78,7 @@ namespace CloakedDagger.Web
             
             services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUserRegistrationKeyService, UserRegistrationKeyService>();
 
             services.AddTransient<IResourceService, ResourceService>();
             services.AddTransient<IResourceScopeService, ResourceScopeService>();

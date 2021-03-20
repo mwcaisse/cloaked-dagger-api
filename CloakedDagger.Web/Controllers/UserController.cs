@@ -58,8 +58,6 @@ namespace CloakedDagger.Web.Controllers
         [Route("register")]
         public IActionResult Register([FromBody] UserRegistrationViewModel registration)
         {
-            // We aren't allowing new registrations at the moment.
-            return Forbid();
             _userService.Register(registration);
             // if registration failed it will throw an EntityValidationException, in which case our middleware will
             //     handle that if we make it here registration was successful so we return 200.

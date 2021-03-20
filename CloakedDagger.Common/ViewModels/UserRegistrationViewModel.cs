@@ -19,5 +19,8 @@ namespace CloakedDagger.Common.ViewModels
         [Required(AllowEmptyStrings = false, ErrorMessage = "Email is required")]
         [MaxLength(250, ErrorMessage = "Email must not be more than 250 characters")]
         public string Email { get; set; }
+        
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Registration Key is required")]
+        public string RegistrationKey { get; set; }
     }
 }

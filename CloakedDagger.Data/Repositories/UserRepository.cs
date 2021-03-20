@@ -41,5 +41,14 @@ namespace CloakedDagger.Data.Repositories
             _db.Users.Add(userEntity);
             _db.SaveChanges();
         }
+
+        public void Delete(Guid id)
+        {
+            var toDelete = Get(id);
+            if (null != toDelete)
+            {
+                _db.Users.Remove(toDelete);
+            }
+        }
     }
 }

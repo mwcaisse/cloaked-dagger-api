@@ -5,6 +5,7 @@ using CloakedDagger.Common;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Exceptions;
 using CloakedDagger.Common.Repositories;
+using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using CloakedDagger.Logic.Services;
 using Moq;
@@ -24,6 +25,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 var roleRepositoryMock = new Mock<IRoleRepository>();
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
+                var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
 
                 var users = new List<UserEntity>();
                 
@@ -36,21 +38,25 @@ namespace CloakedDagger.Logic.Tests.Services
                     Email = "mitchell@mitchell.com",
                     Username = username,
                     Name = "Mitchell",
-                    Password = password
+                    Password = password,
+                    RegistrationKey = Guid.NewGuid().ToString()
                 };
 
                 passwordHasherMock.Setup(ph => ph.HashPassword(password)).Returns(passwordHash);
                 userRepositoryMock.Setup(ur => ur.UsernameExists(username)).Returns(false);
                 userRepositoryMock.Setup(ur => ur.Get(It.IsAny<Guid>())).Returns(new UserEntity());
                 roleRepositoryMock.Setup(rr => rr.Get(It.IsAny<Guid>())).Returns(new RoleEntity());
+
+                userRegistrationKeyServiceMock.Setup(urks => urks.IsValid(It.IsAny<string>())).Returns(true);
+                userRegistrationKeyServiceMock.Setup(urks => urks.Use(It.IsAny<string>(), It.IsAny<Guid>())).Returns(true);
                 
                 userRepositoryMock.Setup(ur => ur.Create(It.IsAny<UserEntity>())).Callback((UserEntity u) =>
                 {
                     users.Add(u);
                 });
-                
+
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
                 
                 subject.Register(userRegistration);
                 
@@ -74,6 +80,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 var roleRepositoryMock = new Mock<IRoleRepository>();
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
+                var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
 
                 var users = new List<UserEntity>();
                 
@@ -86,14 +93,19 @@ namespace CloakedDagger.Logic.Tests.Services
                     Email = "mitchell@mitchell.com",
                     Username = username,
                     Name = "Mitchell",
-                    Password = password
+                    Password = password,
+                    RegistrationKey = "hello world"
                 };
 
                 passwordHasherMock.Setup(ph => ph.HashPassword(password)).Returns(passwordHash);
                 userRepositoryMock.Setup(ur => ur.UsernameExists(username)).Returns(true);
                 
+                userRegistrationKeyServiceMock.Setup(urks => urks.IsValid(It.IsAny<string>())).Returns(true);
+                userRegistrationKeyServiceMock.Setup(urks => urks.Use(It.IsAny<string>(), It.IsAny<Guid>())).Returns(true);
+
+                
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
 
                 var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
 
@@ -104,12 +116,109 @@ namespace CloakedDagger.Logic.Tests.Services
             }
             
             [Fact]
+            public void CannotRegisterUserWithoutRegistrationKey()
+            {
+                var userRepositoryMock = new Mock<IUserRepository>();
+                var roleRepositoryMock = new Mock<IRoleRepository>();
+                var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
+                var passwordHasherMock = new Mock<IPasswordHasher>();
+                var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
+
+                var users = new List<UserEntity>();
+                
+                var username = "mitchell";
+                var password = "securePassword1";
+                var passwordHash = "hash_securePassword1";
+                
+                var userRegistration = new UserRegistrationViewModel()
+                {
+                    Email = "mitchell@mitchell.com",
+                    Username = username,
+                    Name = "Mitchell",
+                    Password = password,
+                    RegistrationKey = null
+                };
+
+                passwordHasherMock.Setup(ph => ph.HashPassword(password)).Returns(passwordHash);
+                userRepositoryMock.Setup(ur => ur.UsernameExists(username)).Returns(false);
+                userRepositoryMock.Setup(ur => ur.Get(It.IsAny<Guid>())).Returns(new UserEntity());
+                roleRepositoryMock.Setup(rr => rr.Get(It.IsAny<Guid>())).Returns(new RoleEntity());
+
+                userRegistrationKeyServiceMock.Setup(urks => urks.IsValid(It.IsAny<string>())).Returns(true);
+                userRegistrationKeyServiceMock.Setup(urks => urks.Use(It.IsAny<string>(), It.IsAny<Guid>())).Returns(true);
+                
+                userRepositoryMock.Setup(ur => ur.Create(It.IsAny<UserEntity>())).Callback((UserEntity u) =>
+                {
+                    users.Add(u);
+                });
+
+                var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
+                
+                var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
+
+                userRepositoryMock.Verify(ur => ur.Create(It.IsAny<UserEntity>()), Times.Never);
+                
+                Assert.NotNull(ex);
+                Assert.NotEmpty(ex.ValidationResults);
+            }
+            
+            [Fact]
+            public void CannotRegisterUserWithInvalidRegistrationKey()
+            {
+                var userRepositoryMock = new Mock<IUserRepository>();
+                var roleRepositoryMock = new Mock<IRoleRepository>();
+                var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
+                var passwordHasherMock = new Mock<IPasswordHasher>();
+                var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
+
+                var users = new List<UserEntity>();
+                
+                var username = "mitchell";
+                var password = "securePassword1";
+                var passwordHash = "hash_securePassword1";
+                
+                var userRegistration = new UserRegistrationViewModel()
+                {
+                    Email = "mitchell@mitchell.com",
+                    Username = username,
+                    Name = "Mitchell",
+                    Password = password,
+                    RegistrationKey = "hello world"
+                };
+
+                passwordHasherMock.Setup(ph => ph.HashPassword(password)).Returns(passwordHash);
+                userRepositoryMock.Setup(ur => ur.UsernameExists(username)).Returns(false);
+                userRepositoryMock.Setup(ur => ur.Get(It.IsAny<Guid>())).Returns(new UserEntity());
+                roleRepositoryMock.Setup(rr => rr.Get(It.IsAny<Guid>())).Returns(new RoleEntity());
+
+                userRegistrationKeyServiceMock.Setup(urks => urks.IsValid(It.IsAny<string>())).Returns(false);
+                userRegistrationKeyServiceMock.Setup(urks => urks.Use(It.IsAny<string>(), It.IsAny<Guid>())).Returns(false);
+                
+                userRepositoryMock.Setup(ur => ur.Create(It.IsAny<UserEntity>())).Callback((UserEntity u) =>
+                {
+                    users.Add(u);
+                });
+
+                var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
+         
+                var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
+
+                userRepositoryMock.Verify(ur => ur.Create(It.IsAny<UserEntity>()), Times.Never);
+                
+                Assert.NotNull(ex);
+                Assert.Contains("Registration Key is not valid!", ex.Message);
+            }
+            
+            [Fact]
             public void CannotRegisterWithInvalidInfo()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
                 var roleRepositoryMock = new Mock<IRoleRepository>();
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
+                var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
 
                 var users = new List<UserEntity>();
                 
@@ -120,13 +229,18 @@ namespace CloakedDagger.Logic.Tests.Services
                     Email = "",
                     Username = username,
                     Name = "",
-                    Password = ""
+                    Password = "",
+                    RegistrationKey = "hello world"
                 };
 
                 userRepositoryMock.Setup(ur => ur.UsernameExists(username)).Returns(true);
                 
+                userRegistrationKeyServiceMock.Setup(urks => urks.IsValid(It.IsAny<string>())).Returns(true);
+                userRegistrationKeyServiceMock.Setup(urks => urks.Use(It.IsAny<string>(), It.IsAny<Guid>())).Returns(true);
+
+                
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
 
                 var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
 
@@ -146,6 +260,7 @@ namespace CloakedDagger.Logic.Tests.Services
                 var roleRepositoryMock = new Mock<IRoleRepository>();
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
+                var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
 
                 var userId = Guid.NewGuid();
                 var user = new UserEntity()
@@ -154,14 +269,14 @@ namespace CloakedDagger.Logic.Tests.Services
                     Password = "amazinglySecurePassword",
                     Username = "mitchell",
                     Email = "mitchell@mitchell.com",
-                    Roles = new List<UserRoleEntity>()
+                    Roles = new List<UserRoleEntity>(),
                 };
 
                 userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(user);
                 
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object);
-
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
+                
                 var fetchedUser = subject.Get(userId);
                 Assert.NotNull(fetchedUser);
                 Assert.IsNotType<UserEntity>(fetchedUser);
@@ -178,13 +293,14 @@ namespace CloakedDagger.Logic.Tests.Services
                 var roleRepositoryMock = new Mock<IRoleRepository>();
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
+                var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
 
                 var userId = Guid.NewGuid();
 
                 userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(default(UserEntity));
-                
+             
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
 
                 var fetchedUser = subject.Get(userId);
                 Assert.Null(fetchedUser);

@@ -18,17 +18,21 @@ namespace CloakedDagger.Logic.Services
 
         private readonly IRoleRepository _roleRepository;
 
+        private readonly IUserRegistrationKeyService _userRegistrationKeyService;
+
         private readonly IUserRoleRepository _userRoleRepository;
 
         private readonly IPasswordHasher _passwordHasher;
         
         public UserService(IUserRepository userRepository, IRoleRepository roleRepository, 
-            IUserRoleRepository userRoleRepository, IPasswordHasher passwordHasher)
+            IUserRoleRepository userRoleRepository, IPasswordHasher passwordHasher,
+            IUserRegistrationKeyService userRegistrationKeyService)
         {
             this._userRepository = userRepository;
             this._roleRepository = roleRepository;
             this._userRoleRepository = userRoleRepository;
             this._passwordHasher = passwordHasher;
+            this._userRegistrationKeyService = userRegistrationKeyService;
         }
 
         public UserViewModel Get(Guid id)
@@ -62,6 +66,19 @@ namespace CloakedDagger.Logic.Services
                 Locked = false
             };
             _userRepository.Create(toCreate);
+
+            var registrationKeyValid = false;
+            try
+            {
+                registrationKeyValid = _userRegistrationKeyService.Use(registration.RegistrationKey, toCreate.UserId);
+            }
+            finally
+            {
+                if (!registrationKeyValid)
+                {
+                    _userRepository.Delete(toCreate.UserId);
+                }
+            }
             AddRole(toCreate.UserId, Roles.User.Id);
         }
 
@@ -102,6 +119,11 @@ namespace CloakedDagger.Logic.Services
             if (_userRepository.UsernameExists(registration.Username))
             {
                 throw new EntityValidationException("Username is not available!");
+            }
+
+            if (!_userRegistrationKeyService.IsValid(registration.RegistrationKey))
+            {
+                throw new EntityValidationException("Registration Key is not valid!");
             }
         }
     }
