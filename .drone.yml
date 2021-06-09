@@ -5,7 +5,6 @@ name: development
 steps:
   - name: unit-tests
     image: mcr.microsoft.com/dotnet/sdk:5.0
-    failure: ignore # allow failure for now to ensure everything else is working
     commands:
       - sleep 15 # wait for the database to start up
       - dotnet nuget add source "$${OWLTIN_SOURCE}" --name owltin --username "$${OWLTIN_USERNAME}" --password "$${OWLTIN_PASSWORD}" --store-password-in-clear-text
