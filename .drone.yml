@@ -1,0 +1,148 @@
+kind: pipeline
+type: docker
+name: development
+
+steps:
+  - name: unit-tests
+    image: mcr.microsoft.com/dotnet/sdk:5.0
+    failure: ignore # allow failure for now to ensure everything else is working
+    commands:
+      - sleep 15 # wait for the database to start up
+      - dotnet nuget add source "$${OWLTIN_SOURCE}" --name owltin --username "$${OWLTIN_USERNAME}" --password "$${OWLTIN_PASSWORD}" --store-password-in-clear-text
+      - dotnet test -l "console;verbosity=detailed"
+    environment:
+      # Nug Configuration
+      OWLTIN_SOURCE: https://nuget.pkg.github.com/mwcaisse/index.json
+      OWLTIN_USERNAME:
+        from_secret: github-username
+      OWLTIN_PASSWORD:
+        from_secret: github-password
+
+      # Database Configuration
+      CLOAKED_DAGGER_API__DATABASE__HOST: database
+      CLOAKED_DAGGER_API__DATABASE__USER: "cloaked-dagger-tester"
+      CLOAKED_DAGGER_API__DATABASE__PASSWORD: "password"
+      CLOAKED_DAGGER_API__DATABASE__PORT: 3306
+      CLOAKED_DAGGER_API__DATABASE__SCHEMA: "CLOAKED_DAGGER_TESTING"
+      CLOAKED_DAGGER_API__DATABASE__SSLMODE: "Required"
+      # Auth Configuration
+      CLOAKED_DAGGER_API_AUTHENTICATION__COOKIENAME: "CLOAKED_DAGGER_SESSION"
+      CLOAKED_DAGGER_API_AUTHENTICATION__LOGINURL: "http://localhost:3333/login"
+      CLOAKED_DAGGER_API_AUTHENTICATION__LOGOUT: "/user/logout"
+
+  - name: build-publish
+    image: registry.gitlab.com/mwcaisse/drone-images/drone-docker:20.10.7
+    volumes:
+      - name: docker-socket
+        path: /var/run/docker.sock
+    settings:
+      username:
+        from_secret: gitlab-username
+      password:
+        from_secret: gitlab-password
+      repo: registry.gitlab.com/mwcaisse/application-images/cloaked-dagger-api
+      registry: registry.gitlab.com
+      tags:
+        - '${DRONE_COMMIT}'
+        - latest
+      build_args_from_env:
+        - OWLTIN_SOURCE
+        - OWLTIN_USERNAME
+        - OWLTIN_PASSWORD
+    environment:
+      OWLTIN_SOURCE: https://nuget.pkg.github.com/mwcaisse/index.json
+      OWLTIN_USERNAME:
+        from_secret: github-username
+      OWLTIN_PASSWORD:
+        from_secret: github-password
+
+  - name: deploy-to-dev
+    image: registry.gitlab.com/mwcaisse/drone-images/drone-k8s-deploy
+    settings:
+      template: k8s.dev.yml
+      namespace: dev
+      server:
+        from_secret: k8s-server
+      token:
+        from_secret: k8s-token
+      ca:
+        from_secret: k8s-ca
+      tv_image_tag: '${DRONE_COMMIT}'
+    when:
+      branch:
+        - master
+
+services:
+  - name: database
+    image: mysql
+    command:
+      - "--default-authentication-plugin=mysql_native_password"
+    environment:
+      MYSQL_USER: "cloaked-dagger-tester"
+      MYSQL_PASSWORD: "password"
+      MYSQL_DATABASE: "CLOAKED_DAGGER_TESTING"
+      MYSQL_ROOT_PASSWORD: "amazing-password"
+
+volumes:
+  - name: docker-socket
+    host:
+      path: /var/run/docker.sock
+
+image_pull_secrets:
+  - docker-auth-config
+
+---
+kind: secret
+name: gitlab-username
+get:
+  path: drone/gitlab
+  name: username
+
+---
+kind: secret
+name: gitlab-password
+get:
+  path: drone/gitlab
+  name: access-token
+
+---
+kind: secret
+name: github-username
+get:
+  path: drone/github
+  name: username
+
+---
+kind: secret
+name: github-password
+get:
+  path: drone/github
+  name: access-token
+
+---
+kind: secret
+name: docker-auth-config
+get:
+  path: drone/docker
+  name: auth
+
+---
+kind: secret
+name: k8s-server
+get:
+  path: drone/mwcaisse-k8s
+  name: server
+
+---
+kind: secret
+name: k8s-token
+get:
+  path: drone/mwcaisse-k8s
+  name: dev-access-token
+
+---
+kind: secret
+name: k8s-ca
+get:
+  path: drone/mwcaisse-k8s
+  name: cluster-certificate

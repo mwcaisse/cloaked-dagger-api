@@ -31,7 +31,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: cloaked-dagger-api
-          image: registry.gitlab.com/mwcaisse/application-images/cloaked-dagger-api:$IMAGE_TAG
+          image: registry.gitlab.com/mwcaisse/application-images/cloaked-dagger-api:[[image_tag]]
           ports:
             - containerPort: 8080
           env:
