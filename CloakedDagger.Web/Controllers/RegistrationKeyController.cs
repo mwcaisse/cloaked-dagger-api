@@ -5,32 +5,33 @@ using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CloakedDagger.Web.Controllers;
-
-[Route("/user/registration-key")]
-[Authorize (Roles=Roles.Admin.Name)]
-public class RegistrationKeyController : BaseController
+namespace CloakedDagger.Web.Controllers
 {
-
-    private readonly IUserRegistrationKeyService _userRegistrationKeyService;
-
-    public RegistrationKeyController(IUserRegistrationKeyService userRegistrationKeyService)
+    [Route("/user/registration-key")]
+    [Authorize (Roles=Roles.Admin.Name)]
+    public class RegistrationKeyController : BaseController
     {
-        _userRegistrationKeyService = userRegistrationKeyService;
-    }
 
-    [HttpGet]
-    [Route("")]
-    public IActionResult GetAll()
-    {
-        return Ok(_userRegistrationKeyService.GetAll());
-    }
+        private readonly IUserRegistrationKeyService _userRegistrationKeyService;
 
-    [HttpPost]
-    [Route("")]
-    public IActionResult Create([FromBody] CreateUserRegistrationKeyViewModel vm)
-    {
-        var created = _userRegistrationKeyService.Create(vm.Key, vm.Uses);
-        return Ok(created);
+        public RegistrationKeyController(IUserRegistrationKeyService userRegistrationKeyService)
+        {
+            _userRegistrationKeyService = userRegistrationKeyService;
+        }
+
+        [HttpGet]
+        [Route("")]
+        public IActionResult GetAll()
+        {
+            return Ok(_userRegistrationKeyService.GetAll());
+        }
+
+        [HttpPost]
+        [Route("")]
+        public IActionResult Create([FromBody] CreateUserRegistrationKeyViewModel vm)
+        {
+            var created = _userRegistrationKeyService.Create(vm.Key, vm.Uses);
+            return Ok(created);
+        }
     }
 }

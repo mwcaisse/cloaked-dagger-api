@@ -1,9 +1,10 @@
-namespace CloakedDagger.Common.ViewModels;
-
-public class CreateUserRegistrationKeyViewModel
+namespace CloakedDagger.Common.ViewModels
 {
-    public string Key { get; set; }
-    
-    public int Uses { get; set; }
-    
+    public class CreateUserRegistrationKeyViewModel
+    {
+        public string Key { get; set; }
+
+        public int Uses { get; set; }
+
+    }
 }
