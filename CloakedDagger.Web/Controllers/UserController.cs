@@ -44,6 +44,21 @@ namespace CloakedDagger.Web.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("login/mfa")]
+        public async Task<IActionResult> LoginValidateMfa([FromBody] UserLoginMfaViewModel mfa)
+        {
+            /*
+             * Helpful links
+             *
+             *  https://docs.microsoft.com/en-us/aspnet/core/security/authentication/mfa?view=aspnetcore-5.0
+             *      -- Name the RequireClaim portion? This could be helpful to say its not authenticated unclass
+             *              the given claim exists / is present?
+             * 
+             */
+            return Unauthorized();
+        }
+
         [HttpGet]
         [HttpPost]
         [Authorize]

@@ -21,6 +21,9 @@ namespace CloakedDagger.Common.Entities
         
         public bool Locked { get; set; }
 
+        // TOOD: Make this a saved field, but for now assume its always true
+        public bool RequiresTfa => true;
+
         public DateTime CreateDate { get; set; }
         
         public DateTime ModifiedDate { get; set; }
