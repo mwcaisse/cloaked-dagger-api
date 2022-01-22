@@ -1,7 +1,12 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using CloakedDagger.Common.Entities;
+using CloakedDagger.Common.Exceptions;
 using CloakedDagger.Common.Repositories;
 using CloakedDagger.Common.Services;
+using DasCookbook.Common.Exceptions;
 
 namespace CloakedDagger.Logic.Services
 {
@@ -43,6 +48,39 @@ namespace CloakedDagger.Logic.Services
             entity.UsesRemaining--;
             _userRegistrationKeyRepository.Update(entity);
             return true;
+        }
+
+        public IEnumerable<UserRegistrationKeyEntity> GetAll()
+        {
+            return _userRegistrationKeyRepository.GetAll();
+        }
+        
+        public UserRegistrationKeyEntity Create(string key, int uses)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                throw new EntityValidationException("Key must not be empty.");
+            }
+
+            if (_userRegistrationKeyRepository.Exists(key))
+            {
+                throw new EntityAlreadyExistsException("A registration key with this key value already exists!");
+            }
+
+            if (uses < 1)
+            {
+                throw new EntityValidationException("Must have at least once use!");
+            }
+
+            var entity = new UserRegistrationKeyEntity()
+            {
+                Active = true,
+                Key = key,
+                UsesRemaining = uses
+            };
+            
+            _userRegistrationKeyRepository.Create(entity);
+            return entity;
         }
     }
 }

@@ -96,7 +96,8 @@ namespace CloakedDagger.Web
                     .ForMember(vm => vm.Description, cfg =>
                         cfg.MapFrom(rs => rs.ScopeEntity.Description)
                     );
-                config.CreateMap<CloakedDagger.Common.Entities.ResourceEntity, ResourceViewModel>();
+                config.CreateMap<ResourceEntity, ResourceViewModel>();
+                config.CreateMap<UserRegistrationKeyEntity, UserRegistrationKeyViewModel>();
             });
             
             var entityMapper = new Mapper(entityMapperConfig);
@@ -107,8 +108,9 @@ namespace CloakedDagger.Web
                 {
                     options.SerializerSettings.Converters.Add(new JsonDateEpochConverter());
                     options.SerializerSettings.Converters.Add(
-                        new MapperJsonConverter<CloakedDagger.Common.Entities.ResourceEntity, ResourceViewModel>(entityMapper));
+                        new MapperJsonConverter<ResourceEntity, ResourceViewModel>(entityMapper));
                     options.SerializerSettings.Converters.Add(new MapperJsonConverter<ResourceScopeEntity, ResourceScopeViewModel>(entityMapper));
+                    options.SerializerSettings.Converters.Add(new MapperJsonConverter<UserRegistrationKeyEntity, UserRegistrationKeyViewModel>(entityMapper));
                 });
 
             services.AddSingleton(Log.Logger);

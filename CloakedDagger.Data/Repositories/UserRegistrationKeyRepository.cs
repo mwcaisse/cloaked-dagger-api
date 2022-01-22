@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Repositories;
@@ -20,9 +21,19 @@ namespace CloakedDagger.Data.Repositories
             return _db.UserRegistrationKeys.Active().FirstOrDefault(urk => urk.Id == id);
         }
 
+        public IEnumerable<UserRegistrationKeyEntity> GetAll()
+        {
+            return _db.UserRegistrationKeys.Active().AsEnumerable();
+        }
+
         public UserRegistrationKeyEntity Get(string key)
         {
             return _db.UserRegistrationKeys.Active().FirstOrDefault(urk => urk.Key == key);
+        }
+
+        public bool Exists(string key)
+        {
+            return _db.UserRegistrationKeys.Any(urk => urk.Key == key);
         }
 
         public void Create(UserRegistrationKeyEntity registrationKey)
