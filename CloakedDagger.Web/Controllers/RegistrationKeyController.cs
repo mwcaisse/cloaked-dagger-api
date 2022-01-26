@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Services;
@@ -32,6 +33,22 @@ namespace CloakedDagger.Web.Controllers
         {
             var created = _userRegistrationKeyService.Create(vm.Key, vm.Uses);
             return Ok(created);
+        }
+
+        [HttpPost]
+        [Route("{id}/activate")]
+        public IActionResult Activate(Guid id)
+        {
+            _userRegistrationKeyService.Activate(id);
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("{id}/deactivate")]
+        public IActionResult Deactivate(Guid id)
+        {
+            _userRegistrationKeyService.Deactivate(id);
+            return Ok();
         }
     }
 }

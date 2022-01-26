@@ -34,5 +34,18 @@ namespace CloakedDagger.Common.Services
         /// <returns>The newly created registration key</returns>
         public UserRegistrationKeyEntity Create(string key, int uses);
 
+        /// <summary>
+        /// Activates the given registration key
+        /// </summary>
+        /// <param name="id"></param>
+        public void Activate(Guid id);
+
+        /// <summary>
+        /// Deacticates the given registration key
+        /// </summary>
+        /// <param name="id"></param>
+        public void Deactivate(Guid id);
+
+
     }
 }

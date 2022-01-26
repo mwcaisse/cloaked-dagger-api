@@ -82,5 +82,32 @@ namespace CloakedDagger.Logic.Services
             _userRegistrationKeyRepository.Create(entity);
             return entity;
         }
+
+        public void Activate(Guid id)
+        {
+            var urk = GetOrException(id);
+
+            urk.Active = true;
+            _userRegistrationKeyRepository.Update(urk);
+        }
+
+        public void Deactivate(Guid id)
+        {
+            var urk = GetOrException(id);
+
+            urk.Active = false;
+            _userRegistrationKeyRepository.Update(urk);
+        }
+
+        private UserRegistrationKeyEntity GetOrException(Guid id)
+        {
+            var urk = _userRegistrationKeyRepository.Get(id);
+            if (urk == null)
+            {
+                throw new EntityNotFoundException($"No registration key with the id {id} exists.");
+            }
+
+            return urk;
+        }
     }
 }

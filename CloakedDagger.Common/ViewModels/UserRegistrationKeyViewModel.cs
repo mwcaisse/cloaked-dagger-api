@@ -11,6 +11,8 @@ namespace CloakedDagger.Common.ViewModels
         public int UsesRemaining { get; set; }
     
         public DateTime CreateDate { get; set; }
+        
+        public bool Active { get; set; }
     
     }
 }

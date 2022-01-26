@@ -18,17 +18,17 @@ namespace CloakedDagger.Data.Repositories
 
         public UserRegistrationKeyEntity Get(Guid id)
         {
-            return _db.UserRegistrationKeys.Active().FirstOrDefault(urk => urk.Id == id);
+            return _db.UserRegistrationKeys.FirstOrDefault(urk => urk.Id == id);
         }
 
         public IEnumerable<UserRegistrationKeyEntity> GetAll()
         {
-            return _db.UserRegistrationKeys.Active().AsEnumerable();
+            return _db.UserRegistrationKeys.AsEnumerable();
         }
 
         public UserRegistrationKeyEntity Get(string key)
         {
-            return _db.UserRegistrationKeys.Active().FirstOrDefault(urk => urk.Key == key);
+            return _db.UserRegistrationKeys.FirstOrDefault(urk => urk.Key == key);
         }
 
         public bool Exists(string key)
