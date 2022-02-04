@@ -87,6 +87,20 @@ spec:
                   key: authentication-logout-url
             - name: CLOAKED_DAGGER_API_AUTHENTICATION__COOKIENAME
               value: "CLOAKED_DAGGER_SESSION"
-
+            - name: CLOAKED_DAGGER_API_EMAIL__FROMEMAILADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: email-from-email-address
+            - name: CLOAKED_DAGGER_API_EMAIL__FROMEMAILNAME
+              value: "[DEV] Cloaked Dagger"
+            - name: CLOAKED_DAGGER_API_EMAIL__EMAILVERIFICATIONURL
+              value: "https://id.dev.fourfivefire.com/email-verification?verificationKey=[[verification-key]]"                
+            - name: CLOAKED_DAGGER_API_SENDGRID_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: cloaked-dagger-api-secret
+                  key: sendgrid-api-key
+                  
       imagePullSecrets:
         - name: docker-creds

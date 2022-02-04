@@ -11,7 +11,6 @@ namespace CloakedDagger.Web.Controllers
     [Authorize (Roles=Roles.Admin.Name)]
     public class ResourceController : BaseController
     {
-
         private readonly IResourceService _resourceService;
 
         public ResourceController(IResourceService resourceService)

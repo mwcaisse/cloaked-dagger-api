@@ -36,6 +36,10 @@ namespace CloakedDagger.Data.Mappings
                 .IsRequired()
                 .HasMaxLength(250);
 
+            builder.Property(u => u.EmailVerified)
+                .HasColumnName("EMAIL_VERIFIED")
+                .IsRequired();
+
             builder.Property(u => u.Locked)
                 .HasColumnName("LOCKED")
                 .IsRequired();

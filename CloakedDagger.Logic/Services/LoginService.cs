@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using CloakedDagger.Common;
+using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Repositories;
 using CloakedDagger.Common.Services;
+using CloakedDagger.Common.ViewModels;
 
 namespace CloakedDagger.Logic.Services
 {
@@ -75,18 +78,48 @@ namespace CloakedDagger.Logic.Services
             {
                 new(ClaimTypes.Name, userEntity.Username),
                 new(ClaimTypes.Sid, userEntity.UserId.ToString()),
-                new("sub", userEntity.UserId.ToString()),
-                new("id", userEntity.UserId.ToString()),
-                new("username", userEntity.Username),
-                new("name", userEntity.Name),
+                new(UserClaims.Subject, userEntity.UserId.ToString()),
+                new(UserClaims.Id, userEntity.UserId.ToString()),
+                new(UserClaims.Username, userEntity.Username),
+                new(UserClaims.Name, userEntity.Name)
             };
-            foreach (var roleEntity in userEntity.Roles)
+            if (userEntity.EmailVerified)
             {
-                claims.Add(new Claim(ClaimTypes.Role, roleEntity.Role.Name));
-                claims.Add(new Claim("role", roleEntity.Role.Name));
+                claims.Add(new Claim(UserClaims.EmailVerified, userEntity.EmailVerified.ToString()));
+                
+                   
+                foreach (var roleEntity in userEntity.Roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, roleEntity.Role.Name));
+                    claims.Add(new Claim(UserClaims.Role, roleEntity.Role.Name));
+                }
             }
-
+         
             return claims;
+        }
+
+        public UserViewModel GetUserViewModelFromPrincipal(ClaimsPrincipal user)
+        {
+            if (!user.HasClaim(c => c.Type == UserClaims.Id))
+            {
+                return null;
+            }
+            
+            var vm = new UserViewModel()
+            {
+                Id = Guid.Parse(user.FindFirst(UserClaims.Id)?.Value),
+                Username = user.FindFirst(UserClaims.Username)?.Value,
+                Name = user.FindFirst(UserClaims.Name)?.Value,
+                Roles = user.FindAll(UserClaims.Role).Select(c => c.Value).ToList()
+            };
+            if (!user.HasClaim(c => c.Type == UserClaims.EmailVerified))
+            {
+                vm.AdditionalActions = new UserLoggedInAdditionalActionViewModel()
+                {
+                    EmailVerificationRequired = true
+                };
+            }
+            return vm;
         }
     }
 }

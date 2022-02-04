@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Services;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -22,10 +23,11 @@ namespace CloakedDagger.Web.Adapters
 
         private readonly HashSet<string> _profileClaimTypes = new()
         {
-            "name",
-            "username",
-            "id",
-            "role"
+            UserClaims.Name,
+            UserClaims.Username,
+            UserClaims.Id,
+            UserClaims.Role,
+            UserClaims.EmailVerified
         };
         
         public Task GetProfileDataAsync(ProfileDataRequestContext context)

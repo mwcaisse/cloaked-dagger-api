@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CloakedDagger.Common;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Exceptions;
@@ -15,17 +16,18 @@ namespace CloakedDagger.Logic.Tests.Services
 {
     public class UserServiceTests
     {
-
         public class RegisterTests
         {
             [Fact]
-            public void CanRegisterValidUser()
+            public async Task CanRegisterValidUser()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
                 var roleRepositoryMock = new Mock<IRoleRepository>();
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
                 var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
+                var userEmailVerificationRequestRepositoryMock = new Mock<IUserEmailVerificationRequestRepository>();
+                var emailServiceMock = new Mock<IEmailService>();
 
                 var users = new List<UserEntity>();
                 
@@ -56,11 +58,15 @@ namespace CloakedDagger.Logic.Tests.Services
                 });
 
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object,
+                    userEmailVerificationRequestRepositoryMock.Object, emailServiceMock.Object);
                 
-                subject.Register(userRegistration);
+                await subject.Register(userRegistration);
                 
                 userRepositoryMock.Verify(ur => ur.Create(It.IsAny<UserEntity>()), Times.Once);
+                
+                userEmailVerificationRequestRepositoryMock.Verify(x => 
+                    x.Create(It.IsAny<UserEmailVerificationRequestEntity>()), Times.Once);
 
                 Assert.NotEmpty(users);
                 var createdUser = users.First();
@@ -74,13 +80,15 @@ namespace CloakedDagger.Logic.Tests.Services
             }
 
             [Fact]
-            public void CannotRegisterUserIfUsernameIsTaken()
+            public async Task CannotRegisterUserIfUsernameIsTaken()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
                 var roleRepositoryMock = new Mock<IRoleRepository>();
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
                 var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
+                var userEmailVerificationRequestRepositoryMock = new Mock<IUserEmailVerificationRequestRepository>();
+                var emailServiceMock = new Mock<IEmailService>();
 
                 var users = new List<UserEntity>();
                 
@@ -105,9 +113,10 @@ namespace CloakedDagger.Logic.Tests.Services
 
                 
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object,
+                    userEmailVerificationRequestRepositoryMock.Object, emailServiceMock.Object);
 
-                var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
+                var ex = await Assert.ThrowsAsync<EntityValidationException>(() => subject.Register(userRegistration));
 
                 userRepositoryMock.Verify(ur => ur.Create(It.IsAny<UserEntity>()), Times.Never);
                 
@@ -116,13 +125,15 @@ namespace CloakedDagger.Logic.Tests.Services
             }
             
             [Fact]
-            public void CannotRegisterUserWithoutRegistrationKey()
+            public async Task CannotRegisterUserWithoutRegistrationKey()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
                 var roleRepositoryMock = new Mock<IRoleRepository>();
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
                 var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
+                var userEmailVerificationRequestRepositoryMock = new Mock<IUserEmailVerificationRequestRepository>();
+                var emailServiceMock = new Mock<IEmailService>();
 
                 var users = new List<UserEntity>();
                 
@@ -153,9 +164,10 @@ namespace CloakedDagger.Logic.Tests.Services
                 });
 
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object,
+                    userEmailVerificationRequestRepositoryMock.Object, emailServiceMock.Object);
                 
-                var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
+                var ex = await Assert.ThrowsAsync<EntityValidationException>(() => subject.Register(userRegistration));
 
                 userRepositoryMock.Verify(ur => ur.Create(It.IsAny<UserEntity>()), Times.Never);
                 
@@ -164,13 +176,15 @@ namespace CloakedDagger.Logic.Tests.Services
             }
             
             [Fact]
-            public void CannotRegisterUserWithInvalidRegistrationKey()
+            public async Task CannotRegisterUserWithInvalidRegistrationKey()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
                 var roleRepositoryMock = new Mock<IRoleRepository>();
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
                 var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
+                var userEmailVerificationRequestRepositoryMock = new Mock<IUserEmailVerificationRequestRepository>();
+                var emailServiceMock = new Mock<IEmailService>();
 
                 var users = new List<UserEntity>();
                 
@@ -201,9 +215,10 @@ namespace CloakedDagger.Logic.Tests.Services
                 });
 
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object,
+                    userEmailVerificationRequestRepositoryMock.Object, emailServiceMock.Object);
          
-                var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
+                var ex = await Assert.ThrowsAsync<EntityValidationException>(() => subject.Register(userRegistration));
 
                 userRepositoryMock.Verify(ur => ur.Create(It.IsAny<UserEntity>()), Times.Never);
                 
@@ -212,13 +227,15 @@ namespace CloakedDagger.Logic.Tests.Services
             }
             
             [Fact]
-            public void CannotRegisterWithInvalidInfo()
+            public async Task CannotRegisterWithInvalidInfo()
             {
                 var userRepositoryMock = new Mock<IUserRepository>();
                 var roleRepositoryMock = new Mock<IRoleRepository>();
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
                 var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
+                var userEmailVerificationRequestRepositoryMock = new Mock<IUserEmailVerificationRequestRepository>();
+                var emailServiceMock = new Mock<IEmailService>();
 
                 var users = new List<UserEntity>();
                 
@@ -240,9 +257,10 @@ namespace CloakedDagger.Logic.Tests.Services
 
                 
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object,
+                    userEmailVerificationRequestRepositoryMock.Object, emailServiceMock.Object);
 
-                var ex = Assert.Throws<EntityValidationException>(() => subject.Register(userRegistration));
+                var ex = await Assert.ThrowsAsync<EntityValidationException>(() => subject.Register(userRegistration));
 
                 userRepositoryMock.Verify(ur => ur.Create(It.IsAny<UserEntity>()), Times.Never);
                 
@@ -261,6 +279,8 @@ namespace CloakedDagger.Logic.Tests.Services
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
                 var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
+                var userEmailVerificationRequestRepositoryMock = new Mock<IUserEmailVerificationRequestRepository>();
+                var emailServiceMock = new Mock<IEmailService>();
 
                 var userId = Guid.NewGuid();
                 var user = new UserEntity()
@@ -275,7 +295,8 @@ namespace CloakedDagger.Logic.Tests.Services
                 userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(user);
                 
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object,
+                    userEmailVerificationRequestRepositoryMock.Object, emailServiceMock.Object);
                 
                 var fetchedUser = subject.Get(userId);
                 Assert.NotNull(fetchedUser);
@@ -294,13 +315,16 @@ namespace CloakedDagger.Logic.Tests.Services
                 var userRoleRepositoryMock = new Mock<IUserRoleRepository>();
                 var passwordHasherMock = new Mock<IPasswordHasher>();
                 var userRegistrationKeyServiceMock = new Mock<IUserRegistrationKeyService>();
+                var userEmailVerificationRequestRepositoryMock = new Mock<IUserEmailVerificationRequestRepository>();
+                var emailServiceMock = new Mock<IEmailService>();
 
                 var userId = Guid.NewGuid();
 
                 userRepositoryMock.Setup(ur => ur.Get(userId)).Returns(default(UserEntity));
              
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
-                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object);
+                    userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object,
+                    userEmailVerificationRequestRepositoryMock.Object, emailServiceMock.Object);
 
                 var fetchedUser = subject.Get(userId);
                 Assert.Null(fetchedUser);

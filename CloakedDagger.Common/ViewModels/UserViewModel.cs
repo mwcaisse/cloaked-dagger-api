@@ -12,5 +12,7 @@ namespace CloakedDagger.Common.ViewModels
         public string Name { get; set; }
 
         public ICollection<string> Roles { get; set; }
+        
+        public UserLoggedInAdditionalActionViewModel AdditionalActions { get; set; }
     }
 }

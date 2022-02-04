@@ -35,6 +35,12 @@ namespace CloakedDagger.Common.Repositories
         public void Create(UserEntity userEntity);
 
         /// <summary>
+        /// Updates the given user
+        /// </summary>
+        /// <param name="userEntity"></param>
+        public void Update(UserEntity userEntity);
+
+        /// <summary>
         /// Delete the user with the given id
         /// </summary>
         /// <param name="id"></param>

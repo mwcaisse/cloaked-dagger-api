@@ -3,7 +3,6 @@ using System.Linq;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Repositories;
 using CloakedDagger.Data.Extensions;
-using Microsoft.EntityFrameworkCore;
 using OwlTin.Common;
 
 namespace CloakedDagger.Data.Repositories
@@ -39,6 +38,12 @@ namespace CloakedDagger.Data.Repositories
         public void Create(UserEntity userEntity)
         {
             _db.Users.Add(userEntity);
+            _db.SaveChanges();
+        }
+
+        public void Update(UserEntity userEntity)
+        {
+            _db.Users.Attach(userEntity);
             _db.SaveChanges();
         }
 

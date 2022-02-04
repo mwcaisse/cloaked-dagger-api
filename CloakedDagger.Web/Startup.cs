@@ -4,12 +4,14 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
 using CloakedDagger.Common;
+using CloakedDagger.Common.Configuration;
 using CloakedDagger.Common.Entities;
 using CloakedDagger.Common.Repositories;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using CloakedDagger.Data;
 using CloakedDagger.Data.Repositories;
+using CloakedDagger.Logic.EmailSender;
 using CloakedDagger.Logic.PasswordHasher;
 using CloakedDagger.Logic.Services;
 using CloakedDagger.Web.Adapters;
@@ -53,6 +55,20 @@ namespace CloakedDagger.Web
                 KeyPassword = Configuration.GetValue<string>("authentication:keyPassword")
             };
             services.AddSingleton(authenticationConfiguration);
+
+            var emailConfiguration = new EmailConfiguration()
+            {
+                FromEmailAddress = Configuration.GetValue<string>("email:fromEmailAddress"),
+                FromEmailName = Configuration.GetValue<string>("email:fromEmailName"),
+                EmailVerificationUrl = Configuration.GetValue<string>("email:emailVerificationUrl"),
+            };
+            services.AddSingleton(emailConfiguration);
+
+            var sendGridConfiguration = new SendGridConfiguration()
+            {
+                ApiKey = Configuration.GetValue<string>("sendGrid:apiKey"),
+            };
+            services.AddSingleton(sendGridConfiguration);
             
             DatabaseMigrator.MigrateDatabase(Configuration.GetDatabaseConnectionString());
 
@@ -68,6 +84,7 @@ namespace CloakedDagger.Web
             services.AddTransient<IUserRoleRepository, UserRoleRepository>();
             services.AddTransient<IUserRegistrationKeyRepository, UserRegistrationKeyRepository>();
             services.AddTransient<IUserRegistrationKeyUseRepository, UserRegistrationKeyUseRepository>();
+            services.AddTransient<IUserEmailVerificationRequestRepository, UserEmailVerificationRequestRepository>();
             
             services.AddTransient<IResourceRepository, ResourceRepository>();
             services.AddTransient<IResourceScopeRepository, ResourceScopeRepository>();
@@ -86,6 +103,10 @@ namespace CloakedDagger.Web
             services.AddTransient<IClientService, ClientService>();
 
             services.AddTransient<IPasswordHasher, ArgonPasswordHasher>();
+            
+            //Email Stuff
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
+            services.AddTransient<IEmailService, EmailService>();
 
             var entityMapperConfig = new MapperConfiguration(config =>
             {

@@ -17,6 +17,8 @@ namespace CloakedDagger.Common.Entities
         
         public string Email { get; set; }
         
+        public bool EmailVerified { get; set; }
+
         public bool Active { get; set; }
         
         public bool Locked { get; set; }

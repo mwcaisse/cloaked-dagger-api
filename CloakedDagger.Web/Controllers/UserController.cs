@@ -1,9 +1,11 @@
-using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloakedDagger.Web.Controllers
@@ -18,8 +20,8 @@ namespace CloakedDagger.Web.Controllers
 
         public UserController(ILoginService loginService, IUserService userService)
         {
-            this._loginService = loginService;
-            this._userService = userService;
+            _loginService = loginService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -27,7 +29,7 @@ namespace CloakedDagger.Web.Controllers
         [Authorize]
         public IActionResult GetMe()
         {
-            return Ok(_userService.Get(GetCurrentUserId()));
+            return OkOrNotFound(_loginService.GetUserViewModelFromPrincipal(HttpContext.User));
         }
         
         [HttpPost]
@@ -41,9 +43,16 @@ namespace CloakedDagger.Web.Controllers
             }
 
             await HttpContext.SignInAsync(principal);
+
+            var additionalActionsVm = GetAdditionalActionsForUser(principal);
+            if (additionalActionsVm != null)
+            {
+                return AdditionalActionsRequired(additionalActionsVm);
+            }
+
             return Ok();
         }
-
+        
         [HttpGet]
         [HttpPost]
         [Authorize]
@@ -55,13 +64,48 @@ namespace CloakedDagger.Web.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
-        public IActionResult Register([FromBody] UserRegistrationViewModel registration)
+        [Authorize]
+        [Route("resend-email-verification")]
+        public async Task<IActionResult> ResendEmailVerification()
         {
-            _userService.Register(registration);
+            await _userService.RequestEmailVerification(GetCurrentUserId());
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("verify-email")]
+        public IActionResult VerifyEmail([FromBody] UserVerifyEmailAddressViewModel vm)
+        {
+            _userService.ValidateUsersEmail(GetCurrentUserId(), vm.VerificationKey);
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register([FromBody] UserRegistrationViewModel registration)
+        {
+            await _userService.Register(registration);
             // if registration failed it will throw an EntityValidationException, in which case our middleware will
             //     handle that if we make it here registration was successful so we return 200.
             return Ok(); 
+        }
+        private UserLoggedInAdditionalActionViewModel GetAdditionalActionsForUser(ClaimsPrincipal principal)
+        {
+            if (!principal.HasClaim(c => c.Type == UserClaims.EmailVerified))
+            {
+                return new UserLoggedInAdditionalActionViewModel()
+                {
+                    EmailVerificationRequired = true
+                };
+            }
+
+            return null;
+        }
+
+        private IActionResult AdditionalActionsRequired(UserLoggedInAdditionalActionViewModel actions)
+        {
+            return StatusCode(StatusCodes.Status206PartialContent, actions);
         }
     }
 }

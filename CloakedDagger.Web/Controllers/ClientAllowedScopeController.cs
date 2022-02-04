@@ -2,7 +2,6 @@ using System;
 using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
-using CloakedDagger.Common.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;

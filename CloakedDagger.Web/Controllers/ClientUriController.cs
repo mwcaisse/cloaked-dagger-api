@@ -1,6 +1,5 @@
 using System;
 using CloakedDagger.Common.Constants;
-using CloakedDagger.Common.Domain;
 using CloakedDagger.Common.Mapper;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
