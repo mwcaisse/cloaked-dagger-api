@@ -6,7 +6,7 @@ steps:
   - name: database-health-check
     image: mysql
     commands:
-      - while ! mysqladmin ping -h $"{{DB_HOST}}" -u "${{DB_USERNAME}}" -p"${{DB_PASSWORD}}" --silent; do sleep 1; done
+      - while ! mysqladmin ping -h $$"{DB_HOST}" -u "$${DB_USERNAME}" -p"$${DB_PASSWORD}" --silent; do sleep 1; done
     environment:
       DB_HOST: database
       DB_USERNAME: cloaked-dagger-tester
