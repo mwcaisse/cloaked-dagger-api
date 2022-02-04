@@ -19,7 +19,7 @@ namespace CloakedDagger.Logic.Services
             _configuration = configuration;
         }
 
-        private const string EmailVerificationKeyReplacement = "[[verification-key]]";
+        private const string EmailVerificationKeyReplacement = "${{verification-key}}";
         
         public async Task<bool> SendEmailVerificationEmail(UserEntity user, string validationKey)
         {
