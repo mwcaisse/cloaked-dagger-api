@@ -96,7 +96,7 @@ spec:
               value: "[DEV] Cloaked Dagger"
             - name: CLOAKED_DAGGER_API_EMAIL__EMAILVERIFICATIONURL
               value: "https://id.dev.fourfivefire.com/email-verification?verificationKey=${{verification-key}}"                
-            - name: CLOAKED_DAGGER_API_SENDGRID_APIKEY
+            - name: CLOAKED_DAGGER_API_SENDGRID__APIKEY
               valueFrom:
                 secretKeyRef:
                   name: cloaked-dagger-api-secret
