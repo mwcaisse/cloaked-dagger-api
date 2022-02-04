@@ -15,7 +15,7 @@ namespace CloakedDagger.Web.Tests.Fixtures
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             base.ConfigureWebHost(builder);
-
+            
             builder.ConfigureTestServices(services =>
             {
                 services.AddAuthentication("Test")
