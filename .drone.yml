@@ -3,6 +3,15 @@ type: docker
 name: development
 
 steps:
+  - name: database-health-check
+    image: mysql
+    commands:
+      - while ! mysqladmin ping -h $"{{DB_HOST}}" -u "${{DB_USERNAME}}" -p"${{DB_PASSWORD}}" --silent; do sleep 1; done
+    environment:
+      DB_HOST: database
+      DB_USERNAME: cloaked-dagger-tester
+      DB_PASSWORD: password
+  
   - name: unit-tests
     image: mcr.microsoft.com/dotnet/sdk:5.0
     commands:
@@ -28,7 +37,7 @@ steps:
       CLOAKED_DAGGER_API_AUTHENTICATION__COOKIENAME: "CLOAKED_DAGGER_SESSION"
       CLOAKED_DAGGER_API_AUTHENTICATION__LOGINURL: "http://localhost:3333/login"
       CLOAKED_DAGGER_API_AUTHENTICATION__LOGOUT: "/user/logout"
-
+  
   - name: build-publish
     image: registry.gitlab.com/mwcaisse/drone-images/drone-docker:20.10.7
     volumes:
