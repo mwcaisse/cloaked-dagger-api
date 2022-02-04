@@ -57,6 +57,9 @@ namespace CloakedDagger.Logic.Tests.Services
                     users.Add(u);
                 });
 
+                emailServiceMock.Setup(x => x.SendEmailVerificationEmail(It.IsAny<UserEntity>(), It.IsAny<string>()))
+                    .ReturnsAsync(true);
+
                 var subject = new UserService(userRepositoryMock.Object, roleRepositoryMock.Object, 
                     userRoleRepositoryMock.Object, passwordHasherMock.Object, userRegistrationKeyServiceMock.Object,
                     userEmailVerificationRequestRepositoryMock.Object, emailServiceMock.Object);
