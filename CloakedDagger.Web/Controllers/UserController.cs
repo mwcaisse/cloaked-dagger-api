@@ -14,6 +14,10 @@ namespace CloakedDagger.Web.Controllers
     [Route("/user")]
     public class UserController : BaseController
     {
+
+        private const string AuthenticationSchemes =
+            CloakedDaggerAuthenticationSchemes.Default + "," + CloakedDaggerAuthenticationSchemes.Partial;
+        
         private readonly ILoginService _loginService;
 
         private readonly IUserService _userService;
@@ -26,7 +30,7 @@ namespace CloakedDagger.Web.Controllers
 
         [HttpGet]
         [Route(("me"))]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = AuthenticationSchemes)]
         public IActionResult GetMe()
         {
             return OkOrNotFound(_loginService.GetUserViewModelFromPrincipal(HttpContext.User));
@@ -55,7 +59,7 @@ namespace CloakedDagger.Web.Controllers
         
         [HttpGet]
         [HttpPost]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = AuthenticationSchemes)]
         [Route("logout")]
         public async Task<IActionResult> Logout()
         {
