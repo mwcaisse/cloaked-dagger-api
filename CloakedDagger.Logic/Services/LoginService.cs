@@ -78,6 +78,7 @@ namespace CloakedDagger.Logic.Services
             {
                 new(ClaimTypes.Name, userEntity.Username),
                 new(ClaimTypes.Sid, userEntity.UserId.ToString()),
+                new(UserClaims.Subject, userEntity.UserId.ToString()),
                 new(UserClaims.Id, userEntity.UserId.ToString()),
                 new(UserClaims.Username, userEntity.Username),
                 new(UserClaims.Name, userEntity.Name)
@@ -85,9 +86,6 @@ namespace CloakedDagger.Logic.Services
             if (userEntity.EmailVerified)
             {
                 claims.Add(new Claim(UserClaims.EmailVerified, userEntity.EmailVerified.ToString()));
-                // Identity Server requires the sub field be on the user to identity them. Don't add it until they are
-                //  fully authenticated / have their email verified
-                claims.Add(new(UserClaims.Subject, userEntity.UserId.ToString()));
                 
                    
                 foreach (var roleEntity in userEntity.Roles)
