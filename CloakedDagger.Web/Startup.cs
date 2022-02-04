@@ -16,6 +16,7 @@ using CloakedDagger.Logic.PasswordHasher;
 using CloakedDagger.Logic.Services;
 using CloakedDagger.Web.Adapters;
 using CloakedDagger.Web.Configuration;
+using CloakedDagger.Web.Constants;
 using CloakedDagger.Web.Converters;
 using CloakedDagger.Web.Database;
 using CloakedDagger.Web.Middleware;
@@ -24,6 +25,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -158,24 +160,40 @@ namespace CloakedDagger.Web
 
             // Add this after we configure Identity Server, otherwise it overrides the settings or at least the
             //  OnRedirectToLogin handler
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
+            services.AddAuthentication(CloakedDaggerAuthenticationSchemes.Default)
+                .AddCookie(CloakedDaggerAuthenticationSchemes.Default, options =>
                 {
                     options.LogoutPath = authenticationConfiguration.LogoutUrl;
                     options.Cookie.Name = authenticationConfiguration.CookieName;
                     options.Events.OnRedirectToLogin = context =>
                     {
                         // Don't want it to redirect to a different URL when not logged in, just return a 401
-                        context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         return Task.CompletedTask;
                     };
                     options.Events.OnRedirectToAccessDenied = context =>
                     {
-                        context.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+                        context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                        return Task.CompletedTask;
+                    };
+                })
+                .AddCookie(CloakedDaggerAuthenticationSchemes.Partial, options =>
+                {
+                    options.LogoutPath = authenticationConfiguration.LogoutUrl;
+                    options.Cookie.Name =
+                        $"{authenticationConfiguration.CookieName}__{CloakedDaggerAuthenticationSchemes.Partial}";
+                    options.Events.OnRedirectToLogin = context =>
+                    {
+                        // Don't want it to redirect to a different URL when not logged in, just return a 401
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Task.CompletedTask;
+                    };
+                    options.Events.OnRedirectToAccessDenied = context =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                         return Task.CompletedTask;
                     };
                 });
-
         }
 
         private X509Certificate2 LoadAuthenticationSigningKey(AuthenticationConfiguration config)

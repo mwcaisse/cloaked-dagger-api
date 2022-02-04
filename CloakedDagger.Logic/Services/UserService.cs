@@ -183,7 +183,7 @@ namespace CloakedDagger.Logic.Services
             }
         }
 
-        public void ValidateUsersEmail(Guid userId, string emailVerificationKey)
+        public bool ValidateUsersEmail(Guid userId, string emailVerificationKey)
         {
             var user = _userRepository.Get(userId);
             if (user == null)
@@ -204,6 +204,7 @@ namespace CloakedDagger.Logic.Services
 
             user.EmailVerified = true;
             _userRepository.Update(user);
+            return true;
         }
 
         public async Task RequestEmailVerification(Guid userId)

@@ -14,6 +14,6 @@ namespace CloakedDagger.Common.Services
 
         Task RequestEmailVerification(Guid userId);
 
-        void ValidateUsersEmail(Guid userId, string emailVerificationKey);
+        bool ValidateUsersEmail(Guid userId, string emailVerificationKey);
     }
 }

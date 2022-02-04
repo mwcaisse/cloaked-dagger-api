@@ -35,6 +35,12 @@ namespace CloakedDagger.Logic.Services
             return CreateClaimsPrincipalForUser(user);
         }
 
+        public ClaimsPrincipal RefreshClaimsPrincipalForUser(Guid userId)
+        {
+            var user = _userRepository.Get(userId);
+            return CreateClaimsPrincipalForUser(user);
+        }
+
         /// <summary>
         ///  Attempts to login a user with the given username and password
         /// </summary>

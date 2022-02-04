@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CloakedDagger.Common.Constants;
 using CloakedDagger.Common.Services;
 using CloakedDagger.Common.ViewModels;
+using CloakedDagger.Web.Constants;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,9 @@ namespace CloakedDagger.Web.Controllers
     public class UserController : BaseController
     {
 
+        private const string AuthenticationSchemes =
+            CloakedDaggerAuthenticationSchemes.Default + "," + CloakedDaggerAuthenticationSchemes.Partial;
+        
         private readonly ILoginService _loginService;
 
         private readonly IUserService _userService;
@@ -26,7 +30,7 @@ namespace CloakedDagger.Web.Controllers
 
         [HttpGet]
         [Route(("me"))]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = AuthenticationSchemes)]
         public IActionResult GetMe()
         {
             return OkOrNotFound(_loginService.GetUserViewModelFromPrincipal(HttpContext.User));
@@ -42,29 +46,30 @@ namespace CloakedDagger.Web.Controllers
                 return Unauthorized("Invalid credentials provided.");
             }
 
-            await HttpContext.SignInAsync(principal);
-
+            await SignInAsync(principal);
+            
             var additionalActionsVm = GetAdditionalActionsForUser(principal);
+
             if (additionalActionsVm != null)
             {
                 return AdditionalActionsRequired(additionalActionsVm);
             }
-
             return Ok();
         }
         
         [HttpGet]
         [HttpPost]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = AuthenticationSchemes)]
         [Route("logout")]
         public async Task<IActionResult> Logout()
         {
+            //TODO: We need to sign out of all schemes we are logged in as
             await HttpContext.SignOutAsync();
             return Ok();
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = CloakedDaggerAuthenticationSchemes.Partial)]
         [Route("resend-email-verification")]
         public async Task<IActionResult> ResendEmailVerification()
         {
@@ -73,12 +78,24 @@ namespace CloakedDagger.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = CloakedDaggerAuthenticationSchemes.Partial)]
         [Route("verify-email")]
-        public IActionResult VerifyEmail([FromBody] UserVerifyEmailAddressViewModel vm)
+        public async Task<IActionResult> VerifyEmail([FromBody] UserVerifyEmailAddressViewModel vm)
         {
-            _userService.ValidateUsersEmail(GetCurrentUserId(), vm.VerificationKey);
-            return NoContent();
+            var currentUserId = GetCurrentUserId();
+            var emailVerified = _userService.ValidateUsersEmail(currentUserId, vm.VerificationKey);
+
+            if (emailVerified)
+            {
+                // if their email was verified successfully, re-log in with the appropriate claims / scheme
+                var fullPrincipal = _loginService.RefreshClaimsPrincipalForUser(currentUserId);
+                await SignInAsync(fullPrincipal);
+                return NoContent();
+            }
+
+            // We won't actually ever hit this, since emailVerified shouldn't ever return false, and throw exceptions
+            //  if it fails, but this feels safer.
+            return BadRequest();
         }
 
         [HttpPost]
@@ -90,6 +107,21 @@ namespace CloakedDagger.Web.Controllers
             //     handle that if we make it here registration was successful so we return 200.
             return Ok(); 
         }
+
+        private async Task SignInAsync(ClaimsPrincipal principal)
+        {
+            if (!principal.HasClaim(c => c.Type == UserClaims.EmailVerified))
+            {
+                // if their email isn't verified, log in with the partial scheme
+                await HttpContext.SignInAsync(CloakedDaggerAuthenticationSchemes.Partial, principal);
+            }
+            else
+            {
+                // otherwise, they are fulled authorized, use default scheme
+                await HttpContext.SignInAsync(CloakedDaggerAuthenticationSchemes.Default, principal);
+            }
+        }
+        
         private UserLoggedInAdditionalActionViewModel GetAdditionalActionsForUser(ClaimsPrincipal principal)
         {
             if (!principal.HasClaim(c => c.Type == UserClaims.EmailVerified))
