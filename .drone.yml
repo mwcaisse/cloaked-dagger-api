@@ -84,8 +84,6 @@ steps:
 services:
   - name: database
     image: postgres:13
-    command:
-      - "--default-authentication-plugin=mysql_native_password"
     environment:
       POSTGRES_USER: "cloaked_dagger_tester"
       POSTGRES_PASSWORD: "password"
