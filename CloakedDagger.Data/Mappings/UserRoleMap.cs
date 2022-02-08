@@ -9,19 +9,19 @@ namespace CloakedDagger.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<UserRoleEntity> builder)
         {
-            builder.ToTable("USER_ROLE")
+            builder.ToTable("user_role")
                 .HasKey(ur => ur.UserRoleId);
 
             builder.Property(ur => ur.UserRoleId)
-                .HasColumnName("ID")
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
             builder.Property(ur => ur.UserId)
-                .HasColumnName("USER_ID")
+                .HasColumnName("user_id")
                 .IsRequired();
 
             builder.Property(ur => ur.RoleId)
-                .HasColumnName("ROLE_ID")
+                .HasColumnName("role_id")
                 .IsRequired();
 
             builder.HasOne(ur => ur.User)
@@ -34,7 +34,7 @@ namespace CloakedDagger.Data.Mappings
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
             
-            builder.AddTrackedEntityProperties();
+            builder.AddTrackedEntityProperties(true);
         }
     }
 }

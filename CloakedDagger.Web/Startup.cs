@@ -17,21 +17,17 @@ using CloakedDagger.Logic.Services;
 using CloakedDagger.Web.Adapters;
 using CloakedDagger.Web.Configuration;
 using CloakedDagger.Web.Constants;
-using CloakedDagger.Web.Converters;
 using CloakedDagger.Web.Database;
 using CloakedDagger.Web.Middleware;
 using CloakedDagger.Web.Utils;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OwlTin.Common.Converters;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
 
 namespace CloakedDagger.Web
@@ -76,9 +72,7 @@ namespace CloakedDagger.Web
 
             services.AddDbContext<CloakedDaggerDbContext>(options =>
             {
-                options.UseMySql(Configuration.GetDatabaseConnectionString(),
-                    ServerVersion.AutoDetect(Configuration.GetDatabaseConnectionString()),
-                    mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend));
+                options.UseNpgsql(Configuration.GetDatabaseConnectionString());
             });
 
             services.AddTransient<IUserRepository, UserRepository>();

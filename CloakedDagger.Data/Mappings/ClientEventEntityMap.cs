@@ -12,28 +12,28 @@ namespace CloakedDagger.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<ClientEventEntity> builder)
         {
-            builder.ToTable("CLIENT_EVENT")
+            builder.ToTable("client_event")
                 .HasKey(ce => ce.Id);
 
             builder.Property(ce => ce.Id)
-                .HasColumnName("ID")
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
             builder.Property(ce => ce.ClientId)
-                .HasColumnName("CLIENT_ID")
+                .HasColumnName("client_id")
                 .IsRequired();
 
             builder.Property(ce => ce.OccurredOn)
-                .HasColumnName("OCCURRED_ON")
+                .HasColumnName("occurred_on")
                 .IsRequired();
 
             builder.Property(ce => ce.Type)
-                .HasColumnName("TYPE")
+                .HasColumnName("type")
                 .IsRequired()
                 .HasMaxLength(250);
 
             builder.Property(ce => ce.Event)
-                .HasColumnName("EVENT")
+                .HasColumnName("event")
                 .IsRequired()
                 .HasConversion(
                     cde => JsonConvert.SerializeObject(cde, new JsonSerializerSettings()

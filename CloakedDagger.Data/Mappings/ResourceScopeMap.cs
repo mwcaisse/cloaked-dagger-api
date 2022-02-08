@@ -10,19 +10,19 @@ namespace CloakedDagger.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<ResourceScopeEntity> builder)
         {
-            builder.ToTable("RESOURCE_SCOPE")
+            builder.ToTable("resource_scope")
                 .HasKey(rs => rs.ResourceScopeId);
 
             builder.Property(rs => rs.ResourceScopeId)
-                .HasColumnName("ID")
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
             builder.Property(rs => rs.ResourceId)
-                .HasColumnName("RESOURCE_ID")
+                .HasColumnName("resource_id")
                 .IsRequired();
 
             builder.Property(rs => rs.ScopeId)
-                .HasColumnName("SCOPE_ID")
+                .HasColumnName("scope_id")
                 .IsRequired();
 
             builder.HasOne(rs => rs.ResourceEntity)
@@ -35,7 +35,7 @@ namespace CloakedDagger.Data.Mappings
                 .HasForeignKey(rs => rs.ScopeId)
                 .IsRequired();
 
-            builder.AddTrackedEntityProperties();
+            builder.AddTrackedEntityProperties(true);
         }
     }
 }

@@ -12,7 +12,8 @@ namespace CloakedDagger.Web.Utils
             var databasePort = configuration.GetSection("database:port").Value;
             var databaseSchema = configuration.GetSection("database:schema").Value;
             var sslMode = configuration.GetSection("database:sslMode").Value;
-            return $"server={databaseHost};userid={databaseUser};pwd={databasePassword};port={databasePort};database={databaseSchema};sslmode={sslMode};";
+            
+            return $"Host={databaseHost};Username={databaseUser};Password='{databasePassword}';Port={databasePort};Database={databaseSchema};sslmode={sslMode};Trust Server Certificate=true";
         }
     }
 }

@@ -10,23 +10,23 @@ namespace CloakedDagger.Data.Mappings
         public void Configure(EntityTypeBuilder<RoleEntity> builder)
         {
 
-            builder.ToTable("ROLE")
+            builder.ToTable("role")
                 .HasKey(r => r.RoleId);
 
             builder.Property(r => r.RoleId)
-                .HasColumnName("ID")
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
             builder.Property(r => r.Name)
-                .HasColumnName("NAME")
+                .HasColumnName("name")
                 .HasMaxLength(250)
                 .IsRequired();
 
             builder.Property(r => r.Description)
-                .HasColumnName("DESCRIPTION")
+                .HasColumnName("description")
                 .HasMaxLength(1000);
             
-            builder.AddTrackedEntityProperties();
+            builder.AddTrackedEntityProperties(true);
         }
     }
 }

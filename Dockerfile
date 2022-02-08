@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 # CA Certificats are outdated in base image, update before proceeding so we can restore nuget packages
 RUN apt update -y && apt upgrade -y
@@ -19,7 +19,7 @@ RUN dotnet nuget add source ${OWLTIN_SOURCE} --name owltin --username ${OWLTIN_U
 RUN dotnet restore
 RUN dotnet publish -c Release -o /build/out
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 
 WORKDIR /app
 

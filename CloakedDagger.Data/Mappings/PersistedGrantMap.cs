@@ -9,48 +9,48 @@ namespace CloakedDagger.Data.Mappings
         public void Configure(EntityTypeBuilder<PersistedGrantEntity> builder)
         {
 
-            builder.ToTable("PERSISTED_GRANT")
+            builder.ToTable("persisted_grant")
                 .HasKey(pg => pg.Id);
 
             builder.Property(pg => pg.Id)
-                .HasColumnName("ID")
+                .HasColumnName("id")
                 .HasMaxLength(200);
 
             builder.Property(pg => pg.Type)
-                .HasColumnName("TYPE")
+                .HasColumnName("type")
                 .IsRequired()
                 .HasMaxLength(50);
 
             builder.Property(pg => pg.SubjectId)
-                .HasColumnName("SUBJECT_ID")
+                .HasColumnName("subject_id")
                 .HasMaxLength(200);
             
             builder.Property(pg => pg.SessionId)
-                .HasColumnName("SESSION_ID")
+                .HasColumnName("session_id")
                 .HasMaxLength(200);
             
             builder.Property(pg => pg.ClientId)
-                .HasColumnName("CLIENT_ID")
+                .HasColumnName("client_id")
                 .IsRequired()
                 .HasMaxLength(200);
             
             builder.Property(pg => pg.Description)
-                .HasColumnName("DESCRIPTION")
+                .HasColumnName("description")
                 .HasMaxLength(200);
 
             builder.Property(pg => pg.CreateDate)
-                .HasColumnName("CREATE_DATE")
+                .HasColumnName("create_date")
                 .IsRequired()
                 .ValueGeneratedOnAdd();
 
             builder.Property(pg => pg.ExpirationDate)
-                .HasColumnName("EXPIRATION_DATE");
+                .HasColumnName("expiration_date");
 
             builder.Property(pg => pg.ConsumedDate)
-                .HasColumnName("CONSUMED_DATE");
+                .HasColumnName("consumed_date");
 
             builder.Property(pg => pg.Data)
-                .HasColumnName("DATA")
+                .HasColumnName("data")
                 .IsRequired();
 
         }

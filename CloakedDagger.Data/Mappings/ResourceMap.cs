@@ -10,24 +10,24 @@ namespace CloakedDagger.Data.Mappings
         public void Configure(EntityTypeBuilder<ResourceEntity> builder)
         {
 
-            builder.ToTable("RESOURCE")
+            builder.ToTable("resource")
                 .HasKey(r => r.ResourceId);
 
             builder.Property(r => r.ResourceId)
-                .HasColumnName("ID")
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
             builder.Property(r => r.Name)
-                .HasColumnName("NAME")
+                .HasColumnName("name")
                 .HasMaxLength(250)
                 .IsRequired();
 
             builder.Property(r => r.Description)
-                .HasColumnName("DESCRIPTION")
+                .HasColumnName("description")
                 .HasMaxLength(1000);
             
-            builder.AddActiveEntityProperties();
-            builder.AddTrackedEntityProperties();
+            builder.AddActiveEntityProperties(true);
+            builder.AddTrackedEntityProperties(true);
         }
     }
 }

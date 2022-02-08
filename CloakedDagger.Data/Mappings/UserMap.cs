@@ -9,43 +9,43 @@ namespace CloakedDagger.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
-            builder.ToTable("USER")
+            builder.ToTable("user")
                 .HasKey(u => u.UserId);
 
             builder.Property(u => u.UserId)
-                .HasColumnName("ID")
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
             builder.Property(u => u.Username)
-                .HasColumnName("USERNAME")
+                .HasColumnName("username")
                 .HasMaxLength(100)
                 .IsRequired();
 
             builder.Property(u => u.Password)
-                .HasColumnName("PASSWORD")
+                .HasColumnName("password")
                 .HasMaxLength(500)
                 .IsRequired();
 
             builder.Property(u => u.Name)
-                .HasColumnName("NAME")
+                .HasColumnName("name")
                 .IsRequired()
                 .HasMaxLength(500);
 
             builder.Property(u => u.Email)
-                .HasColumnName("EMAIL")
+                .HasColumnName("email")
                 .IsRequired()
                 .HasMaxLength(250);
 
             builder.Property(u => u.EmailVerified)
-                .HasColumnName("EMAIL_VERIFIED")
+                .HasColumnName("email_verified")
                 .IsRequired();
 
             builder.Property(u => u.Locked)
-                .HasColumnName("LOCKED")
+                .HasColumnName("locked")
                 .IsRequired();
 
-            builder.AddActiveEntityProperties();
-            builder.AddTrackedEntityProperties();
+            builder.AddActiveEntityProperties(true);
+            builder.AddTrackedEntityProperties(true);
 
         }
     }

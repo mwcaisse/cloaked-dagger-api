@@ -9,24 +9,24 @@ namespace CloakedDagger.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<UserRegistrationKeyEntity> builder)
         {
-            builder.ToTable("USER_REGISTRATION_KEY")
+            builder.ToTable("user_registration_key")
                 .HasKey(urk => urk.Id);
 
             builder.Property(urk => urk.Id)
-                .HasColumnName("ID")
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
             builder.Property(urk => urk.Key)
-                .HasColumnName("KEY_VAL")
+                .HasColumnName("key_val")
                 .HasMaxLength(100)
                 .IsRequired();
 
             builder.Property(urk => urk.UsesRemaining)
-                .HasColumnName("USES_REMAINING")
+                .HasColumnName("uses_remaining")
                 .IsRequired();
             
-            builder.AddActiveEntityProperties();
-            builder.AddTrackedEntityProperties();
+            builder.AddActiveEntityProperties(true);
+            builder.AddTrackedEntityProperties(true);
         }
     }
 }

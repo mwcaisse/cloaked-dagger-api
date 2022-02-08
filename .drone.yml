@@ -4,16 +4,17 @@ name: development
 
 steps:
   - name: database-health-check
-    image: mysql
+    image: postgres:13
     commands:
-      - while ! mysqladmin ping -h "$${DB_HOST}" -u "$${DB_USERNAME}" -p"$${DB_PASSWORD}"; do sleep 1; done
+      - while ! pg_isready ping -h "$${DB_HOST}" -u "$${DB_USERNAME}" -p"$${DB_PASSWORD} -d "$${DB_DATABASE}}"; do sleep 1; done
     environment:
       DB_HOST: database
-      DB_USERNAME: cloaked-dagger-tester
+      DB_USERNAME: cloaked_dagger_tester
       DB_PASSWORD: password
+      DB_DATABASE: cloaked_dagger_testing
   
   - name: unit-tests
-    image: mcr.microsoft.com/dotnet/sdk:5.0
+    image: mcr.microsoft.com/dotnet/sdk:6.0
     commands:
       - sleep 15 # wait for the database to start up
       - dotnet nuget add source "$${OWLTIN_SOURCE}" --name owltin --username "$${OWLTIN_USERNAME}" --password "$${OWLTIN_PASSWORD}" --store-password-in-clear-text
@@ -28,11 +29,11 @@ steps:
 
       # Database Configuration
       CLOAKED_DAGGER_API_DATABASE__HOST: database
-      CLOAKED_DAGGER_API_DATABASE__USER: "cloaked-dagger-tester"
+      CLOAKED_DAGGER_API_DATABASE__USER: "cloaked_dagger_tester"
       CLOAKED_DAGGER_API_DATABASE__PASSWORD: "password"
-      CLOAKED_DAGGER_API_DATABASE__PORT: 3306
-      CLOAKED_DAGGER_API_DATABASE__SCHEMA: "CLOAKED_DAGGER_TESTING"
-      CLOAKED_DAGGER_API_DATABASE__SSLMODE: "none"
+      CLOAKED_DAGGER_API_DATABASE__PORT: 5432
+      CLOAKED_DAGGER_API_DATABASE__SCHEMA: "cloaked_dagger_testing"
+      CLOAKED_DAGGER_API_DATABASE__SSLMODE: "Prefer"
       # Auth Configuration
       CLOAKED_DAGGER_API_AUTHENTICATION__COOKIENAME: "CLOAKED_DAGGER_SESSION"
       CLOAKED_DAGGER_API_AUTHENTICATION__LOGINURL: "http://localhost:3333/login"
@@ -82,14 +83,13 @@ steps:
 
 services:
   - name: database
-    image: mysql
+    image: postgres:13
     command:
       - "--default-authentication-plugin=mysql_native_password"
     environment:
-      MYSQL_USER: "cloaked-dagger-tester"
-      MYSQL_PASSWORD: "password"
-      MYSQL_DATABASE: "CLOAKED_DAGGER_TESTING"
-      MYSQL_ROOT_PASSWORD: "amazing-password"
+      POSTGRES_USER: "cloaked_dagger_tester"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "cloaked_dagger_testing"      
 
 volumes:
   - name: docker-socket

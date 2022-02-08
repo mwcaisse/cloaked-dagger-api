@@ -9,29 +9,29 @@ namespace CloakedDagger.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<UserEmailVerificationRequestEntity> builder)
         {
-            builder.ToTable("USER_EMAIL_VERIFICATION_REQUEST")
+            builder.ToTable("user_email_verification_request")
                 .HasKey(vr => vr.Id);
 
             builder.Property(vr => vr.Id)
-                .HasColumnName("ID")
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
             builder.Property(vr => vr.UserId)
-                .HasColumnName("USER_ID")
+                .HasColumnName("user_id")
                 .IsRequired();
 
             builder.Property(vr => vr.Email)
-                .HasColumnName("EMAIL")
+                .HasColumnName("email")
                 .IsRequired()
                 .HasMaxLength(250);
 
             builder.Property(vr => vr.ValidationKey)
-                .HasColumnName("VALIDATION_KEY")
+                .HasColumnName("validation_key")
                 .IsRequired()
                 .HasMaxLength(100);
 
             builder.Property(vr => vr.Successful)
-                .HasColumnName("SUCCESSFUL")
+                .HasColumnName("successful")
                 .IsRequired();
 
             builder.HasOne(vr => vr.User)
@@ -39,8 +39,8 @@ namespace CloakedDagger.Data.Mappings
                 .HasForeignKey(vr => vr.UserId)
                 .IsRequired();
             
-            builder.AddActiveEntityProperties();
-            builder.AddTrackedEntityProperties();
+            builder.AddActiveEntityProperties(true);
+            builder.AddTrackedEntityProperties(true);
 
         }
     }

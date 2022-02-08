@@ -1,5 +1,5 @@
 using System;
-using MySqlConnector;
+using Npgsql;
 using Serilog;
 
 namespace CloakedDagger.Web.Database
@@ -11,7 +11,7 @@ namespace CloakedDagger.Web.Database
             try
             {
                 Log.Information("Migrating our database");
-                var databaseConnection = new MySqlConnection(connectionString);
+                var databaseConnection = new NpgsqlConnection(connectionString);
                 var evolve = new Evolve.Evolve(databaseConnection, Log.Information)
                 {
                     Locations = new[]

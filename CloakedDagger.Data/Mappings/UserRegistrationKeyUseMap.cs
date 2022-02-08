@@ -10,19 +10,19 @@ namespace CloakedDagger.Data.Mappings
         public void Configure(EntityTypeBuilder<UserRegistrationKeyUseEntity> builder)
         {
 
-            builder.ToTable("USER_REGISTRATION_KEY_USE")
+            builder.ToTable("user_registration_key_use")
                 .HasKey(urku => urku.Id);
 
             builder.Property(urku => urku.Id)
-                .HasColumnName("ID")
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
             builder.Property(urku => urku.UserId)
-                .HasColumnName("USER_ID")
+                .HasColumnName("user_id")
                 .IsRequired();
 
             builder.Property(urku => urku.UserRegistrationKeyId)
-                .HasColumnName("USER_REGISTRATION_KEY_ID")
+                .HasColumnName("user_registration_key_id")
                 .IsRequired();
 
             builder.HasOne(urku => urku.User)
@@ -35,7 +35,7 @@ namespace CloakedDagger.Data.Mappings
                 .HasForeignKey(urk => urk.UserRegistrationKeyId)
                 .IsRequired();
             
-            builder.AddTrackedEntityProperties();
+            builder.AddTrackedEntityProperties(true);
 
         }
     }
